@@ -1,114 +1,4 @@
 import time
-class Recursion:
-    def fib(self,n):
-        firstterm=1
-        secondterm=1
-        z=[]
-        if(n<=0):
-            return z
-        z.append(firstterm)
-        if(n<=1):
-            return z
-        z.append(secondterm)
-        n=n-2
-        while(n>0):
-            n-=1
-            nextterm=firstterm+secondterm
-            firstterm=secondterm
-            secondterm=nextterm
-            z.append(nextterm)
-        return z
-    def fibrec(self,n):
-        if(n<=0):
-            return []
-        if(n<=1):
-            return [1]
-        return self.fibrec1(1,1,[1,1],n-2)
-    def fibrec1(self,first,second,arr,n):
-        if(n==0):
-            return arr
-        next = first+second
-        arr.append(next)
-        return self.fibrec1(second,next,arr,n-1)
-    def palindrome():
-        pass
-
-class Hashing:
-    def findcounts(self, arr, queries):
-        z=[]
-        for i in range (0,len(queries),1):
-            z.append(self.findnum(arr,queries[i]))
-        return z
-        
-
-    def findnum(self, arr,tofind):
-        count=0
-        for i in range (0,len(arr),1):
-            if(arr[i]==tofind):
-                count+=1
-        return count
-
-    def findcounthasing(self,arr,queries):
-        hash = [0]
-        hash = hash * 256
-        # pre-processing
-        for i in range (0,len(arr),1):
-            hash[ord(arr[i])]+=1
-        # finding            
-        z = []
-        for i in range (0,len(queries),1):
-           char = queries[i] #a b E
-           z.append(hash[ord(char)])            
-        return z
-    def findcountsdic(self,arr,queries):
-        count={}
-        # pre-processing
-        for key in arr:
-            # if value present in dictionary , add 1 to it
-            if key in count:
-                count[key] = count[key] + 1
-            # if value not present, put key,value(key, 1) in dictionary
-            else:
-                count[key] = 1
-        # finding   
-        z=[]
-        for tofind in queries:
-            #quereis value==dic check
-            #dic key check (tofind)
-            if tofind in count:
-                z.append(count[tofind])
-            else:
-                z.append(0)  
-        return z  
-    def find_counts_string(self, word):
-        z={}
-        for key in word:
-            if (key==' '):
-                continue
-            if key in z:
-                z[key]=z[key]+1
-            else:
-                z[key]=1
-        print(z)
-        for key,value in z.items():
-            print('char:',key,' count:',value)
-    def findcounttopk(self,nums,k):
-        count={}
-        z=[]
-        for key in nums:
-            if key in count:
-                count[key] = count[key]  + 1
-            else:
-                count[key] = 1
-        for key,value in count.items():
-            z.append((value,key))
-        sorted_z = sorted(z, reverse=True)
-        res = []
-        for i in range (0,k,1):
-            sorted_pair = sorted_z[i] #(3, 1)
-            res.append(sorted_pair[1])
-        return res
-
 class Sorting:
     def selectsort(self,arr):  #O(n**2) #O(1)
         #min arr
@@ -229,7 +119,7 @@ class Sorting:
                 temp=arr[g]
                 arr[g]=arr[l]
                 arr[l]=temp
-        temp=arr[low]git
+        temp=arr[low]
         arr[low]=arr[l]
         arr[l]=temp
         return l
@@ -242,7 +132,6 @@ class Sorting:
     #g=1 l=7
     #4, 3, 2, 5, 7,9 ,1,6
 
-  
 inputs = [[4, 6, 2, 5, 7,9 ,1,3 ]]
 #exp =[1, 3, 2, 4, 7,9 ,5,6   ]
 s=Sorting()
@@ -253,5 +142,3 @@ for arr in inputs:
     print('-'*25)
 end = time.time()
 print('TIME TAKEN:',(end-start)* 10**3, "ms")
-
-	    

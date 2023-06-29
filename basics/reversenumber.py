@@ -1,6 +1,6 @@
 class Solution:
     def isPalindrome(self, x: int):
-        rev = n
+        rev =x
         sum = 0
         if x < 0:
             return False
@@ -8,5 +8,5 @@ class Solution:
             r = rev % 10
             sum = sum * 10 + r
             rev = rev // 10
-        if sum == n:
+        if sum == x:
             return True

@@ -1,34 +1,34 @@
-class Solution:
-    def fact(self,n):
-        last=len(n)-1
-        start=0
-        for i in range(0,(len(n)//2),1):
-            temp=n[last] 
-            n[last]=n[start]
-            n[start]=temp
-            start+=1
-            last-=1
-        return n
-    def fact_recur1(self,l,s,arr):
-        if(l<s):
+class Recursion:
+    def fib(self,n):
+        firstterm=1
+        secondterm=1
+        z=[]
+        if(n<=0):
+            return z
+        z.append(firstterm)
+        if(n<=1):
+            return z
+        z.append(secondterm)
+        n=n-2
+        while(n>0):
+            n-=1
+            nextterm=firstterm+secondterm
+            firstterm=secondterm
+            secondterm=nextterm
+            z.append(nextterm)
+        return z
+    def fibrec(self,n):
+        if(n<=0):
+            return []
+        if(n<=1):
+            return [1]
+        return self.fibrec1(1,1,[1,1],n-2)
+    def fibrec1(self,first,second,arr,n):
+        if(n==0):
             return arr
-        else:
-            temp=arr[l]
-            arr[l]=arr[s]
-            arr[s]=temp
-        return self.fact_recur1(l-1,s+1,arr)       
-    def fact_recur(self,arr):
-        return self.fact_recur1(len(arr)-1,0,arr)
-
-n=[1,2,3,4,5,6,7]
-s=Solution()
-print(s.fact_recur(n))
-
-
-
-
-
-
-
-
+        next = first+second
+        arr.append(next)
+        return self.fibrec1(second,next,arr,n-1)
+    def palindrome():
+        pass
 
