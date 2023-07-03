@@ -118,18 +118,144 @@ class ArrayProblems:
             start+=1
             end-=1
         return arr
+    def zero_to_end(sef,arr):
+        #sample_io
+        #input             output
+        #[2,4,0,2,0,5,0]     [2,4,2,4,5,0,0,0]
+        #[0,2,3,0] k=12        [2,3,0,0,]
+        #[8] k=4              [8]
+        #check the current 2 pointes starting with index 
+        # check current 1 is not zero---> (check current 2 is not zero increment current2 ) out increment current 2
+        # if its zero check the current 2 is not zero then swap it.. till u reach a value for current 2 incerment it to swap with i
+        n=len(arr)-1
+        if(n<1):
+            return arr
+        start=0
+        next1=0
+        while(next1<=n):
+            if(arr[start]!=0):
+                if(arr[next1]!=0):
+                    next1+=1
+                start+=1
+            else:
+                if(arr[next1]!=0):
+                    temp=arr[start]
+                    arr[start]=arr[next1]
+                    arr[next1]=temp
+                else:
+                    next1+=1
+        return arr
+       
+    def liner_serach(self,arr,k):
+        n=len(arr)-1
+        if(k>arr[n]):
+            return -1           
+        if(arr[0]==k):
+            return 1
+        for i in range(0,n+1,1):
+            if(arr[i]==k):
+                return 1
+        return -1
     
+    def find_union(self,arr1,n,arr2,m):
+        z=[]
+        #p1(arr1),p2(arr2) we need to compare which is less whether arr[p1] or arr[p2] 
+        #put that in a new array z.. before putting check the element is already present in the z array 
+        p1=0
+        p2=0
+        while(p1<n and p2<m):
+            if(arr1[p1]<arr2[p2]):
+                #checking if z is not empty and last element of z is current smallest
+                if(self.is_value_present(arr1,p1,z)):
+                    p1+=1
+                else:
+                    z.append(arr1[p1])
+                    p1+=1
+            else:
+                if(self.is_value_present(arr2,p2,z)):
+                    p2+=1
+                else:
+                    z.append(arr2[p2])
+                    p2+=1 
+
+        while(p1<n):
+            if(self.is_value_present(arr1,p1,z)):
+                p1+=1
+            else:
+                z.append(arr1[p1])
+                p1+=1
+        while(p2<n):
+            if(self.is_value_present(arr2,p2,z)):
+                p2+=1
+            else:
+                z.append(arr2[p2])
+                p2+=1  
+        return z     
+
+    def is_value_present(self,arr,p,z):
+        return (len(z)>0 and arr[p]==z[len(z)-1])
+    
+    def missing_number_brute(self,arr,k):
+        #sample_io
+        #input             output
+        #[1 2 3 4] 5     [3]
+        #[5,1]  5            [2,3,4]
+        for i in range(1,k+1,1):
+            found=False
+            for item in arr: 
+                if(item!=i): 
+                    found=False 
+                else:
+                    found=True
+                    break
+            if(found!=True):
+                return i
+    def missing_number_better(self,arr,k):
+        whole=set()
+        for item in arr:
+            whole.add(item)
+        for i in range(1,k+1,1):
+            if i not in whole:
+                return i
+    def missing_number_best(self,arr,k):
+        total_sum=(k*(k+1))//2
+        for item in arr:
+            total_sum=total_sum-item
+        return total_sum
+    def max_rep_1(self,arr):
+        #[0,1,1,1,0,1,1,0,1]     
+        len1=0
+        old_max=0
+        for i in range(0,len(arr),1):
+            if(arr[i]==1):
+                len1+=1#3
+            else:
+                if(len1>old_max):
+                    old_max=len1 #2
+                len1=0
+        if(len1>old_max):
+          old_max=len1 
+        return old_max
+    
+    def appears_once(self,arr):
+        miss=0
+        for i in range(0,len(arr),1):
+            miss=miss^arr[i]
+        return miss
 
 
 
 a=ArrayProblems()
-arr=[[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28],[4,5,6,1,2,3],[1,2,3,4,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-for test in arr:
-    start = time.time()
-    print('Input',test)
-    result=a.rotate_array(test,9944)
-    print('Output',result)
-    end = time.time()
-    print('TIME TAKEN:',(end-start)* 10**3, "ms")
-    print('-'*25)
+arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
+arr1=[1, 35]
+arr2=[1,1,2,2,3,4,4,5,5]
+print(a.appears_once(arr2))
+# for test in arr:
+#     start = time.time()
+#     print('Input',test)
+#     result=a.find_union(arr1,6,arr2,4)
+#     print('Output',result)
+#     end = time.time()
+#     print('TIME TAKEN:',(end-start)* 10**3, "ms")
+#     print('-'*25)
 
