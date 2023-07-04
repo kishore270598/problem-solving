@@ -242,14 +242,45 @@ class ArrayProblems:
         for i in range(0,len(arr),1):
             miss=miss^arr[i]
         return miss
-
-
+    def len_of_long_subarr(self,arr,k):
+        max_len=0 
+        for i in range(0,len(arr),1):
+            current_len=0
+            current_sum=0
+            for j in range(i,len(arr),1):
+                current_sum+=arr[j]
+                if(current_sum==k):
+                    current_len=(j-i)+1
+                    if(current_len>max_len):
+                        max_len=current_len               
+        return max_len
+    #10,5,2,7,1,9  - k=10
+    def len_of_long_subarr_better(self,arr,k):
+        current_prefix_sum=0
+        max_len=0
+        pre_sum={}
+        for i in range(0,len(arr),1):
+            current_prefix_sum+=arr[i]
+            if(current_prefix_sum==k):
+                current_len=i+1
+                if(current_len>max_len):
+                    max_len=current_len
+            to_search=current_prefix_sum-k
+            if to_search in pre_sum:
+                current_len=i-pre_sum[to_search]
+                if(current_len>max_len):
+                    max_len=current_len
+            if current_prefix_sum not in pre_sum:
+                pre_sum[current_prefix_sum]=i
+        return  max_len   
+ 
+          
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
 arr1=[1, 35]
-arr2=[1,1,2,2,3,4,4,5,5]
-print(a.appears_once(arr2))
+arr2=[-13 ,0, 6 ,15 ,16 ,2 ,15 ,-12, 17 ,-16,0 ,-3, 19 ,-3, 2,-9, -6]
+print(a.len_of_long_subarr_better(arr2,15))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
