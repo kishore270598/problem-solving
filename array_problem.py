@@ -272,15 +272,63 @@ class ArrayProblems:
                     max_len=current_len
             if current_prefix_sum not in pre_sum:
                 pre_sum[current_prefix_sum]=i
-        return  max_len   
- 
-          
+        return  max_len  
 
+    def required_sum_pairs(self,a,n,b,m,k):
+        #sort first array since the requirment is (u1,v1) ,(u2,v2) u1<u2  
+        #once its sorted put the second array in set ..
+        #using while loop traverse array till n subtract first i element with the sum and check that remaning is avalible in set
+        #if i that the case append it into a list with the arr[i], the sum
+        i=0
+        required_pair=[]
+        s_a=sorted(a)
+        b2=set()
+        for j in b:
+            b2.add(j)
+        while(i<len(a)):
+            to_search=k-s_a[i]
+            if to_search in b2:
+                required_pair.append([s_a[i],to_search])
+            i+=1
+        return required_pair
+    
+    def two_sum(self,a,n,k):
+        #sort first array since the requirment is (u1,v1) ,(u2,v2) u1<u2  
+        #once its sorted put the second array in set ..
+        #using while loop traverse array till n subtract first i element with the sum and check that remaning is avalible in set
+        #if i that the case append it into a list with the arr[i], the sum
+        i=0
+        b1=dict()
+        for j in range(0,len(a),1):
+            b1[a[j]]=j  
+        while(i<len(a)):
+            to_search=k-a[i] # 4
+            if to_search in b1 and  b1[to_search]!=i:
+                return [i,b1[to_search]]
+            i+=1
+    def sort012(self,arr,n):
+        c_0=0
+        c_1=0
+        c_2=0
+        for item in arr:
+            if(item==0):
+                c_0+=1
+            if(item==1):
+                c_1+=1
+            if(item==2):
+                c_2+=1
+        for i in range(0,c_0,1):
+            arr[i]=0
+        for i in range(c_0,c_1+c_0,1):
+            arr[i]=1
+        for i in range(c_1+c_0,len(arr),1):
+            arr[i]=2
+        return arr
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[1, 35]
-arr2=[-13 ,0, 6 ,15 ,16 ,2 ,15 ,-12, 17 ,-16,0 ,-3, 19 ,-3, 2,-9, -6]
-print(a.len_of_long_subarr_better(arr2,15))
+arr1=[0 ,1, 0] 
+arr2=[5, 6, 3, 4, 8]
+print(a.sort012(arr1,len(arr1)))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
