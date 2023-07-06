@@ -324,11 +324,102 @@ class ArrayProblems:
         for i in range(c_1+c_0,len(arr),1):
             arr[i]=2
         return arr
+    
+    def majority_element(self, arr):
+        d=dict()
+        for i in range(0,len(arr),1):
+            key=arr[i]
+            if key in d:
+                d[key]+=1
+            else:
+                d[key]=1
+        for key,value in d.items():
+            if(value>len(arr)//2):
+                return key  
+        return -1
+    
+    def moore_voting_algorithm(self,arr):
+        #majority's Algorithm,
+        element=arr[0] #2
+        count=1
+        for i in range(1,len(arr),1):
+            if(count==0):
+                element=arr[i]
+            if(arr[i]==element): #3==2  count=0
+                count+=1
+            else:
+                count-=1
+                       
+        return element
+
+
+    def majority_element_best(self, arr):
+        required_v=self.moore_voting_algorithm(arr)
+        count=0
+
+        for i in range(0,len(arr),1):
+            if(arr[i]==required_v):
+                count+=1
+        if(count>len(arr)//2):
+            return required_v
+        else:
+            return -1
+        
+
+    def max_sub_array_sum(self,arr):
+        sum=0
+        start=0
+        end=0
+        z=[]
+        for i in range(0,len(arr),1):
+            for j in range(i,len(arr),1):
+                sum2=0
+                for k in range(i,j+1,1):
+                    sum2+=arr[k]
+                if(sum2>sum):
+                    sum=sum2
+                    start=i
+                    end=j 
+        if(start==end):
+            return z       
+        for i in range(start,end+1,1):
+            z.append(arr[i])            
+        return z
+    
+    def max_sub_array_opt(self,arr):
+        #Kadane's Algorithm
+        sum=0
+        max_sum=arr[0]
+        neg_present=False
+        for i in range(0,len(arr),1):
+            if(arr[i]<0):
+                neg_present=True
+                if(arr[i]>max_sum):
+                    max_sum=arr[i]
+            else:
+                neg_present=False
+                break
+        if(neg_present==True):
+            return max_sum
+        else:
+            max_sum=arr[0] 
+
+        for i in range(0,len(arr),1):
+            sum+=arr[i]
+            if(sum<0):
+                sum=0
+            if(sum>max_sum):
+                max_sum=sum
+        return max_sum
+            
+#-1 -2 -3 -4
+
+
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[0 ,1, 0] 
+arr1=[-1,-2,-3,-4] 
 arr2=[5, 6, 3, 4, 8]
-print(a.sort012(arr1,len(arr1)))
+print(a.max_sub_array_opt(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
