@@ -1,4 +1,5 @@
 import time
+import math
 class ArrayProblems:
     def largest_element_array(self,arr):
         #sample_io
@@ -411,15 +412,51 @@ class ArrayProblems:
             if(sum>max_sum):
                 max_sum=sum
         return max_sum
-            
-#-1 -2 -3 -4
+    
+    def pair_with_max_Sum_brute(self, arr):
+        max_sub=0
+        for i in range(0,len(arr),1):
+            for j in range(i+1,len(arr),1):
+                result=self.find_smallest_and_secondsmallest(arr,i,j)
+                if(result>max_sub):
+                    max_sub=result
+        return max_sub 
+
+    def find_smallest_and_secondsmallest(self,arr,i,j):
+        small=arr[i]
+        second_small=math.inf
+        for k in range(i,j+1,1):
+            if(arr[k]<small):
+                second_small=small
+                small=arr[k]
+            if(arr[k]<second_small and arr[k]!=small):
+                second_small=arr[k]
+        if(second_small==math.inf):
+            second_small=small
+        return small+second_small
+    
+    def pair_with_max_Sum_better(self,arr):
+        max=-math.inf
+        for i in range(0,len(arr)-1,1):
+            sum=arr[i]+arr[i+1]
+            if(sum>max):
+                max=sum
+        return max
+ #7 ,1, 5, 3 ,6   
+    def stockBuyAndSell_2(self,prices):
+        profit=0
+        for i in range(0,len(prices)-1,1):
+            if(prices[i]<prices[i+1]):
+                profit+=prices[i+1]-prices[i]
+        return profit
 
 
+      
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[-1,-2,-3,-4] 
+arr1=[7,1,5,3,6,4] 
 arr2=[5, 6, 3, 4, 8]
-print(a.max_sub_array_opt(arr1))
+print(a.stockBuyAndSell_2(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
