@@ -449,14 +449,70 @@ class ArrayProblems:
             if(prices[i]<prices[i+1]):
                 profit+=prices[i+1]-prices[i]
         return profit
+    
+    def rearrange(self,arr):
+        print("   ",arr[1:])
+        pos=[]
+        neg=[]
+        for i in range(0,len(arr),1):
+            if(arr[i]<0):
+                neg.append(arr[i])
+            else:
+                pos.append(arr[i])
+        pos_len=len(pos)
+        neg_len=len(neg)
+        point=0
+        neg_point=0
+        pos_point=0
+        while(point<len(arr)):
+            if(point%2==0 and pos_len!=0 and  neg_len!=0):
+                arr[point]=pos[pos_point]
+                pos_point+=1
+                pos_len-=1
+                point+=1
+            else:
+                if(point%2==1 and pos_len!=0 and  neg_len!=0):
+                    arr[point]=neg[neg_point]
+                    neg_point+=1
+                    neg_len-=1
+                    point+=1
+            
+            if(pos_len==0 or neg_len==0 ):
+                break
+            
 
+        while (pos_len>0):
+            arr[point]=pos[pos_point]
+            pos_point+=1
+            pos_len-=1
+            point+=1
 
+        while (neg_len>0):
+            arr[point]=neg[neg_point]
+            neg_point+=1
+            neg_len-=1
+            point+=1
+        return arr 
+    
+    def leaders(self, arr):
+        lead=[]
+        k=len(arr)-1
+        if(len(arr)==1):
+            return arr
+        lead.append(arr[k])
+        current_max=arr[k]
+        for i in range (k-1,-1,-1):
+            if(current_max<=arr[i]):
+                lead.append(arr[i])
+                current_max=arr[i]
+        return lead[::-1]
+    
       
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[7,1,5,3,6,4] 
-arr2=[5, 6, 3, 4, 8]
-print(a.stockBuyAndSell_2(arr1))
+arr1=[16,17,4,20,5,2] 
+arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
+print(a.leaders(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
