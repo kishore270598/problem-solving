@@ -507,29 +507,7 @@ class ArrayProblems:
                 current_max=arr[i]
         return lead[::-1]
     
-    def longestConsecutive(self,arr):
-        start=0
-        current_max=1
-        max1=0
-        n=0
-        k=0
-        z=dict()
-        for i in range(0,len(arr),1):
-            z[arr[i]]=i
-
-        while(n<len(arr)-1):
-            if arr[k]+1 in z:
-                k=z[arr[k]+1]
-                current_max+=1
-            else:
-                if(current_max>max1):
-                    max1=current_max
-                    current_max=1
-                n+=1
-                k+=1
-        return max1
-    
-    def longestConsecutive_brute(self,arr):
+    def longestSuccessiveElements_brute(self,arr):
         start=0
         current_max=1
         max1=1
@@ -541,7 +519,7 @@ class ArrayProblems:
                 max1=current_max 
                 current_max=1 
             current_max=1
-            while(find(arr,f+1)==0):
+            while(self.find(arr,f+1)==0):
                 f+=1
                 current_max+=1  
         if(current_max > max1):
@@ -549,19 +527,44 @@ class ArrayProblems:
             current_max=1    
         return max1
     
-    def find(arr,f):
+    def find(self,arr,f):
         for i in range(0,len(arr),1):
             if(arr[i]==f):
                 return 0
         return 1
     
+    def longestSuccessiveElements_best(self,arr):
+        max1=1
+        current_max=1
+        prev_element=1
+        arr1=sorted(arr)
+        if(len(arr)==1):
+          return 1
+        if(len(arr)==0):
+          return 0
+        for i in range(0,len(arr1),1):
+            if(arr1[i]-1==prev_element):
+                current_max+=1
+                prev_element=arr1[i]
+            else:
+                if(arr1[i]!=prev_element):
+                    if(current_max > max1):
+                        max1=current_max   
+                    current_max=1
+                    prev_element=arr1[i]
+        if(current_max > max1):
+            max1=current_max   
+        return max1
+
+
+
 
      
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[100,4,200,1,3,2] 
+arr1=[0,3,7,2,5,8,4,6,0,1] 
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.longestConsecutive(arr1))
+print(a.longestSuccessiveElements_best(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
