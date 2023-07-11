@@ -533,7 +533,8 @@ class ArrayProblems:
                 return 0
         return 1
     
-    def longestSuccessiveElements_best(self,arr):
+
+    def longestSuccessiveElements_better(self,arr):
         max1=1
         current_max=1
         prev_element=1
@@ -555,16 +556,54 @@ class ArrayProblems:
         if(current_max > max1):
             max1=current_max   
         return max1
+    
+    def longestSuccessiveElements_optimal(self,arr):
+        # make a set a with a given elements
+        # traverse set elements.
+        # check the element is starting point if( starting point then find the consective range)
+        #else ignore find the max consective range
+        max1=0
+        unique_elements=set()
+        for item in arr:
+            unique_elements.add(item)
+        
+        for key in unique_elements:
+            if key-1 not in unique_elements:
+                count=self.find_consecutive_numberofelements(key,unique_elements)
+                if(count>max1):
+                    max1=count
+        return max1
+
+    def find_consecutive_numberofelements(self,start,unique_elements):
+        #1 2 3 start 1
+        count=0
+        while (start in unique_elements):
+            count+=1
+            start+=1
+        return count 
 
 
+    def setZeroes(self, arr):
+        ROWS=len(arr)
+        COLS=len(arr[0])
+        rows_toconvert=set()
+        cols_toconvert=set()
+        for i in range(0,ROWS,1):
+            for j in range(0,COLS,1):
+                if(arr[i][j]==0):
+                    rows_toconvert.add(i)
+                    cols_toconvert.add(j)
+        for row in range(0,ROWS,1):
+            for col in range (0,COLS,1):
+                if (row in rows_toconvert ) or (col in cols_toconvert):
+                    arr[row][col]=0
+        return arr 
 
-
-     
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[0,3,7,2,5,8,4,6,0,1] 
+arr1=[[2,4,3],[1,0,0]]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.longestSuccessiveElements_best(arr1))
+print(a.setZeroes(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
