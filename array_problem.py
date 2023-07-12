@@ -598,12 +598,71 @@ class ArrayProblems:
                 if (row in rows_toconvert ) or (col in cols_toconvert):
                     arr[row][col]=0
         return arr 
+    
+    def rotate(self, arr):
+        ROWS=len(arr)
+        COLS=len(arr[0])
+        k=[]
+        j_start=0
+        for i in range(0,ROWS,1):
+            for j in range(j_start,COLS,1):
+                temp=arr[i][j]
+                arr[i][j]=arr[j][i]
+                arr[j][i]=temp
+            j_start+=1
+        for i in range(0,ROWS,1):
+          arr=self.reverse_row(arr,i)
+        return arr
+    def reverse_row(self,arr,i):
+        start=0
+        end=len(arr[i])-1
+        while(start<end):
+            temp=arr[i][start]
+            arr[i][start]=arr[i][end]
+            arr[i][end]=temp
+            start+=1
+            end-=1
+        return arr
+    
+    def spiralOrder(self, arr):
+        left=0
+        right=len(arr[0])-1
+        bot=len(arr)-1
+        top=0
+        z=[]
+        while(len(z)<(len(arr[0])*len(arr))):
+            i=left
+            while( i<=right):
+                z.append(arr[top][i])
+                i+=1
+            top+=1
+            i=top
+            while(i<=bot):
+                z.append(arr[i][right])
+                i+=1
+            right-=1
+            i=right
+            if(top<=bot):
+                while(left<=i):
+                    z.append(arr[bot][i])
+                    i-=1
+                bot-=1
+            i=bot
+            if(left<=right):
+                while(i>=top):
+                    z.append(arr[i][left])
+                    i-=1
+                left+=1
+        return z
+
+        
+
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[[2,4,3],[1,0,0]]
+arr1=[[1,2,3,4],[5,6,7,8],[9,10,11,12]]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.setZeroes(arr1))
+print(a.spiralOrder(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
