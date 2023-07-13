@@ -654,15 +654,31 @@ class ArrayProblems:
                     i-=1
                 left+=1
         return z
+    def subarraySum(self,arr,k):
+        current_prefix_sum=0
+        pre_sum={}
+        pre_sum[0]=1
+        count=0
+        to_search=0
+        for i in range(0,len(arr),1):
+            current_prefix_sum+=arr[i]
+            to_search=current_prefix_sum-k
+            if(to_search in pre_sum):
+                count+=pre_sum[to_search]
+            if(current_prefix_sum not in pre_sum):
+                pre_sum[current_prefix_sum]=1
+            else:
+                pre_sum[current_prefix_sum]+=1
+        return  count    
 
         
 
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+arr1=[1,-1,0]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.spiralOrder(arr1))
+print(a.subarraySum(arr1,0))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
