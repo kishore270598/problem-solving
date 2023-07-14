@@ -669,16 +669,114 @@ class ArrayProblems:
                 pre_sum[current_prefix_sum]=1
             else:
                 pre_sum[current_prefix_sum]+=1
-        return  count    
+        return  count   
 
+    def generate(self, n):
+        z=[]
+        i=0
+        while(i<n):
+            value=self.ncr(n,i)
+            z.append(value)
+            i+=1
+        z.append(1)
+        return z
+
+    def pascal_triangle(self,n):
+        ans=[]
+        for i in range(0,n,1):
+            ans.append(self.generate(i))
+        return ans 
+
+    def ncr(self,k,r):
+        return self.fact(k)//(self.fact(r) * self.fact(k-r))
+    
+    def fact(self,k):
+        if k==0:
+            return 1
+        val=1
+        for i in range (2,k+1,1):
+            val*=i
+        return val
+    
+    def pascal_triangle_best(self,n):#without fact
+        z=[]
+        if(n==0):
+            return z
+        if(n==1):
+            return [[1]]
+        z.append([1])
+        for total_elements in range(2,n+1,1):
+            #generate inner array
+            row=[]
+            for i in range(0,total_elements,1):
+                if(i==0 or ( i+1==total_elements)):
+                    row.append(1)
+                else:
+                    current_value=z[total_elements-2][i-1]+z[total_elements-2][i]
+                    row.append(current_value)
+            z.append(row)
+        return z
+    
+    def majorityElement(self,nums):
+        to_search=len(nums)//3
+        lookup=dict()
+        result=[]
+        for item in nums:
+            if(item in lookup):
+                lookup[item]+=1
+            else:
+                lookup[item]=1
         
+        for key,value in lookup.items():
+            if(to_search<value):
+                result.append(key)
+        return result
+    
+    def majorityElement_best(self,nums):
+        to_search=len(nums)//3
+        count1=0
+        result=self.moores_voting_2elements(nums)
+        result1=[]
+        for i in range (0,len(nums),1):
+            if(result[0]==nums[i]):
+                count1+=1
+        if(count1>to_search and result[0]!=-99999999):
+            result1.append(result[0])
+        count1=0
+        for i in range (0,len(nums),1):
+            if(result[1]==nums[i]):
+                count1+=1
+        if(count1>to_search and  result[1]!=-99999999):
+            result1.append(result[1])
+       
+        return result1 
 
+    def moores_voting_2elements(self,arr):
+        element1=-99999999
+        count1=0
+        element2=-99999999
+        count2=0
+        for i in range(0,len(arr),1):
+            if(count1==0 and element2!=arr[i] ):
+                element1=arr[i]
+                count1=1
+            elif(count2==0 and element1!=arr[i]):
+                element2=arr[i]
+                count2=1
+            elif(element1==arr[i]):
+                count1+=1
+            elif(element2==arr[i]):
+                count2+=1
+            else:
+                count1-=1
+                count2-=1
+        return [element1,element2]
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[1,-1,0]
+arr1=[1,2]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.subarraySum(arr1,0))
+print(a.majorityElement_best(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
