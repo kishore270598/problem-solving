@@ -771,12 +771,76 @@ class ArrayProblems:
                 count1-=1
                 count2-=1
         return [element1,element2]
+    
+    def threeSum_brute(self,arr):
+        z=[]
+        n=[]
+        l=set()
+        arr=sorted(arr)
+        for i in range(0,len(arr)-2,1):
+            for j in range(i+1,len(arr)-1,1):
+                for k in range(j+1,len(arr),1):
+                    if(arr[i]+arr[j]+arr[k]==0):
+                        z.append([arr[i],arr[j],arr[k]])
+        for item in z:
+            l.add(tuple(item))
+        for item in l:
+            n.append(list(item))
+        return n
+    
+    def threeSum_best(self,arr):
+        z=[]
+        n=[]
+        k=set()
+        for i in range(0,len(arr),1):
+            l=set()
+            for j in range(i+1,len(arr),1):
+                to_search=-(arr[i]+arr[j])
+                if(to_search in l):
+                    z.append(sorted([arr[i],arr[j],to_search]))
+                else:
+                    l.add(arr[j])
+        for item in z:
+            k.add(tuple(item))
+        for item in k:
+            n.append(list(item))
+        return n
+    def threeSum_opt(self,arr):
+        arr=sorted(arr)
+        z=[]
+        for i  in range(0,len(arr),1):
+            j=i+1
+            k=len(arr)-1
+            if(i>0 and arr[i]==arr[i-1]):
+                continue
+            while(j<k):
+                sums=arr[i]+arr[j]+arr[k]
+                if(sums <0):
+                    j+=1
+                elif(sums>0):
+                    k-=1
+                else:
+                    z.append([arr[i],arr[j],arr[k]])
+                    j+=1
+                    k-=1
+                    while(j<k and arr[j]==arr[j-1]):
+                        j+=1
+                    while(j<k and arr[k]==arr[k+1]):
+                        k-=1
+                    
+        return z
+    
+
+
+
+
+
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[1,2]
+arr1=[0,0,0]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.majorityElement_best(arr1))
+print(a.threeSum_opt(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
