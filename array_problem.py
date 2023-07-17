@@ -834,13 +834,81 @@ class ArrayProblems:
 
 
 
+    def foursSum_opt(self,arr,k):
+        arr=sorted(arr)
+        z=[]
+        if(len(arr)<4):
+          return z
+        for first in range(0,len(arr),1):
+            if(first>0 and arr[first]==arr[first-1]):
+                continue
+            for second in range (first+1,len(arr),1):
+                if(second>(first+1) and arr[second]==arr[second-1]):
+                    continue
+                third= second+1
+                fourth=len(arr)-1
+                while(third<fourth):
+                    sums=arr[first]+arr[second]+arr[third]+arr[fourth]
+                    if(sums>k):
+                        fourth-=1
+                    elif(sums<k):
+                        third+=1
+                    else:
+                        z.append([arr[first],arr[second],arr[third],arr[fourth]])
+                        third+=1
+                        fourth-=1
+                        while(third<fourth and arr[third]==arr[third-1]):
+                            third+=1
+                        while(third<fourth and arr[fourth]==arr[fourth+1]):
+                            fourth-=1
+        return z
+                 
 
 
+    def two_sum_two_pointers(self, arr, start, end,  target):
+        res = []
+
+        while start < end:
+            first = arr[start] 
+            second = arr[end]
+            summ = first + second 
+            if (summ == target):
+                res.append([arr[start], arr[end]])
+            if summ > target:
+                end -= 1
+            else:
+                start += 1
+        return res
+
+    def three_sum_two_pointers(self, arr, start, end, target):
+        res = []
+        for i in range(start, end +1, 1):
+            fixed_item = arr[i]
+            possible_solutions = self.two_sum_two_pointers(arr, i+1, end, target-fixed_item)
+            for item in possible_solutions:
+                item.append(fixed_item)
+                res.append(item)
+        return res
+
+    def four_sum_two_pointers(self, arr, start, end, target):
+        res = []
+        for i in range(0, end+1, 1):
+            fixed_item = arr[i]
+            possible_solutions = self.three_sum_two_pointers(arr, i+1, end, target-fixed_item)
+            for item in possible_solutions:
+                item.append(fixed_item)
+                res.append(item)
+        return res
+    def four_sum(self, arr, target):
+        arr.sort()
+        return self.four_sum_two_pointers(arr, 0, len(arr)-1, target)
+
+                                 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[0,0,0]
+arr1=[2,2,2,2,2]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.threeSum_opt(arr1))
+print(a.foursSum_opt(arr1,8))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
@@ -849,4 +917,6 @@ print(a.threeSum_opt(arr1))
 #     end = time.time()
 #     print('TIME TAKEN:',(end-start)* 10**3, "ms")
 #     print('-'*25)
+
+
 
