@@ -902,13 +902,30 @@ class ArrayProblems:
     def four_sum(self, arr, target):
         arr.sort()
         return self.four_sum_two_pointers(arr, 0, len(arr)-1, target)
+    
 
-                                 
+
+    def getLongestZeroSumSubarrayLength(self,arr):
+        value =dict()
+        maxs= 0
+        pre_sums = 0
+        for i in range(0,len(arr),1):
+            pre_sums += arr[i]
+            if pre_sums == 0:
+                maxs = i + 1
+            else:
+                if pre_sums in value:
+                    if((i-value[pre_sums])>maxs):
+                        maxs=i-value[pre_sums]
+                else:
+                    value[pre_sums] = i
+        return maxs
+                      
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[2,2,2,2,2]
+arr1=[1 ,45, 22, 0, 10 ,-37 ,37 ,29 ,23 ,2 ,9 ,0 ,2, 15, 49, 6 ,27 ,25 ]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.foursSum_opt(arr1,8))
+print(a.getLongestZeroSumSubarrayLength(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
