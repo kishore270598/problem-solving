@@ -920,12 +920,30 @@ class ArrayProblems:
                 else:
                     value[pre_sums] = i
         return maxs
-                      
+    
+    def subarray_xor(self,arr,k):
+        count=0
+        values=dict()
+        xor=0
+        values[0]=1
+        for i in range(0,len(arr),1):
+            xor=xor ^ arr[i]
+            if (xor^k) in values:
+                # print(xor^k,arr[i])
+                count+=values[xor^k]
+            if (xor) in values:
+                values[xor]+=1
+            else:
+                values[xor]=1
+            # else:
+            #     values[xor^k]=1
+        return count
+
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[1 ,45, 22, 0, 10 ,-37 ,37 ,29 ,23 ,2 ,9 ,0 ,2, 15, 49, 6 ,27 ,25 ]
+arr1=[4, 2, 2, 6, 4]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.getLongestZeroSumSubarrayLength(arr1))
+print(a.subarray_xor(arr1,6))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
