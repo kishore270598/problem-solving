@@ -938,12 +938,66 @@ class ArrayProblems:
             # else:
             #     values[xor^k]=1
         return count
-
+    
+    # def merge(self,arr):
+    #         i=0
+    #         k=[]
+    #         z=[]
+    #         arr=sorted(arr)
+    #         if(len(arr)==1):
+    #           return arr
+    #         else:
+    #             k.append(arr[0])
+    #         while(i<len(arr)):
+    #             if(arr[i][1]>=arr[i][0]):
+    #                 if(arr[i][1]>=arr[i][1]):
+    #                     z.append(arr[i][0])
+    #                     z.append(arr[i][1])
+    #                     j+=1
+    #                 else:
+    #                     z.append(arr[i][0])
+    #                     z.append(arr[j][1])
+    #                     j+=1
+    #                 k.append(z)
+    #                 z=[]
+    #             else:              
+    #                 # if(len(k)==0):
+    #                 #     z.append(arr[i][0])
+    #                 #     z.append(arr[i][1])
+    #                 #     k.append(z)
+    #                 #     z=[]
+    #                 i=j
+    #         return k
+    
+    def merge(self,arr):
+            i=1
+            k=[]
+            arr=sorted(arr)
+            if(len(arr)==1):
+              return arr
+            else:
+                k.append(arr[0])
+            #k=[1,3] [2,6]
+            while(i<len(arr)):
+                a,b=k[-1]
+                if(b>=arr[i][0]):
+                    if(b>=arr[i][1]):
+                        i+=1
+                        continue
+                    else:
+                        b=arr[i][1]
+                    k[-1][1]=b
+                    i+=1
+                else:
+                    k.append(arr[i])
+                    i+=1
+            print(k)
+                     
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[4, 2, 2, 6, 4]
+arr1=[[0,4],[1,4]]
 arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.subarray_xor(arr1,6))
+print(a.merge(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
