@@ -992,12 +992,50 @@ class ArrayProblems:
                     k.append(arr[i])
                     i+=1
             print(k)
-                     
+
+    def merge_sorted_array(self,arr1,m,arr2,n):
+        start2=0
+        for i in range(m,n+m,1):
+            arr1[i]=arr2[start2]
+            start2+=1
+        arr1.sort()
+        return arr1 
+    def merge_sorted_array_opt(self,arr1,m,arr2,n):
+    #arr1 we have 1 pointer (pointer1)  starts from m-1
+    #arr2 we have 1 pointer (pointer2)    starts from n-1
+    #main checks while loop () pointer-writer 
+    #always writer will be decreasing ,starts from (m+n)-1
+    #compare p1 p2 greatest element write in arr1[writer]
+    #if p2 greater writer equal to p2 (p2--)
+    #if p1 greater writer equal to p1 (p1--)\
+        pointer1=m-1
+        pointer2=n-1
+        writer=(m+n)-1
+        while(pointer1>=0 and pointer2>=0 ):
+            if(arr1[pointer1]<arr2[pointer2]):
+                arr1[writer]=arr2[pointer2]
+                pointer2-=1
+            else:
+                arr1[writer]=arr1[pointer1]
+                pointer1-=1
+            writer-=1
+        while(pointer2>=0):
+            arr1[writer]=arr2[pointer2]
+            pointer2-=1
+            writer-=1
+        return arr1 
+    
+
+
+
+
+
+
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[[0,4],[1,4]]
-arr2=[-15 ,30 ,43 ,-18 ,-38, 38 ,36 ,78 ,-22 ,-68, 16 ,39 ,-41 ,-15, 98 ,69 ,-72, -32]
-print(a.merge(arr1))
+arr1=[0]
+arr2=[1]
+print(a.merge_sorted_array_opt(arr1,0,arr2,1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
@@ -1006,6 +1044,3 @@ print(a.merge(arr1))
 #     end = time.time()
 #     print('TIME TAKEN:',(end-start)* 10**3, "ms")
 #     print('-'*25)
-
-
-
