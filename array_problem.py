@@ -1025,17 +1025,24 @@ class ArrayProblems:
             writer-=1
         return arr1 
     
-
-
-
-
-
+    def findMissingRepeatingNumbers(self,arr,n):
+        k=dict()
+        for item in arr:
+            if item in k:
+                k[item]+=1
+                twice_=item
+            else:
+                k[item]=1
+        print(k,twice_)
+        for i in range (1,n+1,1):
+            if i not in k:
+                return  (twice_,i)
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[0]
+arr1=[5 ,2 ,3, 4 ,3 ]
 arr2=[1]
-print(a.merge_sorted_array_opt(arr1,0,arr2,1))
+print(a.findMissingRepeatingNumbers(arr1,5))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
