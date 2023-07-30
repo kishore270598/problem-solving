@@ -1038,11 +1038,119 @@ class ArrayProblems:
             if i not in k:
                 return  (twice_,i)
 
+
+    def numberOfInversions(self,arr,n):
+        return self.mergerec(arr,0,len(arr)-1)
+    def mergerec(self,arr,start,end):
+        count = 0 
+        if(start>=end):
+            return count
+        mid=((start+end)//2)
+        count+=self.mergerec(arr,start,mid)
+        count+=self.mergerec(arr,mid+1,end)
+        count+=self.merge(arr,start,mid,end)
+        return count
+
+    def merge(self,arr,start,mid,end):
+        z=[]
+        p1=start
+        p2=mid+1
+        count=0
+        while(p1<=mid and p2<=end):
+            if(arr[p1]>arr[p2]):
+                z.append(arr[p2])
+                p2+=1
+                #count the all possible elements 
+                count+=(mid-p1 +1 )
+            #right is smaller 
+            else:
+                z.append(arr[p1])
+                p1+=1 
+        while(p2<=end):
+            z.append(arr[p2])
+            p2+=1
+        while(p1<=mid):
+            z.append(arr[p1])
+            p1+=1
+        for i in range (start,end+1,1):
+            arr[i]=z[i-start]
+        return count
+    
+    def reversePairs_2multi(self,arr):
+        return self.mergerec(arr,0,len(arr)-1)
+    def mergerec(self,arr,start,end):
+        count = 0 
+        if(start>=end):
+            return count
+        mid=((start+end)//2)
+        count+=self.mergerec(arr,start,mid)
+        count+=self.mergerec(arr,mid+1,end)
+        #check for 2 muti greater 
+        count+=self.count_pairs_2(arr,start,mid,end)
+        self.merge(arr,start,mid,end)
+        return count
+
+    def merge(self,arr,start,mid,end):
+        z=[]
+        p1=start
+        p2=mid+1
+        while(p1<=mid and p2<=end):
+            if(arr[p1]>arr[p2]):
+                z.append(arr[p2])
+                p2+=1
+            #right is smaller 
+            else:
+                z.append(arr[p1])
+                p1+=1 
+        while(p2<=end):
+            z.append(arr[p2])
+            p2+=1
+        while(p1<=mid):
+            z.append(arr[p1])
+            p1+=1
+        for i in range (start,end+1,1):
+            arr[i]=z[i-start]
+
+    def count_pairs_2(self,arr,start,mid,end):
+        right=mid+1
+        count=0
+        for i in range(start,mid+1,1):
+            while(right<=end and arr[i]>2*arr[right]):
+                right+=1
+            count+=(right-(mid+1))
+        return count
+    
+    def maxProduct_brute(self, arr):
+        max_=arr[0]
+        for i in range(0,len(arr)-1,1):  
+            prod = arr[i]      
+            for j in range(i+1,len(arr),1):
+                prod*=arr[j]
+                max_=max(prod,max_)
+            max_=max(prod,max_)
+        return max_
+
+    def maxProduct_opt(self,arr):
+        max_=-99999999999
+        pref=1
+        suf=1
+        for i in range(0,len(arr),1):
+            if(pref==0):
+                pref=1
+            if(suf==0):
+                suf=1
+            pref*=arr[i]
+            suf*=arr[len(arr)-i-1]
+            max_=max(max_,max(pref,suf))
+        return max_
+
+
+
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
-arr1=[5 ,2 ,3, 4 ,3 ]
+arr1=[0,2]
 arr2=[1]
-print(a.findMissingRepeatingNumbers(arr1,5))
+print(a.maxProduct_opt(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
