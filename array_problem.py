@@ -1134,6 +1134,7 @@ class ArrayProblems:
         max_=-99999999999
         pref=1
         suf=1
+        #pref and suf to negalte the negative values
         for i in range(0,len(arr),1):
             if(pref==0):
                 pref=1
