@@ -93,7 +93,7 @@ class Binary_serach_prob:
                 low=mid+1
         return flr
     
-    def binary_search_ceil(self,arr,target):
+    def ce(self,arr,target):
         low=0
         high=len(arr)-1
         cel=-1
@@ -107,12 +107,164 @@ class Binary_serach_prob:
             else:
                 low=mid+1
         return cel
+    
 
+    def searchRange(self, arr, target):
+        low=0
+        high=len(arr)-1
+        start=-1
+        end=-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                start=mid
+                high=mid-1
+            elif(target>arr[mid]):
+                low=mid+1
+            else:
+                high=mid-1
+        low=0
+        high=len(arr)-1        
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                end=mid
+                low=mid+1
+            elif(target>arr[mid]):
+                low=mid+1
+            else:
+                high=mid-1
+        return [start,end]
+    
+    def count(arr: [int], n: int, target: int) -> int:
+        low=0
+        high=len(arr)-1
+        start=-1
+        end=-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                start=mid
+                high=mid-1
+            elif(target>arr[mid]):
+                low=mid+1
+            else:
+                high=mid-1
+        low=0
+        high=len(arr)-1        
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                end=mid
+                low=mid+1
+            elif(target>arr[mid]):
+                low=mid+1
+            else:
+                high=mid-1
+        if(start>=0 and end>=0):
+            return (end-start)+1
+        else:
+            return 0
+    
+    def search_rotate_brute(self, arr, target):
+        val_=dict()
+        for i in range (0,len(arr),1):
+            val_[arr[i]]=i
+        arr=sorted(arr)
+        low=0
+        high=len(arr)-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                return val_[arr[mid]]
+            elif(target>arr[mid]):
+                low=mid+1
+            else:
+                high=mid-1
+        return -1 
+    
+    def search_rotate_opt(self, arr, target):
+        #Input: nums = [4,5,6,7,0,1,2], target = 0
+        #Output: 4
+        low=0
+        high=len(arr)-1
+        start=-1
+        end=-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                return mid 
+            if(arr[low]<=arr[mid]):#left half sorted conditon 
+                if(arr[low]<=target and target<=arr[mid]):
+                    high=mid-1
+                else:
+                    low=mid+1
+        
+            else:
+                if(arr[mid]<=target and target <=arr[high]):#right half sorted conditon 
+                    low=mid+1
+                else:
+                    high=mid-1
+        return -1
+    
+    def search_rotate_opt1(self, arr, target):
+        #Input: nums = [4,5,6,7,0,1,2], target = 0
+        #Output: 4
+        low=0
+        high=len(arr)-1
+        start=-1
+        end=-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                return True 
+            if(arr[low]<=arr[mid]):#left half sorted conditon 
+                if(arr[low]<=target and target<=arr[mid]):
+                    high=mid-1
+                else:
+                    low=mid+1
+        
+            else:
+                if(arr[mid]<=target and target <=arr[high]):#right half sorted conditon 
+                    low=mid+1
+                else:
+                    high=mid-1
+        return False
+    
+    def search_rotate2_opt(self, arr, target):
+        #Input: nums = [4,5,6,7,0,1,2], target = 0
+        #Output: 4
+        low=0
+        high=len(arr)-1
+        start=-1
+        end=-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]==target):
+                return True 
+            if(arr[high]==arr[mid] and arr[low]==arr[mid]):
+                high=high-1
+                low=low+1
+                continue
+            if(arr[low]<=arr[mid]):#left half sorted conditon 
+                if(arr[low]<=target and target<=arr[mid]):
+                    high=mid-1
+                else:
+                    low=mid+1
+        
+            else:
+                if(arr[mid]<=target and target <=arr[high]):#right half sorted conditon 
+                    low=mid+1
+                else:
+                    high=mid-1
+        return False
+
+    
 a=Binary_serach_prob()
 arr=[]
-arr1=[3 ,44, 14, 39 ,41, 47 ,37 ,1, 21 ]
+arr1=[1,0,1,1,1]
 arr2=[1]
-print(a.ceilingInSortedArray(arr1,35))
+print(a.search_rotate2_opt(arr1,0))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
