@@ -258,13 +258,51 @@ class Binary_serach_prob:
                 else:
                     high=mid-1
         return False
-
     
+    #find min in the roated sorted array 
+    def findMin(self, arr):
+        #Input: nums = [4,5,6,7,0,1,2], target = 0
+        #Output: 4
+        low=0
+        high=len(arr)-1
+        min_=999999999999999
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[low]<=arr[mid]):#left half sorted conditon 
+                    min_=min(min_,arr[low])
+                    low=mid+1
+            else:   
+                    min_=min(arr[mid],min_) 
+                    high=mid-1       
+        return min_
+    
+    def howmanyrotate_brute(self, arr):
+        #Input: nums = [4,5,6,7,0,1,2], target = 0
+        #Output: 4
+        low=0
+        high=len(arr)-1
+        min_=999999999999999
+        index=0
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[low]<=arr[mid]):#left half sorted conditon 
+                    if(arr[low]<min_):
+                        min_=arr[low]
+                        index=low
+                    low=mid+1
+            else:   
+                    if(arr[mid]<min_):
+                        min_=arr[mid]
+                        index=mid
+                    high=mid-1 
+        return index
+    
+
 a=Binary_serach_prob()
 arr=[]
-arr1=[1,0,1,1,1]
+arr1=[1,2,3]
 arr2=[1]
-print(a.search_rotate2_opt(arr1,0))
+print(a.howmanyrotate_brute(arr1))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
