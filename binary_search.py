@@ -236,8 +236,6 @@ class Binary_serach_prob:
         #Output: 4
         low=0
         high=len(arr)-1
-        start=-1
-        end=-1
         while(low<=high):
             mid=(low+high)//2
             if(arr[mid]==target):
@@ -290,19 +288,81 @@ class Binary_serach_prob:
                         min_=arr[low]
                         index=low
                     low=mid+1
+                    print(min_)
             else:   
                     if(arr[mid]<min_):
                         min_=arr[mid]
                         index=mid
                     high=mid-1 
-        return index
+                    print(min_)
+        return min_
     
+    def singleNonDuplicate(self, arr):
+        low=0
+        n=len(arr)
+        high=n-1
+        #all conditions
+        if(n==1):
+            return arr[0]
+        if(arr[0]!=arr[1]):
+            return arr[low]
+        if(arr[n-1]!=arr[n-2]):
+            return arr[n-1]
+        #1 1 2 3 3 (arr[even],arr[odd]) are equal means eliminate left(single element is in right)
+        #(arr[odd],arr[even]) are equal means eliminate right (single element is in left)
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]!=arr[mid+1] and arr[mid]!=arr[mid-1]):
+                return arr[mid]
+            if((mid%2==1 and arr[mid]==arr[mid-1]) or (mid%2==0 and arr[mid]==arr[mid+1])):
+                low=mid+1
+            else:
+                high=mid-1
+
+        return -1
+    def findPeakElement_brute(self,arr):
+        for i in range(0,len(arr),1):
+            if((i==0 or arr[i-1]<arr[i]) and (i==(len(arr)-1) or arr[i]>arr[i+1])):
+                return i
+    
+    def findPeakElement(self, arr):
+        if(len(arr)==1):
+            return 0
+        if(arr[0]>arr[1]):
+            return 0
+        if(arr[len(arr)-1]>arr[len(arr)-2]):
+            return len(arr)-1
+        low=1
+        high=(len(arr)-2)
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]>arr[mid+1] and arr[mid-1]<arr[mid]):
+                return mid
+            elif(arr[mid]<arr[mid+1]):
+                low=mid+1
+            else:
+                high=mid-1
+        return -1
+
+    def floorSqrt(self,n):
+        low=1
+        high=n
+        root=1
+        while(low<=high):
+            mid=(low+high)//2
+            if((mid**2)<=n):
+                root=mid
+                low=mid+1
+            else:
+                high=mid-1
+        return root
+            
 
 a=Binary_serach_prob()
 arr=[]
-arr1=[1,2,3]
+arr1=[1]
 arr2=[1]
-print(a.howmanyrotate_brute(arr1))
+print(a.floorSqrt(100))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
