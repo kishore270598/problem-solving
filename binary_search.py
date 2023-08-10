@@ -356,13 +356,148 @@ class Binary_serach_prob:
             else:
                 high=mid-1
         return root
-            
+    def NthRoot(self,n: int, m: int) -> int:
+            low=1
+            high=m
+            while(low<=high):
+                mid=(low+high)//2
+                midN = self.npower1(mid,n,m)
+                if(midN==1):
+                    return mid
+                elif(midN==0):
+                    low=mid+1
+                else:
+                    high=mid-1
+            return -1
+        
+    def npower1(self,mid,n,m):
+        ans=1
+        for i in range(1,n+1,1):
+            ans=ans*mid
+            if(ans>m):
+                return 2
+        if(ans==m):
+            return 1
+        return 0
+
+    
+    def npower(self,mid,n):
+        ans=1
+        while(n>0):
+            if(n%2==1):
+                ans=ans*mid
+                n=n-1
+            else:
+                mid=mid*mid
+                n=n//2
+        return ans
+    #Koko Eating Bananas
+    def minEatingSpeed_brute(self,piles,hours):
+        n=max(piles)
+        for i in range(1,n+1,1):
+            required_time=self.calculate_time(i,piles,n)
+            if(required_time<=hours):
+                return i
+    
+
+    def calculate_time(self,piles,k):
+        ans=0
+        for i in range(0,len(piles),1):
+            ans+=math.ceil(piles[i]/k)
+        return ans
+    
+    def minEatingSpeed_binary(self,piles,hours):
+        low=1
+        ans=0
+        high=max(piles)
+        while(low<=high):
+            mid=(low+high)//2
+            ans=self.calculate_time(piles,mid)
+            if(ans<=hours):
+                high=mid-1
+            else:
+                low=mid+1
+        return low
+    
+    #we take min as the possible bloom of the day(low)
+    #high as last day possible.. we need to check the possible adjancent days
+    #that will be the possible flowers that need to be share for 1 Bouquet
+    def minDays(self, bloomDay, m, k):
+        low=min(bloomDay)
+        high=max(bloomDay)
+        ans=-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(self.check(bloomDay,mid,m,k)==True):
+                ans=mid
+                high=mid-1
+            else:
+                low=mid+1
+        return ans
+
+    def check(self,bloomDay,mid,m,k):
+        count=0
+        boq=0
+        for i in range(0,len(bloomDay),1):
+            if(bloomDay[i]<=mid):
+                count+=1
+            else:
+                boq+=(count//k)
+                count=0
+        boq+=(count//k)
+        if(boq>=m):
+            return True
+        else:
+            return False
+
+    def smallestDivisor(self, nums, threshold):
+        low=1
+        high=max(nums)
+        ans=1
+        while(low<=high):
+            mid=(low+high)//2
+            if(self.find_sum_div(nums,mid)<=threshold):
+                ans=mid
+                high=mid-1
+            else:
+                low=mid+1
+        return ans
+    
+    def find_sum_div(self,nums,mid):
+        sum_=0
+        for i in range(0,len(nums),1):
+            sum_+=math.ceil(nums[i]/mid)
+        return sum_
+    
+    def shipWithinDays(self, weights, days):
+        low=max(weights)
+        high=sum(weights)
+        ans=1
+        while(low<=high):
+            mid=(low+high)//2
+            if(self.find_min_days(weights,mid)<=days):
+                ans=mid
+                high=mid-1
+            else:
+                low=mid+1
+        return ans 
+    def find_min_days(self,weights,mid):
+        days=1
+        load=0
+        for i in range(0,len(weights),1):
+            if(load+weights[i]>mid):
+                days+=1
+                load=weights[i]
+            else:
+                load+=weights[i]
+        return days
+
 
 a=Binary_serach_prob()
-arr=[]
+arr=[1,2,3,4,5,6,7,8,9,10]
 arr1=[1]
 arr2=[1]
-print(a.floorSqrt(100))
+print(a.shipWithinDays(arr,5))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
