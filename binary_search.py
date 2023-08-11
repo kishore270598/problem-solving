@@ -491,6 +491,61 @@ class Binary_serach_prob:
             else:
                 load+=weights[i]
         return days
+    
+    #arr    [2,3,4,7,11]
+    #ind    [0,1,2,3,4]
+    #missing[1,1,1,3,5] (missing = arr[i]-(index+1))
+    #for missing we need to do the binary search  at last high and low will be boundaries of missing number
+    # arr[high]+ more will be the result but arr[high] can go -1, so we take more=(k-missing)=--> arr[high] + k-arr[high]-(index+1)  -->
+    #high+1+k that is low+k (since boundaries)
+
+    def findKthPositive(self, arr, k):
+        low = 0
+        high = len(arr) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            missing = (arr[mid] - (mid + 1))
+            if missing < k:
+                low = mid + 1
+            else:
+                high = mid - 1
+        return k + high + 1
+    #we are placeing a cow in starting position and finding the max distance that can be place in array
+    # possibleplacecow function finds the possible cow can be place from the last.. once its place we set the last as placed one
+    #
+
+    
+    def aggressiveCows(self,stalls, k):
+        stalls=sorted(stalls)
+        low=1
+        high=stalls[len(arr)-1] -stalls[0]
+        while(low<=high):
+            mid = (low + high) // 2
+            if(self.possibleplacecow(stalls,mid,k)==True):
+               ans=mid
+               low=mid+1
+            else:
+               high=mid-1
+        return ans
+
+    def possibleplacecow(self,stalls,dist,cows):
+        cow=1
+        last=stalls[0]
+        for i in range(0,len(stalls),1):
+            if(stalls[i]-last>=dist):
+                cow+=1
+                last=stalls[i]
+        if(cow>=cows):
+            return True
+        else:
+            return False
+
+
+
+
+
+
+               
 
 
 a=Binary_serach_prob()
