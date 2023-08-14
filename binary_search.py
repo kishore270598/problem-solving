@@ -503,7 +503,7 @@ class Binary_serach_prob:
         low = 0
         high = len(arr) - 1
         while low <= high:
-            mid = (low + high) // 2
+            mid=(low+high)//2
             missing = (arr[mid] - (mid + 1))
             if missing < k:
                 low = mid + 1
@@ -512,7 +512,6 @@ class Binary_serach_prob:
         return k + high + 1
     #we are placeing a cow in starting position and finding the max distance that can be place in array
     # possibleplacecow function finds the possible cow can be place from the last.. once its place we set the last as placed one
-    #
 
     
     def aggressiveCows(self,stalls, k):
@@ -520,7 +519,7 @@ class Binary_serach_prob:
         low=1
         high=stalls[len(arr)-1] -stalls[0]
         while(low<=high):
-            mid = (low + high) // 2
+            mid=(low+high)//2
             if(self.possibleplacecow(stalls,mid,k)==True):
                ans=mid
                low=mid+1
@@ -539,20 +538,88 @@ class Binary_serach_prob:
             return True
         else:
             return False
+        
+    def findPages(self,arr, n, m):
+        low=max(arr)
+        high=sum(arr)
+        #possible pages can be set
+        while(low<=high):
+            mid=(low+high)//2
+            students_=self.find_maxofstudents(arr,mid,m)
+            if(students_>m):
+                low=mid+1
+                #to find the equal students  more pages is been divded to more students so we need to find more pages to equalizse student value
+            else:
+                high=mid-1
+        return low
+    
+    def find_maxofstudents(self,arr,page_possible,m):
+        student=1 
+        noofpages=0
+        for i in range(0,len(arr),1):
+            if(noofpages+arr[i]<=page_possible):
+                #allocating all the pages to the student itself
+                noofpages+=arr[i]
+            else:
+                noofpages=arr[i]
+                student+=1
+                #if that pages got done add the remaning to other students and allocate
+        return student
+    
+    def splitArray(self, nums, k):
+        low=max(arr)
+        high=sum(arr)
+        while(low<=high):
+            mid=(low+high)//2
+            painter=self.find_maxofpainttime(arr,mid,k)
+            if(painter>k):
+                low=mid+1
+            else:
+                high=mid-1
+        return low
+    
+    def find_maxofpainttime(self,arr,possibletime,m):
+        painter=1 
+        noftime=0
+        for i in range(0,len(arr),1):
+            if(noftime+arr[i]<=possibletime):
+                noftime+=arr[i]
+            else:
+                noftime=arr[i]
+                painter+=1
+        return painter
 
-
-
-
-
-
-               
+    def minimiseMaxDistance(self,arr, k):
+        high=0
+        for i in range(0,len(arr)-1,1):
+            high=max(high,(arr[i+1]-arr[i]))     
+        low=0
+        diff = 1e-6
+        while(high-low > diff):
+            mid=(low+high)/2.0
+            station=self.place_gas_station(arr,mid)
+            if(station>k):
+                low=mid
+            else:
+                high=mid
+        return high
+    
+    def place_gas_station(self,arr,distance):
+        gas=0
+        for i in range(1,len(arr),1):
+            numberinbetween=((arr[i]-arr[i-1])/distance)
+            if((arr[i]-arr[i-1]))==(distance * numberinbetween):
+                numberinbetween-=1
+            gas+=numberinbetween
+        return gas
+    
 
 
 a=Binary_serach_prob()
-arr=[1,2,3,4,5,6,7,8,9,10]
+arr=[1, 2, 3, 4, 5]
 arr1=[1]
 arr2=[1]
-print(a.shipWithinDays(arr,5))
+print(a.minimiseMaxDistance(arr,4))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
