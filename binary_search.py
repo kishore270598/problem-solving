@@ -711,20 +711,73 @@ class Binary_serach_prob:
                 low=mid1+1
         return 0
 
+    def rowMaxOnes(self, mat, n, m):
+        max_=0
+        count=0
+        index_=-1
+        for i in range(0,n,1):
+            count=m-self.findthe1s(mat[i],m,1)
+            if(count>max_):
+                max_=count
+                index_=i
+        return index_
 
-
-
-
-
-
-
-
+    def findthe1s(self,matrix,n,x):
+        low=0
+        high=n-1
+        ans=n
+        while(low<=high):
+            mid=(low+high)//2
+            if(matrix[mid]>=x):
+                ans=mid
+                high=mid-1
+            else:
+                low=mid+1
+        return ans
+    
+    def searchMatrix_best(self, matrix, target) -> bool:
+        index_=-1
+        for i in range(0,len(matrix),1):
+            val=self.findthetraget(matrix[i],target)
+            if(val==target):
+                return True
+        return False
+    
+    def findthetraget(self,matrix,target):
+        low=0
+        high=len(matrix)-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(matrix[mid]==target):
+                return target
+            elif(matrix[mid]>target):
+                high=mid-1
+            else:
+                low=mid+1
+        return -1
+    
+    def searchMatrix_opt(self, matrix, target):
+        n=len(matrix)
+        m=len(matrix[0])
+        low=0
+        high=n*m-1
+        while(low<=high):
+            mid=(low+high)//2
+            row=mid//m
+            col=mid%m
+            if(matrix[row][col]==target):
+                return True
+            elif(matrix[row][col]>target):
+                high=mid-1
+            else:
+                low=mid+1
+        return False
 
 a=Binary_serach_prob()
-arr=[1, 2, 3, 4, 5]
+arr=[[1,2,3],[0,4,0],[0,5,0],[0,2,4,5]]
 arr1=[1,3]
 arr2=[2]
-print(a.findMedianSortedArrays_opt(arr1,arr2))
+print(a.searchMatrix_opt(arr,5))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
