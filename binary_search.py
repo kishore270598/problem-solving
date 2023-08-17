@@ -738,12 +738,12 @@ class Binary_serach_prob:
     def searchMatrix_best(self, matrix, target) -> bool:
         index_=-1
         for i in range(0,len(matrix),1):
-            val=self.findthetraget(matrix[i],target)
+            val=self.findthetarget(matrix[i],target)
             if(val==target):
                 return True
         return False
     
-    def findthetraget(self,matrix,target):
+    def findthetarget(self,matrix,target):
         low=0
         high=len(matrix)-1
         while(low<=high):
