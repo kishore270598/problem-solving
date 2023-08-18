@@ -772,12 +772,69 @@ class Binary_serach_prob:
             else:
                 low=mid+1
         return False
+    
+    def searchMatrix_opt(self, matrix, target: int) -> bool:
+        n=len(matrix)
+        m=len(matrix[0])
+        r=0
+        c=m-1
+        while(r<n and c>=0):
+            if(matrix[r][c]==target):
+                return True
+            elif(matrix[r][c]<target):
+                r+=1
+            else:
+                c+=1
+        return False
+
+    def findPeakGrid(self, mat):
+        n=len(mat)
+        m=len(mat[0])
+        r=0
+        c=n-1
+        while(r < c):
+            mid=(r+c)//2
+            if max(mat[mid])>max(mat[mid+1]) and max(mat[mid])>max(mat[mid-1]):
+               return [mid,mat[mid].index(max(mat[mid]))]
+            if  max(mat[mid]) > max(mat[mid+1]):
+                c = mid
+            else:
+                r = mid + 1      
+        return [r,mat[r].index(max(mat[r]))] 
+    
+    def findMedian_opt(self, A):
+        n=len(A)
+        m=len(A[0])
+        low=0
+        high=10**9
+        while(low<=high):
+            mid=(low+high)//2
+            c=0
+            for i in range (0,n,1):
+                c+=self.countval_lessmedian(A[i],mid)
+            if(c<=(m*n-1)//2):
+                low=mid+1
+            else:
+                high=mid-1
+        return low
+    def countval_lessmedian(self,arr,k):
+        low=0
+        high=len(arr)-1
+        while(low<=high):
+            mid=(low+high)//2
+            if(arr[mid]<=k):
+                low=mid+1
+            else:
+                high=mid-1
+        return low 
+
+
 
 a=Binary_serach_prob()
-arr=[[1,2,3],[0,4,0],[0,5,0],[0,2,4,5]]
+arr=[[1, 5, 1], [3, 5, 6],[6, 9, 9]]
 arr1=[1,3]
 arr2=[2]
-print(a.searchMatrix_opt(arr,5))
+print(a.findMedian(arr))
 # for test in arr:
 #     start = time.time()
 #     print('Input',test)
