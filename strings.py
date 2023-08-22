@@ -57,8 +57,38 @@ class Strings_problems:
         for i in range(start,end,1):
             new_string+=s[i]
         return new_string
+    
+    def largestOddNumber(self, num: str) -> str:
+        max_odd=""
+        flg=0
+        if(num==""):
+            return num
+        for i in range(len(num)-1,-1,-1):
+            if(int(num[i])%2==1):
+                flg=1
+                break
+        if(flg==1):
+            max_odd+=num[0:i+1]
+        return max_odd
+    def longestCommonPrefix(self, strs):
+        min_len=len(strs[0])
+        common_string=""
+        for k in range(0,len(strs),1):
+            if(len(strs[k])<min_len):
+                min_len=len(strs[k])
+        for i in range(0,min_len,1):
+            common=strs[0][i]
+            for j in range(1,len(strs),1):
+                if(strs[j][i]!=common):
+                    return common_string
+            common_string+=common
+        return common_string
+
+     
+     
+
 
 a=Strings_problems()
-s ="he, llo ,world"
-ans=a.reverseWords(s)
+s =["cir","car","ca"]
+ans=a.longestCommonPrefix(s)
 print(ans)
