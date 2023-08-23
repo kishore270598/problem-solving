@@ -83,12 +83,63 @@ class Strings_problems:
                     return common_string
             common_string+=common
         return common_string
-
-     
-     
-
-
+    
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        dict_map={}
+        if (len(s)!=len(t)):
+            return False
+        for index in range(0,len(s),1):
+            char1=s[index]
+            char2=t[index]
+            if(char1 not in dict_map):
+                if(char2 in dict_map.values()):
+                    return False
+                dict_map[char1]=char2
+            elif(dict_map[char1]!=char2):
+                return False
+        return True
+    
+    def rotateString(self, s: str, goal: str) -> bool:
+        final_ans=s+s
+        if(goal in final_ans):
+            return True
+        else:
+            return False
+        
+    def isAnagram(self, s: str, t: str) -> bool:
+        if(len(s)!=len(t)):
+            return False
+        s_=sorted(s)
+        t_=sorted(t)
+        for i in range(0,len(s),1):
+            if(s_[i]!=t_[i]):
+                return False
+        return True
+    
+    def frequencySort(self, s: str) -> str:
+        dict_map={}
+        max_=0
+        ans=""
+        freq=[]
+        for i in range(0,len(s),1):
+            if s[i] not in dict_map:
+                dict_map[s[i]]=1
+            else:
+                dict_map[s[i]]+=1
+        for key in dict_map:
+            freq.append(dict_map[key])
+        freq.sort(reverse=True)
+        for i in range(0,len(freq),1):
+            ans+=self.printthechar(freq[i],dict_map)
+        print(ans)
+    def printthechar(self,val,dict_map):
+        for key in dict_map:
+            if(dict_map[key]==val):
+                dict_map[key]=0
+                return val*key
+            
 a=Strings_problems()
-s =["cir","car","ca"]
-ans=a.longestCommonPrefix(s)
+s ="tree"
+b="nagaram"
+ans=a.frequencySort(s)
 print(ans)
