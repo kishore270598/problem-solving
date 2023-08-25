@@ -205,7 +205,70 @@ class Strings_problems:
                     ans += 1
                 if(dist_count > k):
                     break
-        return ans   
+        return ans  
+    def longestPalindrome_brute(self, s: str) -> str:
+        max_=0
+        max_string=""
+        new_string=""
+        for i in range(0,len(s),1):
+            for j in range(i,len(s),1):
+                str1=""
+                for k in range(i,j+1,1):
+                    str1+=s[k]
+                new_string=self.checkpalindrome(str1)
+                if(new_string==str1):
+                    if(len(new_string)>max_):
+                        max_string=str1
+                        max_=len(str1)
+
+        return max_string
+        
+    def checkpalindrome(self,str):
+        str1="" 
+        for i in range(len(str)-1,-1,-1):
+            str1+=str[i]
+        return str1
+    
+    def longestPalindrome(self, s: str) -> str:
+        result=""
+        ans=""
+        ans1=""
+        for i in range(0,len(s),1):
+            ans=self.expand(i,i,s)
+            if(len(ans)>len(result)):
+                result=ans
+            ans1=self.expand(i,i+1,s)
+            if(len(ans1)>len(result)):
+                result=ans1
+        return result
+    def expand(self,start,end,str):
+        while(start>=0 and end<len(str) and str[start]==str[end]):
+            start-=1
+            end+=1
+        return str[start+1:end]
+
+    def beautySum(self, s: str) -> int:
+        ans=0
+        for i in range(0,len(s),1):
+            val_map={}
+            for j in range(i,len(s),1):
+                if(s[j] not in val_map):
+                  val_map[s[j]]=1
+                  ans+=self.findbeauty(val_map)
+                else:
+                  val_map[s[j]]+=1
+                  ans+=self.findbeauty(val_map)
+        return ans 
+
+    def findbeauty(self,val_map):
+        min_=100000000000
+        max_=-999999
+        for key in val_map:
+            max_=max(max_,val_map[key])
+            min_=min(min_,val_map[key])
+        return max_ - min_
+            
+
 
 
 
@@ -213,7 +276,7 @@ class Strings_problems:
 
 
 a=Strings_problems()
-s ="abcad"
+s ="babad"
 b="nagaram"
-ans=a.countSubStrings(s,2)
+ans=a.longestPalindrome(s)
 print(ans)
