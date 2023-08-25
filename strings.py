@@ -137,9 +137,83 @@ class Strings_problems:
             if(dict_map[key]==val):
                 dict_map[key]=0
                 return val*key
-            
+
+    def romanToInt(self, s):
+        #Decalration of symbol and values
+        val={'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}
+        sum_=0
+        for i in range (len(s)):
+            if(i!=len(s)-1):
+                if(s[i]=='I' and ( s[i+1]=='V' or  s[i+1]=='X' )):
+                   sum_+=-1*self.findthesum(s[i],val)
+                elif(s[i]=='X' and ( s[i+1]=='L' or  s[i+1]=='C' )):
+                    sum_+=-1*self.findthesum(s[i],val)
+                elif(s[i]=='C' and ( s[i+1]=='D' or  s[i+1]=='M' )):    
+                    sum_+=-1*self.findthesum(s[i],val)
+                else:
+                    sum_+=self.findthesum(s[i],val)
+            else:
+                    sum_+=self.findthesum(s[i],val)
+        return sum_
+
+    def findthesum(self,a,val):
+        if(a in val):
+            sum_=val[a]
+
+        return sum_     
+
+    def myAtoi(self, s: str) -> int:
+        maxInt=2**31 - 1
+        minInt=-2**31
+        ans=0
+        start=0
+        sign=1
+        str1=s.lstrip()
+        if (len(str1)==0): 
+          return ans
+        if(str1[start]=="-"):
+            sign=-1
+            start+=1
+        elif(str1[start]=="+"):
+            sign=1
+            start+=1
+        for i in range(start, len(str1),1):
+            char=str1[i]
+            if not char.isdigit():
+                break
+            else:
+                ans=(ans*10) + int(char)
+
+        if ((ans * sign)>maxInt):
+            return maxInt
+        elif ((ans * sign)<=minInt):
+            return minInt
+        return ans*sign
+
+    
+    def countSubStrings(self,s: str, k: int) -> int:
+        ans=0
+        dist_count = 0
+        for i in range(0, len(s),1):
+            dist_count = 0
+            val_char = [0] * 26
+            for j in range(i,len(s),1):
+                if(val_char[ord(s[j]) - 97] == 0):
+                    dist_count += 1
+                val_char[ord(s[j]) - 97] += 1
+                if(dist_count == k):
+                    ans += 1
+                if(dist_count > k):
+                    break
+        return ans   
+
+
+
+
+
+
 a=Strings_problems()
-s ="tree"
+s ="abcad"
 b="nagaram"
-ans=a.frequencySort(s)
+ans=a.countSubStrings(s,2)
 print(ans)
