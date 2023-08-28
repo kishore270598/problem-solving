@@ -1,0 +1,46 @@
+import time
+import math
+class Node:
+    def __init__(self, data, next,prev):
+        self.data = data
+        self.next = next
+        self.prev = prev
+
+class Doubly_linked_list:
+        def __init__(self):
+            self.head=None
+        def insertion(self,data):
+            node=Node(data,None,None)
+            if self.head is None:
+                node.prev=None
+                self.head=node
+            else:
+                pointer=self.head
+                while pointer.next is not None:
+                    pointer=pointer.next
+                pointer.next=node
+                node.prev=pointer
+            return self.head
+        def print_all(self):
+            current=self.head
+            ll=[]
+            while current is not None:
+                ll.append(current.data)
+                current=current.next 
+            return ll
+        def delete_at_end(self):
+            pointer=self.head
+            while pointer.next.next is not None:
+                pointer=pointer.next
+            pointer.next=None
+            
+dd=Doubly_linked_list()
+dd.insertion(1)
+dd.insertion(2)
+dd.insertion(3)
+print(dd.print_all())
+
+
+
+
+

@@ -81,6 +81,7 @@ class Linked_list:
         node.val = node.next.val
         node.next = node.next.next
 
+
          
   
 ll=Linked_list()
