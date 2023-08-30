@@ -81,16 +81,55 @@ class Linked_list:
         node.val = node.next.val
         node.next = node.next.next
 
+    def middleNode(self):
+        fast=self.head
+        slow=self.head
+        #Tortoise and Hare method
+        while((fast is not None) and (fast.next is not None) ):
+            slow=slow.next
+            fast=fast.next.next
+        return slow 
+    def reverseList(self, head: Optional[ListNode]):  
+        # we need to create a dummy node which holds null
+        temp=None
+        cur=head
+        while ( head is not None):
+            cur=cur.next
+            #reversing the arrow
+            head.next=temp
+            #carrying the head
+            temp=head
+            head=cur
+        return temp
+    def hasCycle_brute(self, head) -> bool:
+        val1=set()
+        pointer=self.head
+        while pointer is not None:
+            if(pointer.val in val1):
+                return True
+            else:
+                val1.add(pointer.val)
+            pointer=pointer.next
+        return False
+    def hasCycle(self, head) -> bool:
+        fast=self.head
+        slow=self.head
+        while((fast is not None) and (fast.next is not None) ):
+            slow=slow.next
+            fast=fast.next.next
+            if(slow==fast):
+                return
+        return False
+            
 
-         
-  
 ll=Linked_list()
 ll.insertion(1)
 ll.insertion(2)
 ll.insertion(3)
 ll.insertion(4)
-ll.delete_k_element(1)
-print(ll.print_all())
+print(ll.middleNode())
+print(ll.delete_k_element(1))
+print(ll.reverseList())
 
 # [4] -> next = H
 # [1, (none)]              ----------->

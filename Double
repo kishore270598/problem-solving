@@ -33,11 +33,24 @@ class Doubly_linked_list:
             while pointer.next.next is not None:
                 pointer=pointer.next
             pointer.next=None
+        def reverseDLL(self):
+            temp=None
+            pointer=self.head
+            while pointer is not None:
+                temp=pointer.prev
+                pointer.prev=pointer.next
+                pointer.next=temp
+                pointer=pointer.prev
+            if temp is not None:
+                self.head = temp.prev
+            return self.head
+
             
 dd=Doubly_linked_list()
 dd.insertion(1)
 dd.insertion(2)
 dd.insertion(3)
+dd.reverseDLL()
 print(dd.print_all())
 
 
