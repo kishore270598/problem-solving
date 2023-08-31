@@ -118,8 +118,112 @@ class Linked_list:
             slow=slow.next
             fast=fast.next.next
             if(slow==fast):
-                return
+                return True
         return False
+    
+    def firstNodecycle_brute(self, head) -> bool:
+        val1=set()
+        pointer=self.head
+        while pointer is not None:
+            if(pointer in val1):
+                return pointer
+            else:
+                val1.add(pointer)
+            pointer=pointer.next
+        return None
+    
+    def firstNodecycle(self, head) -> bool:
+        fast=head
+        slow=head
+        tracker=head
+        while((fast is not None) and (fast.next is not None) ):
+            fast=fast.next.next
+            slow=slow.next
+            if slow==fast:
+                while tracker!=slow:
+                    slow=slow.next 
+                    tracker=tracker.next
+                return tracker
+        return None
+    
+    def lengthOfLoop_brute(head: Node) -> int: #wrong approch
+        fast=head
+        slow=head
+        tracker=head
+        length1=0
+        length2=0
+        while((fast is not None) and (fast.next is not None) ):
+            fast=fast.next.next
+            slow=slow.next
+            length1+=1
+            if slow==fast:
+                while tracker!=slow:
+                    slow=slow.next 
+                    tracker=tracker.next
+                    length2+=1
+                return (length1-length2)+1
+        return 0
+    def lengthOfLoop(head: Node) -> int:
+        fast=head
+        slow=head
+        flag=0
+        count=1
+        while((fast is not None) and (fast.next is not None) ):
+            
+            if (slow==fast) and flag==1:
+                count=1
+                slow=slow.next # loop starting we include the length as one (count1)
+                while fast!=slow:
+                    slow=slow.next
+                    count+=1 
+                return count
+            slow=slow.next
+            fast=fast.next.next
+            flag=1
+        return 0
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        fast=head
+        slow=head
+        temp=head 
+        while fast.next != None and fast.next.next != None:
+            slow=slow.next
+            fast=fast.next.next 
+        slow.next=self.reverse_link(slow.next)
+        slow=slow.next
+        while slow is not None:
+            if temp.val is not slow.val:
+                return False
+            temp = temp.next
+            slow = slow.next
+        return True
+
+    def reverse_link(self,midhead):
+        temp=None
+        current=None
+        while midhead is not None:
+            current=midhead.next
+            midhead.next=temp
+            temp=midhead
+            midhead=current
+        return temp
+
+
+
+
+           
+   
+        
+
+
+
+
+
+
+   
+
+
+
+
             
 
 ll=Linked_list()
