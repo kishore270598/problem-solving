@@ -206,25 +206,83 @@ class Linked_list:
             temp=midhead
             midhead=current
         return temp
+    def oddEvenList(self, head):
+        current=head
+        if(head is None):
+          return None
+        if(current.next is None):
+            return head
+        if(current.next.next is None):
+            return head
+        odd_pointer=head
+        even_pointer=head.next 
+        even_head=even_pointer
+        i=1
+        while current is not None:
+            if (i>2 and i%2!=0):
+                odd_pointer.next=current
+                odd_pointer=odd_pointer.next 
+            elif (i>2 and i%2==0):
+                even_pointer.next=current
+                even_pointer=even_pointer.next 
+            i+=1
+            current=current.next
+
+        even_pointer.next =None
+        odd_pointer.next=even_head
+        return head 
+    def removeNthFromEnd_brute(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        current=head
+        pos=0
+        prev=None 
+        len=0
+        while current is not None:
+            len+=1
+        print(len)
+        while(current is not None):
+            if(pos==n):
+                if(current.next is not None):
+                    prev.next=current.next
+                else:
+                    prev.next=None
+                return head 
+            prev=current
+            current=current.next 
+            pos+=1
+        return None
+    def removeNthFromEnd_opt(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        start=Node(None,None)
+        start.next=head
+        fast=start
+        slow=start 
+        while (n>0):
+            fast=fast.next
+        while fast.next is None:
+            slow=slow.next
+            fast=fast.next
+        slow.next=slow.next.next 
+        return start.next
+    def deleteMiddle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        fast=self.head
+        slow=self.head
+        prev=None
+        while ((fast is not None) and fast.next is not None):
+            prev=slow
+            slow=slow.next
+            fast=fast.next.next 
+        prev.next=slow.next
+        return head 
 
 
 
 
            
-   
-        
 
 
 
 
 
 
-   
-
-
-
-
-            
 
 ll=Linked_list()
 ll.insertion(1)
