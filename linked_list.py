@@ -271,13 +271,59 @@ class Linked_list:
             slow=slow.next
             fast=fast.next.next 
         prev.next=slow.next
-        return head 
+        return head
+    
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        start=Node(None,None)
+        temp=start
+        carry=0
+        while ( (l1 is not None ) or (l2 is not None) or carry):
+            sum1=0
+            if(l1!=None):
+                sum1+=l1.val
+                l1=l1.next
+            if(l2!=None):
+                sum1+=l2.val
+                l2=l2.next
+            sum1+=carry
+            carry=(sum1//10)
+            new_=Node(sum1%10,None)
+            temp.next=new_
+            temp=temp.next 
+        return start.next
+    
+    def addOne(self,head: Node) -> Node:
+        k =self.reverse_list(head)
+        carry = 0
+        prev = None
+        head.data += 1
+        while(head != None) and (head.data > 9 or carry > 0):
+            prev = head
+            head.data += carry
+            carry = head.data // 10
+            head.data = head.data % 10
+            head = head.next
+        return self.reverse_list(k)
+    
+    def reverse_list(self,head):
+        currentNode=head
+        prevNode=head
+        currentNode.next=None
+        nextNode=head.next
+        while(nextNode is not None):
+            currentNode=nextNode
+            nextNode=nextNode.next
+            currentNode.next=prevNode
+            prevNode.next=currentNode
+        return currentNode
+ 
+
+
+    
 
 
 
-
-           
-
+            
 
 
 
