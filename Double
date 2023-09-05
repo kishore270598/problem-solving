@@ -44,6 +44,61 @@ class Doubly_linked_list:
             if temp is not None:
                 self.head = temp.prev
             return self.head
+        def deleteAllOccurrences(self,head: Node, k: int) -> Node:
+            if (head == None):
+                return
+            curr=head
+            next_=None
+            while(curr is not None):
+                if(curr.data==k):
+                    next_=curr.next
+                    head=self.delete(head,curr)
+                    curr=next_
+                else:
+                    curr=curr.next
+            return head
+        def delete(self,head,delete):
+            if (head is None and delete is None):
+                return None
+            if (head==delete):
+                head=delete.next
+            #to delete the element which not end
+            if(delete.next!=None):
+                delete.next.prev=delete.prev
+            #to delete the element not first
+            if(delete.prev!=None):
+                delete.prev.next=delete.next
+            delete=None
+            return head
+        
+        def findPairs_best(head: Node, k: int) -> [[int]]:
+            first=head
+            second=head
+            while(second.next!=None):
+                second=second.next
+            ans=[]
+            while(first!=second and second.next!=first):
+                if(first.data+second.data)==k:
+                    ans.append([first.data,second.data])
+                    first=first.next
+                    second=second.prev
+                else:
+                #lesser as expected since sorted we move front
+                    if((first.data+second.data)<k):
+                        first=first.next
+                #greater as expected since sorted we move backward
+                    else:
+                        second=second.prev
+            return ans
+
+
+        
+
+
+
+
+
+        
 
             
 dd=Doubly_linked_list()
