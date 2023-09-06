@@ -304,19 +304,35 @@ class Linked_list:
             head.data = head.data % 10
             head = head.next
         return self.reverse_list(k)
-    
-    def reverse_list(self,head):
-        currentNode=head
-        prevNode=head
-        currentNode.next=None
-        nextNode=head.next
-        while(nextNode is not None):
-            currentNode=nextNode
-            nextNode=nextNode.next
-            currentNode.next=prevNode
-            prevNode.next=currentNode
-        return currentNode
- 
+    #hard problem -- >reverse on k group element 
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+    #we need to find the length 
+        if head == None or head.next == None:
+          return head
+        count=0
+        cur=head
+        while(cur!=None):
+            count+=1
+            cur=cur.next
+
+        # a dummy node 
+        dummy=ListNode(0)
+        dummy.next=head
+        prev=dummy
+        nex=None
+        while (count >= k):
+            cur=prev.next
+            nex=cur.next
+            for i in range(1, k,1):
+                cur.next=nex.next
+                nex.next=prev.next
+                prev.next=nex
+                nex=cur.next
+            prev=cur
+            count-=k
+        return dummy.next
+
+
 
 
     

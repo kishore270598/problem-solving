@@ -90,7 +90,31 @@ class Doubly_linked_list:
                     else:
                         second=second.prev
             return ans
+        def removeDuplicates(self,head: Node) -> Node:
+            first=head
+            while (first.next != None) :
+                if (first.data == first.next.data):
+                     head=self.delete(head, first.next)
+                else:
+                    first = first.next
+            return head
 
+        def delete(self,head,delete):
+            if (head is None and delete is None):
+                return None
+            if (head==delete):
+                head=delete.next
+            #to delete the element which not end
+            if(delete.next!=None):
+                delete.next.prev=delete.prev
+            #to delete the element not first
+            if(delete.prev!=None):
+                delete.prev.next=delete.next
+            delete=None
+            return head 
+        
+        
+  
 
         
 
