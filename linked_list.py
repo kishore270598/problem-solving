@@ -331,6 +331,61 @@ class Linked_list:
             prev=cur
             count-=k
         return dummy.next
+        
+    def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        cur=head
+        count=1
+        if head == None or head.next == None:
+          return head
+        while(cur.next!=None):
+            count+=1
+            cur=cur.next
+        if(k%count==0):
+            return head
+        cur.next=head #to mark last node to first
+        k=k%count
+        k=count-k
+        print(count)
+        while(k>0):
+            cur=cur.next
+            k-=1
+        head=cur.next
+        cur.next=None
+        return head 
+    
+    def flattenLinkedList(root: Node) -> Node:
+            if root == None or root.next == None:
+                return root
+            # recursion to find the end and end -1 node and combine it
+            root.next = flattenLinkedList(root.next)
+            # now merge
+            root = mergeTwoLists(root, root.next)
+            # return the root
+            # it will be in turn merged with its left
+            return root
+
+    def mergeTwoLists(a, b):
+        temp=Node(0,None,None)
+        res=temp
+        while (a!= None and b!= None):
+            if (a.data < b.data):#compare it
+                temp.child=a
+                temp=temp.child
+                a=a.child
+            else:
+                temp.child=b
+                temp=temp.child
+                b=b.child
+        if (a!=None):
+            temp.child=a
+        else:
+            temp.child=b
+        return res.child    
+
+
+
+
+    
 
 
 
