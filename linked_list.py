@@ -382,6 +382,38 @@ class Linked_list:
             temp.child=b
         return res.child    
 
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        #step1 :to create a copy of a node and connect in middle
+        #step2 :connect the random node as original
+        #step3 :then discard the link
+        itr=head
+        front=head
+        if head == None or head.next == None:
+            return head
+        while(itr!=None):
+            front=itr.next
+        copy=Node(itr.data)
+        itr=front
+        #step2
+        itr=head
+        while(itr!=None):
+            if(itr.random!=None):
+                itr.next.random=itr.random.next
+            itr=itr.next.next
+        #step3
+        new=Node
+        copy=new
+        itr=head
+        front=head
+        while(itr!=None):
+            front=itr.next.next
+            copy.next=itr.next
+            itr.next=front
+            itr=itr.next
+            copy=copy.next
+        return new.next
+
+
 
 
 
