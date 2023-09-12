@@ -163,7 +163,6 @@ class Recursion_problems:
         self.genratebinary(arr)
 
     def countStrings(self,n, out='', last_digit=0):
-    
         # if the number becomes n–digit, print it
         if n == 0:
             print(out, end=' ')
@@ -176,9 +175,90 @@ class Recursion_problems:
         # only if the last digit is 0
         if last_digit == 0:
             self.countStrings(n - 1, out + '1', 1)
-    
+    def generateParenthesis(self, n: int):
+    #if open barckets less then number you can add
+    # if the closed brackets less then the open brackets we can close
+    #if both the closed and open are equal we end
+        def gen(left, right, s):
+            if left==right==n:
+                res.append(s)
+                return 
+            if left < n:
+                gen(left + 1, right, s + '(')
+
+            if right < left:
+                gen(left, right + 1, s + ')')
+
+        res = []
+        gen(0, 0, '')
+        return res
+    ############################
+    ############################
+    ## IMPORTANT - POWERSET ####
+    ############################
+    ############################
+    def subsets_brute(self, nums):
+        sub=dict()
+        z=set()
+        for i in range(0,len(nums)+1,1):
+            for j in range(0,i+1,1):
+                a=[]
+                for k in range(j,i,1):
+                    a.append(nums[k])
+    def subset(self,nums):#bit approch
+        n=len(nums)
+        k=set()
+        print(n)
+        for i in range(0,(1<<n),1):
+            s=[]
+            for j in range(0,n,1):
+                if(i&(1<<j)==0):
+                    s.append(nums[j])
+                print(s)
+    # def subset1(self,nums):
+    #     ans=[]
+    #     curr=[]
+    #     def findPowerSet(main,cur,n,ans):
+    #         #base case is when it hits last element we find one sub string
+    #         if n==0:
+    #             k=[]
+    #             for i in cur:
+    #                 k.append(i)
+    #             ans.append(k)
+    #             return 
+    #         cur.append(main[n-1])
+    #         #including last element
+    #         findPowerSet(main,cur,n-1,ans)
+    #         #not including last element just pop and keep on back tracking
+    #         cur.pop()
+    #         findPowerSet(main,cur,n-1,ans)
+    #     findPowerSet(nums, curr, len(nums),[])
+    #     return ans
+    def subset_op(self,nums): # main codee
+        ans=[]
+        subset=[]      
+        def findPowerSet(index):
+            #base case is when it hits last element we find one sub string
+            if index>=len(nums):
+                ans.append(subset.copy())
+                return
+            #include the first element
+            subset.append(nums[index])
+            findPowerSet(index+1)
+            #dont include first element
+            subset.pop()
+            findPowerSet(index+1)
+        findPowerSet(0)
+        return ans 
+    def printAllSubsequence(self,input_str, output_str):
+        if len(input_str) == 0:
+            print(output_str, end="\n")
+            return
+        self.printAllSubsequence(input_str[1:], output_str+input_str[0])
+        self.printAllSubsequence(input_str[1:], output_str)
 
 
 r=Recursion_problems()
-k=[2,4,1,5]
-ans=r.countStrings(3)
+k="abc"
+ans=r.printAllSubsequence(k,"")
+print(ans)
