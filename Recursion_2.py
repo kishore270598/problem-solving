@@ -250,15 +250,71 @@ class Recursion_problems:
             findPowerSet(index+1)
         findPowerSet(0)
         return ans 
-    def printAllSubsequence(self,input_str, output_str):
-        if len(input_str) == 0:
-            print(output_str, end="\n")
-            return
-        self.printAllSubsequence(input_str[1:], output_str+input_str[0])
-        self.printAllSubsequence(input_str[1:], output_str)
+    #to find the distinct subsequence of 2 strings 
+    #best approch
+    def func(s: str, n: int) -> int:
+        # Initializing 'count' with 1.
+        count = 1
+
+        # Creating a dictionary 'm1' to store character counts.
+        m1 = {}
+
+        # Calculating the number of distinct subsequences.
+        for i in range(n):
+            if s[i] not in m1:
+                m1[s[i]] = count
+                count *= 2
+            else:
+                temp = m1[s[i]]
+                m1[s[i]] = count
+                count *= 2
+                count -= temp
+
+        return count
+    #optimal approch
+    def moreSubsequence(self,n: int, m: int, a: str, b:str) -> str:
+        n=set()
+        def printAllSubsequence(input_str, output_str):
+            if len(input_str) == 0:
+                if(output_str not in n):
+                    n.add(output_str)
+                return
+            printAllSubsequence(input_str[1:], output_str+input_str[0])
+            printAllSubsequence(input_str[1:], output_str)
+        printAllSubsequence(a,'')
+        a_len=len(n)-1
+        n=set()
+        printAllSubsequence(b,'')
+        b_len=len(n)-1
+        if(a_len>b_len):
+            return a
+        elif(a_len<b_len):
+            return b
+        else:
+            return a
+    def subarraysWithSumK(self,a,k):
+        ans=[]
+        subset=[]
+        def sub_rec(index,s):
+            if(index>=len(a)):
+                if(s==k):
+                    ans.append(subset.copy())
+                return 
+            subset.append(a[index])
+            s+=a[index]
+            sub_rec(index+1,s)
+            s-=a[index]
+            subset.pop()
+            sub_rec(index+1,s)
+        sub_rec(0,0)
+        return ans
+                    
+
+
 
 
 r=Recursion_problems()
-k="abc"
-ans=r.printAllSubsequence(k,"")
+a=[1, 2, 3 ,1, 1 ,1]
+b='dd'
+ans=r.subarraysWithSumK(a,6)
 print(ans)
