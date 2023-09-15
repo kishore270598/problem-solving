@@ -308,13 +308,114 @@ class Recursion_problems:
             sub_rec(index+1,s)
         sub_rec(0,0)
         return ans
-                    
-
-
-
+    
+    def combinationSum(self, candidates,target):
+        ans=[]
+        subset=[]
+        def sub_rec(index,target):
+            if(index==len(candidates)):
+                if(target==0):
+                    ans.append(subset.copy())
+                return 
+            #adding the mutiple time the same value and subtracting with the target 
+            # before that checking its target value matches
+            if(candidates[index]<=target):
+                subset.append(candidates[index])
+                sub_rec(index,target-candidates[index])
+                subset.pop()
+            sub_rec(index+1,target)
+        sub_rec(0,target)
+        return ans
+    #combination sumb 2
+    #we should'nt inculde again the value, plus to avoid the duplicates
+    def combinationSum2(self, candidates,target):
+        ans=[]
+        subset=[]
+        candidates.sort()
+        def sub_rec(index,target):
+            if(target==0):
+                ans.append(subset.copy())
+                return 
+            #since starting for index to len(arr) we just traves 
+            for i in range(index,len(candidates),1):
+                if(i>index and candidates[i]==candidates[i-1]):
+                    continue
+                if(candidates[i]>target):
+                    break
+                #since the value is more confirm upcoming value wll be more
+                #just break there
+                subset.append(candidates[i])
+                sub_rec(i+1,target-candidates[i])
+                subset.pop()
+        sub_rec(0,target)
+        return ans
+    
+    def subsetSum(self,nums):
+        ans=[]
+        subset=[]      
+        def findPowerSet(index):
+            if index>=len(nums):
+                ans.add(sum(subset))
+                return
+            subset.append(nums[index])
+            findPowerSet(index+1)
+            subset.pop()
+            findPowerSet(index+1)
+        findPowerSet(0)
+        ans.sort()
+        return ans
+    #brute force for subset sum 2 case        
+    def subsetsWithDup_brute(self, nums):
+        ans=set()
+        subset=[]
+        def subset_rec(index):
+            if(index>=len(nums)):
+                subset.sort()
+                ans.add(tuple(subset))
+                return
+            subset.append(nums[index])
+            subset_rec(index+1)
+            subset.pop()
+            subset_rec(index+1)
+        subset_rec(0)
+        return ans 
+    #subset sum2 find subset without duplicate
+    def subsetsWithDup(self,nums):
+        ans=[]
+        subset=[]
+        def subset_rec(index):
+            #starting from empty set
+            ans.append(subset.copy())
+            for i in range(index,len(nums),1):
+                if(i!=index and nums[i]==nums[i-1]):
+                  #to remove the duplicates this check
+                  #index and i make sure that we are not picking it again on the same index
+                    continue
+                subset.append(nums[i])
+                subset_rec(i+1)
+                subset.pop()
+        nums.sort()
+        subset_rec(0)
+        return ans  
+    
+    def combinationSum3(self, n: int, target: int):
+        ans=[]
+        subset=[]
+        candidates=[1,2,3,4,5,6,7,8,9] # with the space 
+        def sub_rec(index,target):
+            if(target==0 and len(subset)==n):
+                ans.append(subset.copy())
+                return 
+            for i in range(index,len(candidates),1):
+                subset.append(candidates[i])
+                sub_rec(i+1,target-candidates[i])
+                subset.pop()
+        sub_rec(0,target)
+        return ans 
+        
 
 r=Recursion_problems()
-a=[1, 2, 3 ,1, 1 ,1]
+a=[1,2,3,4,5,6,7,9]
 b='dd'
-ans=r.subarraysWithSumK(a,6)
+ans=r.combinationSum3(3,9)
 print(ans)
