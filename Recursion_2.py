@@ -411,11 +411,86 @@ class Recursion_problems:
                 sub_rec(i+1,target-candidates[i])
                 subset.pop()
         sub_rec(0,target)
-        return ans 
-        
+        return ans
+    def letterCombinations(self,digits):
+        #dict to set the key and values
+        #whenever the len of digits means.. the len of substring should be equal to number of button u click
+        #we get the value from dict 
+        #till the letters are avalaible we do the perumation 
+        # we pop that particular value perumation which did and go for next one
+        if len(digits) == 0:
+            return []
+        d={
+            "2": "abc",
+            "3": "def",
+            "4": "ghi",
+            "5": "jkl",
+            "6": "mno",
+            "7": "pqrs",
+            "8": "tuv",
+            "9": "wxyz",}
+        def backtrack(index, substring):
+            if len(substring) == len(digits):
+                ans.append("".join(substring))
+                return
+            possible_letters = d[digits[index]]
+            for letter in possible_letters:
+                substring.append(letter)
+                backtrack(index + 1, substring)
+                substring.pop()
+        ans = []
+        backtrack(0, [])
+        return ans
+
+    def partition(self, strs):
+        subset=[]
+        ans=[]
+        def rec_(index):
+            if(index==len(strs)):
+                ans.append(subset.copy())
+                return
+            for i in range(index,len(strs),1):
+                #check palindrome then create the subset
+                if(ispalindrome(strs,index,i)):
+                    subset.append(strs[index:i + 1])
+                    rec_(i+1)
+                    subset.pop()
+        def ispalindrome(s,start,end):
+          while(start<=end):
+            if(s[start]!=s[end]):
+                return False
+            start+=1
+            end-=1
+          return True
+        rec_(0)
+        return ans
+    
+    def exist(self, board):
+        def backtrack(indexm,indexn, substring):
+            if len(substring) == len(board):
+                ans.append("".join(substring))
+                return
+            possible_letters = board[indexm][indexn]
+            for letter in possible_letters:
+                substring.append(letter)
+                backtrack(indexm,indexn, substring)
+                substring.pop()
+            possible_letters = board[indexm][indexn]
+            for letter in possible_letters:
+                substring.append(letter)
+                backtrack(indexm,indexn, substring)
+                substring.pop()
+        ans = []
+        backtrack(0,0, [])
+        return ans
+
+
+
+
 
 r=Recursion_problems()
-a=[1,2,3,4,5,6,7,9]
-b='dd'
-ans=r.combinationSum3(3,9)
+a=[["A","B","C","E"],["S","F","C","S"]]
+b="aab"
+c='efg'
+ans=r.exist(a)
 print(ans)
