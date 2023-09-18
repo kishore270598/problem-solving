@@ -483,14 +483,164 @@ class Recursion_problems:
         ans = []
         backtrack(0,0, [])
         return ans
+    
+    def exist(self, board, word):
+        m=len(board)
+        n=len(board[0])
+        index=0
+        #this to check our first letter matching the board then finding
+        for i in range(0,m,1):
+            for j in range(0,n,1):
+                if(board[i][j]==word[index]):
+                    if(self.findthepath(board,word,index,i,j,n,m)):
+                        return True
+        return False
+    #this recursion function to find the full word is in the m*n board array
+    def findthepath(self,board,word,index,row,col,n,m):
+        #it means i have reached the index till the word len
+        #we found the word is avalaible 
+        if(index==len(word)):
+            return True
+        #Checking the boundaries if the character at which we are placed is not 
+        #the required character
+        if (row<0 or col<0 or row==m or col==n or board[row][col]!=word[index] or board[row][col]=='*'):
+            return False
+        #this is to prevent reusing of the same character we mark it as *
+        c=board[row][col]
+        board[row][col]='*'
+        #we traverse top
+        top=self.findthepath(board,word,index+1,row-1,col,n,m)
+        #we traverse right
+        right=self.findthepath(board,word,index+1,row,col+1,n,m)
+        #we traverse bot
+        bottom=self.findthepath(board,word,index+1,row+1,col,n,m)
+        #we traverse left 
+        left=self.findthepath(board,word,index+1,row,col-1,n,m)
+        #then we reset it orginal
+        board[row][col]=c
+        return top,right,bottom,left
+    
+
+    def findthepath(self,board,word,index,row,col,n,m):
+        ROWS, COLS = len(board), len(board[0])
+        visited = set()
+        def dfs(r,c,idx):
+        # if idx == len(word), then word has been found
+            if idx == len(word):
+                return True
+        # out of bounds
+        # OR current letter does not match letter on board
+        # OR letter already visited
+            if ( 
+                r<0 or r>=ROWS 
+                or c<0 or c>=COLS
+                or word[idx] != board[r][c]
+                or (r,c) in visited
+            ):
+                return False
+        # to keep track of the letter already visited, add it's position to the set
+        # after DFS we can remove it from the set.
+            visited.add((r,c))
+        # performing DFS 
+            res = (
+                dfs(r+1,c,idx+1) 
+                or dfs(r-1,c,idx+1) 
+                or dfs(r,c+1,idx+1) 
+                or dfs(r,c-1,idx+1)
+            )
+            visited.remove((r,c))
+            return res
+        
+        for i in range(ROWS):
+            for j in range(COLS):
+                if dfs(i,j,0):
+                    return True
+        return False
+    #*******************************************************
+    #************ N Queen problem **************************
+    #*******************************************************
+    def solveNQueens(self, n):
+        ans = []
+        board = ['.'*n for _ in range(n)]
+        self.traverse_board(0, board, ans, n)
+        return ans
+    def place(self,row,col,board,n):
+        dupr=row
+        dupc=col
+        #three check is needed anti clock wise 45 angle to check
+        while(row>=0 and col>=0):
+            if(board[row][col]=='Q'):
+                return False
+            row-=1
+            col-=1
+        col=dupc
+        row=dupr
+        #check 90 degree angle column wise
+        while(col>=0):
+            if(board[row][col]=='Q'):
+                return False
+            col-=1
+        col=dupc
+        row=dupr
+        #check 135 degree
+        while(row<n and col>=0): 
+            if(board[row][col]=='Q'):
+                return False
+            col-=1
+            row+=1
+        return True
+    
+    def traverse_board(self,col,board,ans,n):
+        #base case when i reach the end of the board
+        #i would have found the solution
+        if(col==n):
+            ans.append(list(board))
+            return 
+        #now we iterate till row 
+        for row in range(0,n,1):
+            if(self.place(row,col,board,n)):
+                board[row] = board[row][:col] + 'Q' + board[row][col+1:]
+                self.traverse_board(col+1,board,ans,n)
+                board[row] = board[row][:col] + '.' + board[row][col+1:]
+    #rat maze problem
+    def findPath(self, m, n):
+        ans=[]
+        vis=[[0 for _ in range(n)] for _ in range(n)]
+        di=[+1, 0, 0, -1]# all directions of i,j
+        dj=[0, -1, 1, 0]
+        if m[0][0] == 1:
+            self.solve(0, 0, m, n, ans, "", vis, di, dj)
+        return ans
+    #this solve to find the correct path we are taking
+    #base case is when we end n-1
+    def solve(self, i: int, j: int, a, n, ans, move, vis, di, dj):
+        if i==n-1 and j==n-1:
+            ans.append(move)
+            return
+        #to go for the direction.
+        dir="DLRU"
+        for ind in range(4):#possible direction we make
+            nexti=i+di[ind]
+            nextj=j+dj[ind]
+            if nexti>=0 and nextj>=0 and nexti<n and nextj<n and not vis[nexti][nextj] and a[nexti][nextj]==1:# boubdary conditions
+                # if the direction we make is correct we mark it as visted
+                vis[i][j]=1
+                self.solve(nexti, nextj, a, n, ans,move+dir[ind], vis, di, dj)
+                #if its wrong we just undo
+                vis[i][j]=0
 
 
 
 
+
+
+    
+
+        
 
 r=Recursion_problems()
-a=[["A","B","C","E"],["S","F","C","S"]]
-b="aab"
+a=[["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
+b="ABCB"
 c='efg'
-ans=r.exist(a)
-print(ans)
+ke=r.findPathrat(a,3)
+print(ke)
