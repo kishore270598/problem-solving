@@ -629,18 +629,56 @@ class Recursion_problems:
                 #if its wrong we just undo
                 vis[i][j]=0
 
-
-
-
-
-
+    def wordBreak(self, s, wordDict):
+        checked={}
+        def finddict(s,wordDict,checked):
+            if (s in checked):#to check the string already there 
+                return checked[s]
+            if s== "":#means we have reached the end
+                return True 
+            for word in wordDict:
+                if s.startswith(word):
+                    suffix=s[len(word):]
+                    #we send the suffix and check for the 
+                    if finddict(suffix, wordDict,checked):
+                      checked[s]=True
+                      return True
+            checked[s] = False 
+            return False
+        return finddict(s,wordDict,checked)
     
+    def graphColoring(graph, m, n):
+        #we try to place all colour in node
+        color=[0]*n
+        #color=[0,0,0,0]
+        if(placeit(0,color,graph,m,n)):
+            return True
+        else:
+            return False
+    def placeit(node,color,graph,m,n):
+        if(node==n):
+            return True
+        #we need to iterate for the color
+        for i in range(1,m+1,1):
+            if(safetoplace(node,color,graph,n,i)):
+                color[node]=i
+                #then we try next node maximum it true we return true
+                if(placeit(node+1,color,graph,m,n)):
+                    return True
+                color[node] = 0
 
-        
+    def safetoplace(node, color, graph, n, col):
+        for k in range(n):
+            # it should'nt be same node,it should'nt be adj and already there is color 
+            if k!=node and graph[k][node] == 1 and color[k] == col:
+                return False
+        return True
+
+
 
 r=Recursion_problems()
-a=[["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]]
-b="ABCB"
+word=["leet","code"]
+s="leetcode"
 c='efg'
-ke=r.findPathrat(a,3)
+ke=r.wordBreak(s,word)
 print(ke)
