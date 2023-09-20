@@ -673,12 +673,70 @@ class Recursion_problems:
             if k!=node and graph[k][node] == 1 and color[k] == col:
                 return False
         return True
+    #we need to traverse full board where there is possible to place a number
+    #if its possible to place it,we send the board recursive to place other numbers
+    #possible to place is a seperate function which need to be implemented
+    def solveSudoku(self, board):
+        self.solve(board)
+        return board
 
+    def solve(self,board):
+            for i in range(0,len(board),1):
+                for j in range(0,len(board[0]),1):
+                    if(board[i][j]=='.'):
+                        for c in "123456789":
+                            if self.possible(board, i, j, c):
+                                board[i][j] = c
+                                if self.solve(board):
+                                    return True
+                                else:
+                                    board[i][j] = "."
+                        return False
+            return True
+        
+    #possible to check row wise,col wise
+    # and inside the box wise
+    def possible(self,board,row,col,c):
+        for i in range(0,9,1):
+            if(board[i][col]==c):
+                return False
+            if(board[row][i]==c):
+                return False
+            if(board[3*(row//3)+i//3][3*(col//3)+input%3]==c):
+                return False
+        return True
+    
+
+    def addOperators(self, s: str, target: int) -> List[str]:
+        ans=[]
+        def findtheoperation(index,exp,Total,prevsum,s,target):
+            if(index==len(s)):
+                if(Total==target):
+                    ans.append(exp)
+                    return
+            for j in range(index,len(s),1):
+                if(j>index and str(s[index])=='0'):
+                    break
+                currentsum=int(s[index:j+1])
+                if(index==0):
+                    #for starting we send the starting value and set it exp
+                    findtheoperation(j+1,exp+str(currentsum),currentsum,currentsum,s,target)
+                else:
+                    # then try all the combination  +,-
+                    findtheoperation(j+1,exp+"+" +str(currentsum),Total+currentsum,currentsum,s,target)
+                    findtheoperation(j+1,exp+"-" +str(currentsum),Total-currentsum,-currentsum,s,target)
+                    #for * since we give importance to * first we calculate the total from current sum and subtract with the prevsum and add the prevsum *current sum
+                    # 7 + 3 *2  -- > 10 -(3) + ( 3 *2 ) --- (7 +6)--13
+                    findtheoperation(j+1,exp+"*" +str(currentsum),Total-prevsum +(prevsum*currentsum),prevsum*currentsum,s,target)
+        findtheoperation(0,"",0,0,s,target)
+        return ans 
+    
 
 
 r=Recursion_problems()
-word=["leet","code"]
+num = "123"
+target = 6
 s="leetcode"
 c='efg'
-ke=r.wordBreak(s,word)
+ke=r.addOperators(num,target)
 print(ke)
