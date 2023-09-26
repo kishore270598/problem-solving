@@ -707,7 +707,7 @@ class Recursion_problems:
         return True
     
 
-    def addOperators(self, s: str, target: int) -> List[str]:
+    def addOperators(self, s, target):
         ans=[]
         def findtheoperation(index,exp,Total,prevsum,s,target):
             if(index==len(s)):
@@ -734,9 +734,9 @@ class Recursion_problems:
 
 
 r=Recursion_problems()
-num = "123"
+num =[1,2,3,4,5]
 target = 6
 s="leetcode"
 c='efg'
-ke=r.addOperators(num,target)
+ke=r.reverseStack(num)
 print(ke)
