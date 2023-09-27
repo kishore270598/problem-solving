@@ -147,13 +147,42 @@ class Bitmanipulation():
         else:
             return second,first
 
-    def countPrimes(self,n):
-        a=set()
-        for i in range(2,n+1,1):
-            while(n%i==0):
-                a.add(i)
-                n=n//i
-        return a
+    def countPrimes(self,n):#unique primes 
+        seive = [True for i in range(n+1)]
+        # seive array holds all the primes as true so setting default as True
+        i=2
+        ans=[]
+        for i in range(2,n,1):
+            if(seive[i]==True):
+                if(n%i==0):
+                    ans.append(i)
+                for j in range(i*i,n+1,i):
+                    seive[j]=False
+
+        return ans
+    #Sieve of Eratosthenes
+
+    def sievegen(self,n):
+        seive = [True for i in range(n+1)]
+        count=0
+        # seive array holds all the primes as true so setting default as True
+        i=2
+        while (i*i<=n):
+            if(seive[i]==True):#if its occuring only we are checking its mutiple 
+                #other wise negalting it
+                #range from i*i means its i*i-1 already taken care by previous number so we start from 
+                #i *i
+                for j in range(i*i,n+1,i):
+                    seive[j]=False
+            i += 1
+        for p in range(2,n+1,1):
+            if (seive[p]):
+                count+=1
+        return count
+
+    
+        
+
 
 
 
@@ -163,5 +192,5 @@ class Bitmanipulation():
 
 b=Bitmanipulation()
 nums=[1,2,3]
-ans=b.countPrimes(17)
+ans=b.countPrimes(10)
 print(ans)
