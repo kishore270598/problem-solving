@@ -129,6 +129,90 @@ class MyStack:
         return True
       else:
         return False
+##########################################
+#implement que using stack
+##########################################
+from queue import LifoQueue
+class MyQueue:
+ # we declare 2 ques
+    def __init__(self):
+      self.input =LifoQueue()
+      self.output =LifoQueue()
+ # step1 to push we get the existing  records input and put in output
+ # step2 then we insert x 
+ # step3 then reverse of step 1 to follow the que [First in first out ]
 
+    def push(self, x: int) -> None:
+      while not self.input.empty():
+        self.output.put(self.input.get())
+      self.input.put(x)
+      while not self.output.empty():
+        self.input.put(self.output.get())
+
+        
+    def pop(self) -> int:
+        if self.input.qsize() == 0:
+          return -1
+        val = self.input.get()
+        return val
+        
+    def peek(self) -> int:
+        if self.input.qsize() == 0:
+          return -1
+  
+        return self.input.queue[-1]
+        
+
+    def empty(self) -> bool:
+      if(self.input.qsize()==0):
+        return True
+      else:
+        return False
+
+#linked list using stack
+class Node:
+    def __init__(self, data, next_node=None):
+        self.data = data
+        self.next = next_node
+
+class Stack:
+    # Write your code here
+    def __init__(self):
+        self.top=None
+        self.size=0
+ 
+    def getSize(self):
+        return self.size
+
+    def isEmpty(self):
+        if(self.size==0):
+            return True
+        else:
+            return False
+#we will create a node
+#once the node is create we need to make that as top
+#so we make our current new node next as the old top
+#then we assign it to the top
+    def push(self, data):
+        node=Node(data,None)
+        node.next=self.top
+        self.top=node
+        self.size+=1
+
+
+    def pop(self):
+        if(self.top==None):
+            return -1
+        else:
+            topdata=self.top.data
+            stackNode= self.top
+            self.top=self.top.next
+            self.size-=1
+        return topdata
+
+    def getTop(self):
+        return self.top.data
+  
+        
 
 
