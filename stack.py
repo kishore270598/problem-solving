@@ -213,6 +213,30 @@ class Stack:
     def getTop(self):
         return self.top.data
   
+class Node:
+    def __init__(self, data, next_node=None):
+        self.data = data
+        self.next = next_node
+
+class Que:
+    def __init__(self):
+        self.front=None
+        self.rear=None
+    def enque(self,val):
+        if(self.rear==None):
+            self.head=Node(val)
+            self.rear=self.head
+        else:
+            self.rear=Node(val)
+            self.rear=self.rear.next
+    
+    def deque(self):
+        if self.front is None:
+            return None
+        else:
+            temp = self.front.data
+            self.front = self.front.next
+            return temp
         
 
 
