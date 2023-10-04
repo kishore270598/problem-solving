@@ -1,6 +1,5 @@
 import time
 import math
-from collections import que
 class Stack:
     def __init__(self, capacity: int):
         self.stack=[0]*capacity
@@ -238,5 +237,108 @@ class Que:
             self.front = self.front.next
             return temp
         
+class MinStack:
+
+    def __init__(self):
+      self.stack=[]
+      self.stack2=[]
+
+     #stack 2 to calculate the min value tracking it
+     #    
+    def push(self, val: int) -> None:
+      self.stack.append(val)
+      if self.stack2:
+        temp=min(val,self.stack2[len(self.stack2)-1])
+        self.stack2.append(temp)
+      else:
+        self.stack2.append(val)
+                 
+    def pop(self) -> None:
+      
+        self.stack.pop()
+        self.stack2.pop()
 
 
+    def top(self) -> int:
+        return self.stack[len(self.stack)-1]
+        
+    def getMin(self) -> int:
+      return self.stack2[len(self.stack2)-1]
+
+    def infixToPostfix(self,exp):
+        bodmas = {'^': 3,'*': 2,'/': 2,'+': 1,'-': 1,'(': 0,')': 0}
+        result=''
+        stack=[]
+        for c in exp:
+            if(c.isdigit() or c.isalpha()):
+                #if its  numeric u add it
+                result+=c
+            elif(c=='('):
+                stack.append(c)
+            elif(c==')'):
+                #when u reach a part of operation is completed
+                # whatever u have stacked in stack u just append it
+                while( stack[-1]!= '('):
+                    result+=stack.pop()
+                
+                stack.pop()
+            else:
+                #if the current operator is lesser than the old one 
+                # it means the current operator is lesser to old one.. that need to be closed
+                while  len(stack) and bodmas[stack[-1]] >= bodmas[c]:
+                    result+=stack.pop()
+                stack.append(c)
+        #to append all the operators left
+        while (len(stack)):
+            result+=stack.pop()
+        return result
+
+    #Prefix to Infix Conversion    
+    def prefixToInfixConversion(self,s: str) -> str:
+        stack=[]
+        result=''
+        bodmas = {'^': 3,'*': 2,'/': 2,'+': 1,'-': 1,'(': 0,')': 0}
+        for c in s:
+            if(c.isdigit() or c.isalpha()):
+                if(stack[-1].isdigit() or stack[-1].isalpha() ):
+                    op1=stack.pop()
+                    op=stack.pop()
+                    result='('+op1+op+c+')'
+                    stack.append(result)
+                else:
+                    stack.append(c)
+            else:
+                stack.append(c)
+        result=''
+        print(stack)
+        while(len(stack)):
+            op1=stack.pop()
+            op2=stack.pop()
+            op=stack.pop()
+            result='('+op2+op+op1+')'
+            stack.append(result)
+            if(len(stack)==1):
+                return stack[-1]
+
+                    
+                    
+m=MinStack()
+a='/-ab+-cde'
+ans=m.prefixToInfixConversion(a)
+print(ans)
+
+
+
+                    op1=stack.pop()
+                    op=stack.pop()
+                    result='('+op1+op+c+')'
+                
+             
+
+             
+
+        
+
+                
+
+            
