@@ -300,40 +300,68 @@ class MinStack:
         bodmas = {'^': 3,'*': 2,'/': 2,'+': 1,'-': 1,'(': 0,')': 0}
         for c in s:
             if(c.isdigit() or c.isalpha()):
-                if(stack[-1].isdigit() or stack[-1].isalpha() ):
+                ##check
+                stack.append(c)
+                while(len(stack)>=3  and stack[-1] not in bodmas and stack[-2] not in bodmas ):
                     op1=stack.pop()
-                    op=stack.pop()
-                    result='('+op1+op+c+')'
+                    op2=stack.pop()
+                    op=stack.pop()  
+                    result='('+op2+op+op1+')'
                     stack.append(result)
-                else:
-                    stack.append(c)
             else:
                 stack.append(c)
+        return stack[-1]
+            
+    #Convert Prefix to Postfix  
+    # reverse and whenever u see the operator just pop the 2 tops of stack and create a combination 
+    # and add to its stack 
+    # then return the stack     
+    def preToPost(self,s: str) -> str:
+        stack=[]
         result=''
-        print(stack)
-        while(len(stack)):
-            op1=stack.pop()
-            op2=stack.pop()
-            op=stack.pop()
-            result='('+op2+op+op1+')'
-            stack.append(result)
-            if(len(stack)==1):
-                return stack[-1]
+        bodmas = {'^': 3,'*': 2,'/': 2,'+': 1,'-': 1,'(': 0,')': 0}
+        for i in range(len(s)-1,-1,-1):
+            if (s[i].isalpha() or s[i].isdigit()):
+                stack.append(s[i])
+            else:
+                a=stack.pop()
+                b=stack.pop()
+                result=a+b+s[i]
+                stack.append(result)
+        return stack[-1]
+    #postfix to prefix
+    #  ab+cd-* --- > *+ab-cd 
+    # whenever u see digit or alpha just append to stack
+    # whenever u see the  operator pop the top of the stack 2 operand 
+    # add a temp as ( operator + second top + first top) then append into stack
+    def postfixToPrefix(self,s: str) -> str:
+        stack=[]
+        result=''
+        for c in s:
+            if(c.isdigit() or c.isalpha()):
+                stack.append(c)
+            elif(len(stack)>=2):
+                op2=stack.pop()
+                op1=stack.pop()
+                result=c+op1+op2
+                stack.append(result)
+        return stack[-1]
+            
+
+    
+
+
+
+
 
                     
                     
 m=MinStack()
-a='/-ab+-cde'
-ans=m.prefixToInfixConversion(a)
+a='ab+cd-*'
+ans=m.postfixToPrefix(a)
 print(ans)
 
 
-
-                    op1=stack.pop()
-                    op=stack.pop()
-                    result='('+op1+op+c+')'
-                
-             
 
              
 
