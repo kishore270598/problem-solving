@@ -346,19 +346,71 @@ class MinStack:
                 result=c+op1+op2
                 stack.append(result)
         return stack[-1]
-            
 
+    def postToInfix(self,postfix: str) -> str:
+        #ab+c+ to  ((a+b)+c)
+        stack=[]
+        resul=''
+        for c in postfix:
+            if(c.isdigit() or c.isalpha()):
+                stack.append(c)
+            elif(len(stack)>=2):
+                op=c
+                op1=stack.pop()
+                op2=stack.pop()
+                result='('+op2+op+op1+')'
+                stack.append(result)
+        return stack[-1]
     
+    def infixToprifx(self,exp):
+        #first infix to postfix
+        #postfix to prefix
+        bodmas = {'^': 3,'*': 2,'/': 2,'+': 1,'-': 1,'(': 0,')': 0}
+        result=''
+        stack=[]
+        for c in exp:
+            if(c.isdigit() or c.isalpha()):
+                #if its  numeric u add it
+                result+=c
+            elif(c=='('):
+                stack.append(c)
+            elif(c==')'):
+                #when u reach a part of operation is completed
+                # whatever u have stacked in stack u just append it
+                while( stack[-1]!= '('):
+                    result+=stack.pop()
+                
+                stack.pop()
+            else:
+                #if the current operator is lesser than the old one 
+                # it means the current operator is lesser to old one.. that need to be closed
+                while  len(stack) and bodmas[stack[-1]] >= bodmas[c]:
+                    result+=stack.pop()
+                stack.append(c)
+        #to append all the operators left
+        while (len(stack)):
+            result+=stack.pop()
+        n=[]
+        k=''
+        print(result)
+        for c in result:
+            print('1')
+            if(c.isdigit() or c.isalpha()):
+                n.append(c)
+            elif(len(n)>=2):
+                op=c
+                op1=n.pop()
+                op2=n.pop()
+                k='('+op2+op+op1+')'
+                n.append(result)
+        return n[-1]
 
 
-
-
-
-                    
+            
                     
 m=MinStack()
-a='ab+cd-*'
-ans=m.postfixToPrefix(a)
+a='a+b*(c^d-e)^(f+g*h)-i'
+ans=m.infixToprifx(a)
 print(ans)
 
 
