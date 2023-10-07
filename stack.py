@@ -404,13 +404,64 @@ class MinStack:
                 k='('+op2+op+op1+')'
                 n.append(result)
         return n[-1]
-
-
-            
-                    
+    #Next Greater Element only right
+    def nextGreaterElement_brute(self, nums1, nums2):
+        result=[]
+        flag=0
+        for i in range(0,len(nums1),1):
+            flag=0
+            for j in range(i+1,len(nums2),1):
+                if(nums1[i]<nums2[j]):
+                    result.append(nums2[i])
+                    flag=1
+                    break
+            if(flag==0):
+                result.append(-1)
+        return result
+    #Next Greater Element only right
+    def nextGreaterElement(self, nums1, nums2):
+        #we create a stack
+        #traverse from last element of array and compare with the stack 
+        # if the stack top not greater than the current element then pop and find the other element
+        # then once finding the greater element.  append the current array element 
+        stack=[]
+        mapping = {}
+        result=[0]*(len(nums2))
+        for i in range(len(nums2)-1,-1,-1):
+            while(len(stack)!=0 and stack[-1]<=nums2[i]):
+                stack.pop()
+            if(len(stack)!=0):
+                mapping[nums2[i]]=stack[-1]
+            else:
+                mapping[nums2[i]]=-1
+            stack.append(nums2[i])  
+        for element in nums1:
+            result.append(mapping[element])
+        return result 
+    #circle array type 2
+    # we have to follow the first method but we need to run twice the array so
+    # 2n-1 and to acces the index i%n
+    def nextGreaterElements_2(self, nums):
+        stack=[]
+        n=len(nums)
+        result=[0]*n
+        for i in range(2*(n-1),-1,-1):
+            while(len(stack)!=0 and stack[-1]<=nums[i%n]):
+                stack.pop()
+            if(i<n):
+                if(len(stack)!=0):
+                    result[i]=stack[-1]
+                else:
+                    result[i]=-1
+            stack.append(nums[i%n])
+        return result 
+          
+                   
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
-ans=m.infixToprifx(a)
+nums1 = [1,2,1]
+nums2 = [1,3,4,2]
+ans=m.nextGreaterElements_2(nums1)
 print(ans)
 
 
