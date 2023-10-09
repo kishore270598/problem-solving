@@ -419,24 +419,21 @@ class MinStack:
                 result.append(-1)
         return result
     #Next Greater Element only right
-    def nextGreaterElement(self, nums1, nums2):
+    def nextGreaterElement(self,nums2):
         #we create a stack
         #traverse from last element of array and compare with the stack 
         # if the stack top not greater than the current element then pop and find the other element
         # then once finding the greater element.  append the current array element 
         stack=[]
-        mapping = {}
         result=[0]*(len(nums2))
         for i in range(len(nums2)-1,-1,-1):
             while(len(stack)!=0 and stack[-1]<=nums2[i]):
                 stack.pop()
             if(len(stack)!=0):
-                mapping[nums2[i]]=stack[-1]
+                result[i]=stack[-1]
             else:
-                mapping[nums2[i]]=-1
+                result[i]=-1
             stack.append(nums2[i])  
-        for element in nums1:
-            result.append(mapping[element])
         return result 
     #circle array type 2
     # we have to follow the first method but we need to run twice the array so
@@ -455,13 +452,27 @@ class MinStack:
                     result[i]=-1
             stack.append(nums[i%n])
         return result 
-          
+    
+    def immediateSmaller(self,nums):
+        stack=[]
+        result=[0]*(len(nums))
+        for i in range(len(nums)-1,-1,-1):
+            if(len(stack)==0):
+                stack.append(nums[i])
+                result[i]=-1
+            elif(nums[i]>stack[-1]):
+                result[i]=stack[-1]
+            else:
+                result[i]=-1
+            stack.pop()
+            stack.append(nums[i])
+        return result       
                    
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
 nums1 = [1,2,1]
-nums2 = [1,3,4,2]
-ans=m.nextGreaterElements_2(nums1)
+nums2 = [4 ,7 ,8 ,2, 3, 1]
+ans=m.immediateSmaller(nums2)
 print(ans)
 
 
