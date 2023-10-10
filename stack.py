@@ -466,7 +466,52 @@ class MinStack:
                 result[i]=-1
             stack.pop()
             stack.append(nums[i])
-        return result       
+        return result  
+    #Trapping Rain Water
+    # we need to take 2 pointers left ,right 
+    # leftmax and right max
+    # whenever u check the left height is less than right height 
+    # you find the max of left , if its not max then calculate 
+    # which means we have found the left max for the current index
+    #when we see left element is greater than the right element we start find the right max as above steps
+    def trap(self, height): 
+        left=0
+        right=len(height)-1
+        leftmax=0
+        rightmax=0
+        rainstored=0
+        while(left<=right):
+            if(height[left]<=height[right]):
+                if(height[left]>=leftmax):
+                    leftmax=height[left]
+                    #to make sure we are holding the max building
+                else:
+                    rainstored+=leftmax-height[left]
+                    #to calculate the drop
+                left+=1
+            else:
+                if(height[right]>=rightmax):
+                    rightmax=height[right]
+                else:
+                    rainstored+=rightmax-height[right]
+                right-=1
+        return rainstored
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                    
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
