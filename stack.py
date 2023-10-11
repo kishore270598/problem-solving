@@ -496,28 +496,54 @@ class MinStack:
                     rainstored+=rightmax-height[right]
                 right-=1
         return rainstored
+    def sumSubarrayMins_brute(self, arr) -> int:
+        sum_=0
+        for i in range(0,len(arr),1):
+            for j in range(i+1,len(arr)+1,1):
+                sum_+=min(arr[i:j])
+        print(sum_)
 
+    def sumSubarrayMins(self, arr) -> int:
+        stack=[]
+        arr=[-math.inf] + arr + [-math.inf] 
+        sum_=0
+        for i in range(0,len(arr),1):
+            while (len(stack)!=0 and arr[stack[-1]]>arr[i]):# increasing motonic stack
+                mid=stack.pop()
+                left=stack[-1] # this will give be holding last min element
+                right=i#next smaller element 
+                sum_+=arr[mid]*(mid-left) * (right-mid)
+            stack.append(i)
 
+        return sum_ 
+    
 
+    def asteroidCollision(self, asteroids):
+        stack=[]
+        # 10 2 -5 
+        #collision condition when over asteroids is negative and stack is postive
 
+        for element in asteroids:
+            while len(stack)!=0 and element <0 and stack[-1]>0:
+                if((element + stack[-1]) <0):
+                    stack.pop()
+                elif((element +stack[-1])>0):
+                    element=0
+                    #element is destoryed since postive
+                else:
+                  # both are equal so destory both
+                    element=0
+                    stack.pop()
+            if (element!=0):
+                stack.append(element)
+        return stack
 
-
-
-
-
-
-
-
-
-
-
-
-                   
+                  
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
-nums1 = [1,2,1]
+nums1 = [10,2,-5]
 nums2 = [4 ,7 ,8 ,2, 3, 1]
-ans=m.immediateSmaller(nums2)
+ans=m.asteroidCollision(nums1)
 print(ans)
 
 
