@@ -537,13 +537,63 @@ class MinStack:
             if (element!=0):
                 stack.append(element)
         return stack
+    def subArrayRanges_brute(self, arr):
+        diff=0
+        for i in range(0,len(arr),1):
+            for j in range(i+1,len(arr)+1,1):
+                diff+=max(arr[i:j])-min(arr[i:j])
+        return diff
+    def subArrayRanges(self, arr):
+        stack=[]
+        min_sum=0
+        max_sum=0
+        for next_smaller in range(0,len(arr)+1,1):
+            while( len(stack)!=0 ) and  (next_smaller==len(arr) or arr[stack[-1]]>arr[next_smaller]):#increasing motonic stack
+                mid=stack.pop()
+                if(stack):
+                    previous_smaller=stack[-1]
+                else:
+                    previous_smaller=-1 #before assignment it acts as - infinity
+                min_sum+=arr[mid]*(mid-previous_smaller) * (next_smaller-mid)
+            stack.append(next_smaller)
+        stack=[]
+        for next_larger in range(0,len(arr)+1,1):
+            while( len(stack)!=0 ) and  (next_larger==len(arr) or arr[stack[-1]]<arr[next_larger]): #decreasing motonic stack
+                mid=stack.pop()
+                if(stack):
+                    previous_larger=stack[-1]
+                else:
+                    previous_larger=-1#before assignment it acts as - infinity
+                max_sum+=arr[mid]*(mid-previous_larger) * (next_larger-mid)
+            stack.append(next_larger)    
+        return max_sum-min_sum
+    #increasing motonic stack
+    def removeKdigits(self, num: str, k: int) -> str:
+        stack=[]
+        for element in num:
+            while k>0 and stack and  stack[-1]>element:
+                stack.pop()
+                k-=1
+            if stack or element is not '0':
+              stack.append(element)
+        stack=stack[:len(stack)-k]
+        res="".join(stack)
+        if res:
+            return res
+        else:
+            return "0"
+
+
+
+
+
 
                   
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
-nums1 = [10,2,-5]
+nums1 = [1,2,3]
 nums2 = [4 ,7 ,8 ,2, 3, 1]
-ans=m.asteroidCollision(nums1)
+ans=m.subArrayRanges(nums1)
 print(ans)
 
 
