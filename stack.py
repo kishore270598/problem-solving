@@ -582,18 +582,37 @@ class MinStack:
             return res
         else:
             return "0"
-
-
-
+    #Largest rectangle in a histogram    
+    def largestRectangleArea(self, heights) -> int:
+        stack=[]
+        max_=0
+        for i in range(0,len(heights)+1,1):# to include the last index to make sure we clear all the monotonic stack
+            while len(stack)!=0 and (i==len(heights) or heights[stack[-1]]>=heights[i]) :
+                #we have reached the boundary i th place
+                # height will be the previous height 
+                # i will be the right boundary
+                # stack pop will hold the left min value of the height
+                # we use the formula to find ( if stack is empty means there is no boundary height * width (i))
+                # if stack is there  (i (left bounadry ) - stack.top which holds the min of left  -1 to index) 
+                # this will provie width and  * height 
+                hist=heights[stack[-1]]
+                stack.pop()
+                if len(stack)==0:
+                    width =i
+                else:
+                    width= i - stack[-1] -1 
+                max_=max(max_,width * hist)
+            stack.append(i)
+        return max_
 
 
 
                   
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
-nums1 = [1,2,3]
+nums1 = [2,4]
 nums2 = [4 ,7 ,8 ,2, 3, 1]
-ans=m.subArrayRanges(nums1)
+ans=m.largestRectangleArea(nums1)
 print(ans)
 
 
