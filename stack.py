@@ -1,5 +1,6 @@
 import time
 import math
+from collections import deque 
 class Stack:
     def __init__(self, capacity: int):
         self.stack=[0]*capacity
@@ -604,6 +605,65 @@ class MinStack:
                 max_=max(max_,width * hist)
             stack.append(i)
         return max_
+    
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+      #same as histogram problem we will store the montonic stack 
+      # using boundaries we find the width and height
+      # since its a matrix we keep adding the value 1 in the array height
+      # using that height we will find the height and width for the current row
+      #till we reach the end of the row we will be able to find the  max rectangle 
+      if not matrix or not matrix[0]:
+        return 0 
+      stack=[]
+      c= len(matrix)
+      r=len(matrix[0])
+      height=[0]*(r+1)
+      width=0
+      max_=0
+      breath=0
+      for row in matrix:
+        for i in range(r):
+            height[i] = height[i] + 1 if row[i] == '1' else 0
+        stack=[-1]
+        for i in range(0,r+1,1):
+          while height[i]<height[stack[-1]]:
+            width=stack.pop()
+            if stack:
+              breath=i-stack[-1]-1
+            else:
+              breath=i
+            max_=max(max_,height[width]* breath)
+          stack.append(i)
+      return max_
+    
+    
+    def maxSlidingWindow(self, nums, k):
+        dq=deque()
+        ans=[]
+        # Sliding Window Maximum
+        # --------------------------
+        # to hold a sub array of K we will use deque data structure
+        # storing the element index in decreasing order element
+        # whenever we reach a stack K sub array size
+        # we pop the left most element that is front element
+        # when the element contains the lesser value than 
+        # the current index we pop the element and make sure we
+        # just hold the maximum value .
+        for i in range(0,len(nums),1):
+            if (len(dq)!=0 and dq[0]== i-k):# to make sure we don't hold any index outside the K(subarray)
+                dq.popleft()
+            while len(dq)!=0 and nums[dq[-1]]<nums[i]:
+                dq.pop()
+            dq.append(i)
+            if(i>=k-1):#adding every subarray max
+                ans.append(dq[0])
+        return ans
+
+
+            
+
+
+
 
 
 
