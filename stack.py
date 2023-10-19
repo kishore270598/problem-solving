@@ -606,7 +606,7 @@ class MinStack:
             stack.append(i)
         return max_
     
-    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+    def maximalRectangle(self, matrix):
       #same as histogram problem we will store the montonic stack 
       # using boundaries we find the width and height
       # since its a matrix we keep adding the value 1 in the array height
@@ -658,21 +658,116 @@ class MinStack:
             if(i>=k-1):#adding every subarray max
                 ans.append(dq[0])
         return ans
+    
+class StockSpanner:
+
+    def __init__(self):
+        self.stack=[] # stack= (Price,span)
+        #montonic stack and if current value is less the stack  we just keep that lesser value and add their span to maintain montonic decreasing stack
+        
+    def next(self, price: int) -> int:
+        span=1
+        while self.stack and self.stack[-1][0]<=price:
+            span+=self.stack[-1][1]
+            self.stack.pop()
+        self.stack.append((price,span))
+
+        return span
+    
+    
+# '''
+#     This is signature of helper function 'knows'.
+#     You should not implement it, or speculate about its implementation.
+
+#     def knows(int A, int B); 
+#     Function 'knows(A, B)' will returns "true" if the person having
+#     id 'A' knows the person having id 'B' in the party, "false" otherwise.
+# '''
+
+# def findCelebrity(n, knows):
+#         stack=[]
+#         potentialCelebrity=0
+#         for i in range(0,n,1):
+#             stack.append(i)
+#         print(stack)
+#         while(len(stack)=>2):
+#             a=stack.pop()
+#             b=stack.pop()
+#             if(knows(a,b)==1):
+#                 stack.append(b)
+#             else:
+#                 stack.append(a)
+
+#         potentialCelebrity=stack.pop()
+#         flag=True
+#         for i in range(0,n,1):
+#             if(i!=potentialCelebrity):
+#                 if(knows(potentialCelebrity,i)==1 or knows(i,potentialCelebrity)==0):
+#                     flag=false
+#                     break
+        
+#         if(flag==True):
+#             return potentialCelebrity
+#         else:
+#             return -1 
+
+
+class lruCache:
+        def __init__(self,capacity):
+            self.capacity=capacity #size
+            self.cache = deque() # to acces back and front
+            self.dicty = {} #holds a address
+
+        def get(self, key: int) -> int:
+            if key not in self.dicty:
+                return -1
+            else:
+                self.cache.remove(key)
+                self.cache.appendleft(key)# to make it recent
+                val=self.dicty[key]
+            return val
+        
+        def put(self, key, value):
+            if key not in self.dicty:
+                if(len(self.cache)==self.capacity):# to check whether we have crossed the capacity
+                    oldest=self.cache.pop() # right most will be least used
+                    del self.dicty[oldest] # delete from address 
+                    self.dicty[key]=value # add into first to make it recently used
+                    self.cache.appendleft(key)
+                else:
+                    self.dicty[key] = value
+                    self.cache.appendleft(key)
+            else:
+                self.cache.remove(key)  #remove the old 
+                self.dicty[key] = value 
+                self.cache.appendleft(key) #make it as recently used
+        
+
+
+
+
+   
+
+
+    
+
+
+
+
+
+    
+         
+
 
 
             
-
-
-
-
-
 
                   
 m=MinStack()
 a='a+b*(c^d-e)^(f+g*h)-i'
 nums1 = [2,4]
 nums2 = [4 ,7 ,8 ,2, 3, 1]
-ans=m.largestRectangleArea(nums1)
+ans=m.findCelebrity(1,2)
 print(ans)
 
 
