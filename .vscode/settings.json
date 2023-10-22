@@ -2,5 +2,10 @@
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.formatting.provider": "none"
+    "python.formatting.provider": "none",
+    "editor.accessibilityPageSize": 20,
+    "workbench.activityBar.iconClickBehavior": "focus",
+    "workbench.preferredLightColorTheme": "Visual Studio Light",
+    "editor.fontSize": 12,
+    "workbench.colorTheme": "Default Dark+"
 }
