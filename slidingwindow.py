@@ -121,17 +121,48 @@ class Slidingwindow:
                 left+=1
             res=max(res,right -left +1)
         return res
-
-
-
-
-
-            
-        
+    def numSubarraysWithSum(self, nums, goal):
+        left=0
+        right=0
+        n=len(nums)
+        presum=0
+        count=0
+        while (left <n):
+            if(right<n):
+                if(presum>goal):
+                    left+=1
+                    right=left
+                    presum=0
+                elif(presum<goal):
+                    presum+=nums[right]
+                    right+=1
+                else:
+                    count+=1
+                    presum+=nums[right]
+                    right+=1
+            else:
+                left+=1
+                right=left
+                presum=0
+        return count
+    
+    def numSubarraysWithSum(self, nums, goal):
+        count=collections.defaultdict(int)
+        count[0]=1
+        ans=0
+        left=0
+        presum=0
+        for right in nums:
+          presum+=right
+          ans+=count[presum-goal]
+          count[presum]+=1
+        return ans
+    
 s=Slidingwindow()
-nums="AABABBA"
+nums = [1,0,1,0,1]
+goal = 2
 k = 2
-ans=s.characterReplacement(nums,1)
+ans=s.numSubarraysWithSum(nums,2)
 print(ans)
 
 
