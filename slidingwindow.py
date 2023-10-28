@@ -148,21 +148,83 @@ class Slidingwindow:
     
     def numSubarraysWithSum(self, nums, goal):
         count=collections.defaultdict(int)
+        #to keep a default count[0]=1 which will hold  s--->s(pre sum) -- s-k=0 
         count[0]=1
-        ans=0
-        left=0
         presum=0
+        ans=0
         for right in nums:
-          presum+=right
-          ans+=count[presum-goal]
-          count[presum]+=1
+            presum+=right
+            ans+=count[presum-goal]
+            count[presum]+=1
         return ans
+
+
+    def numberOfSubarrays(self, nums, k):
+        #same as prefix sum 
+        # where we add the count for the odd numbers
+        # when we see there is a k elements reached in right side we have found one subset which holds k odd numbers
+        prefixsum=0
+        dic=collections.defaultdict(int)
+        dic[0]=1
+        ans=0
+        for i in nums:
+            if i%2==1:
+                prefixsum+=1
+            ans+=dic[prefixsum-k]
+            dic[prefixsum]+=1
+        return ans   
     
+    def numberOfSubstrings_firstmethod(self, s):
+        left,right=0,0
+        sub_count=0
+        index={}
+        while(left<len(s)):
+            if(len(index)==3):
+                sub_count+=len(s)-(right-left)+1
+                left+=1
+                right=left
+                index.clear()
+            else:
+                if(right<=len(s)-1):
+                    if(s[right] in index): 
+                        index[s[right]]=right
+                    else:
+                        index[s[right]]=right
+                else:
+                    left+=1
+                    right=left
+            right+=1
+        return sub_count
+    
+    def numberOfSubstrings(self, s):
+        # we take the count of the a b c occurence
+        # the base condition is all the count should be greater
+        # when that is satsified we find sub_count as ans
+        a,b,c=0,0,0
+        ans, left, i,n = 0,0, 0, len(s) 
+        for left in range(0,n,1):
+            if(s[left]=='a'):
+                a+=1
+            elif(s[left]=='b'):
+                b+=1
+            else:
+                c+=1
+            while(a>0 and b>0 and c>0):
+                ans += n-left                   # count possible substr, if a substr ends at j, then there are n-j substrs to the right that are containing all a/b/c
+                if s[i] == 'a': a -= 1       # decrement counter accordingly
+                elif s[i] == 'b': b -= 1
+                else: c -= 1
+                i += 1                       # move slow pointer
+        return ans    
+                
+
+
+
 s=Slidingwindow()
-nums = [1,0,1,0,1]
+nums =[2,2,2,1,2,2,1,2,2,2]
+k =  "abcabc"
 goal = 2
-k = 2
-ans=s.numSubarraysWithSum(nums,2)
+ans=s.numberOfSubstrings(k)
 print(ans)
 
 
