@@ -216,15 +216,46 @@ class Slidingwindow:
                 else: c -= 1
                 i += 1                       # move slow pointer
         return ans    
-                
 
+    def maxScore(self, cardPoints, k):
+        #sliding window as k elements from the right
+        #[[left(11),49,100],right(20),86,29,72]  from right to end we get the total value
+        #each time we move right the sliding window, we add the left value inside and remove the right value
+        left,right=0,len(cardPoints)-k
+        total=sum(cardPoints[right:])
+        res=total
+        while right<len((cardPoints)):
+            total+=(cardPoints[left]-cardPoints[right])
+            left+=1
+            right+=1
+            res=max(res,total)
+        return res 
 
+    def kDistinctChars(self,k, str):
+        left,right=0,0
+        hold={}
+        res=0
+        #expanding the window
+        while(right<len(str)):
+            if(str[right] not in hold):
+                hold[str[right]]=right# holding the index
+                k-=1
+            hold[str[right]]=right #already there updating with latest index
+            while(k<0):#our base conditon 
+                if hold[str[left]]==left: #starting index
+                    k+=1
+                    del hold[str[left]]
+                left+=1
+            res=max(right-left+1,res)
+            right+=1
+        return res
+       
 
 s=Slidingwindow()
-nums =[2,2,2,1,2,2,1,2,2,2]
-k =  "abcabc"
-goal = 2
-ans=s.numberOfSubstrings(k)
+cardPoints =[11,49,100,20,86,29,72]
+k=3
+str='abcddefg'
+ans=s.kDistinctChars(k,str)
 print(ans)
 
 
