@@ -249,13 +249,74 @@ class Slidingwindow:
             res=max(right-left+1,res)
             right+=1
         return res
-       
+    
+    def atmostk(self,n,k,nums):
+        left=0
+        right=0
+        hold=collections.defaultdict(int)
+        sub_count=0
+        res=0
+        while(right<len(nums)):
+            hold[nums[right]]+=1
+            while len(hold)>k:
+                hold[nums[left]]-=1
+                if hold[nums[left]]==0:
+                    del hold[nums[left]]
+                left+=1
+            
+            res+=right-left+1
+            right+=1
+        return res
+    # If input = 1, 2, 1 and k = 2
+    # then, the possible subarrays with atmost k distinct integers:
+    # {[1], [2], [1], [1, 2], [2, 1], [1, 2, 1]} i.e. 6.
+    # l = 0, r = 0 --> count += r-l+1 = 1
+    # l = 0, r = 1 --> count += r-l+1 = 2
+    # l = 0, r = 1 --> count += r-l+1 = 3
+    # total to 6.
+    # Similarly, whwn we do this keeping k-1, we get count = 3
+    # We get the difference = 6-3 = 3.
+    # Resultant array - {[1, 2], [2, 1], [1, 2, 1]}  
+
+    def subarraysWithKDistinct(self, nums, k):
+        return self.atmostk(len(nums),k,nums)-self.atmostk(len(nums),k-1,nums)
+
+    def minWindow(self, s, t):
+        #edge case
+        if t=="":
+            return ""
+        countT,countWindow={},{}
+        for c in t:
+            countT[c]=1+countT.get(c,0)
+        have,need=len(countT),0
+        res,result=[-1,-1],float('infinity')
+        left=0
+        for right in range(0,len(s),1):
+            c=s[right]
+            if ((c in countT )and countWindow[c]==countT[c]):
+                have+=1
+            while have==need:
+                #update the result finding the min
+                if( right -left +1 ) <result:
+                    res=[right,left]
+                    result=right -left +1
+                #pop the left window 
+                countWindow[s[left]]-=1
+                #if the removed element is one of the T character and the countwindow is less the required
+                if (s[left] in countT ) and countWindow[s[left]]<countT[s[left]]:
+                    have-=1
+                left+=1
+        right,left=res
+        return res[left:right+1] if result!=float('infinity') else ""
+
+            
+
+
 
 s=Slidingwindow()
-cardPoints =[11,49,100,20,86,29,72]
-k=3
-str='abcddefg'
-ans=s.kDistinctChars(k,str)
+nums = [1,2,1,3,4]
+k = 3
+ans=s.subarraysWithKDistinct(nums,k)
 print(ans)
 
 
