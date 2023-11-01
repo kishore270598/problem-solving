@@ -288,12 +288,13 @@ class Slidingwindow:
         countT,countWindow={},{}
         for c in t:
             countT[c]=1+countT.get(c,0)
-        have,need=len(countT),0
+        have,need=0,len(countT)
         res,result=[-1,-1],float('infinity')
         left=0
         for right in range(0,len(s),1):
             c=s[right]
-            if ((c in countT )and countWindow[c]==countT[c]):
+            countWindow[c]=1+countWindow.get(c,0)
+            if ((c in countT ) and countWindow[c]==countT[c]):
                 have+=1
             while have==need:
                 #update the result finding the min
@@ -307,7 +308,41 @@ class Slidingwindow:
                     have-=1
                 left+=1
         right,left=res
-        return res[left:right+1] if result!=float('infinity') else ""
+        return s[left:right+1] if result!=float('infinity') else ""
+    
+    def minWindow(S, T):
+        # Initially our window is empty
+        window = ""
+        j = 0
+        min_ = len(S) + 1
+        i = 0
+        while i < len(S):
+            # If characters are same, then increment the j pointer
+            if S[i] == T[j]:
+                j = j + 1
+                #  If we finally reach the end of string T, we can start shrinking our window
+                if j == len(T):
+                    end = i
+                    j = j - 1
+                    # We are doing j-- in order to minimise our window size
+                    while j >= 0:
+                        if S[i] == T[j]:
+                            j = j - 1
+                        i = i - 1
+                    # Incrementing i and j for next iteration
+                    j = j + 1
+                    i = i + 1
+                    # Updating our window, if we found an element of minimum length
+                    if end - i < min_:
+                        # updating minimum
+                        min_ = end - i
+                        # updating window
+                        window = ""
+                        for k in range(i, end + 1):
+                            window += S[k]
+            i += 1
+        # returning our final answer, which is stored in window
+        return window
 
             
 
@@ -315,8 +350,9 @@ class Slidingwindow:
 
 s=Slidingwindow()
 nums = [1,2,1,3,4]
-k = 3
-ans=s.subarraysWithKDistinct(nums,k)
+nums="ADOBECODEBANC"
+k="ABC"
+ans=s.minWindow(nums,k)
 print(ans)
 
 
