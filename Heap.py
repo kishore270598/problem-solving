@@ -59,32 +59,30 @@ class maxHeap:
     def max_element(self): #delete
         pop=self.heap[self.front]
         self.heap[self.front]=self.heap[self.size] # we swap the last element to the starting
+        self.heap[self.size]=pop
         self.size-=1
         self.max_heap(self.front) # we maintain the order
 
         return pop
 
     def Print(self):
+        print(self.heap)
         for i in range(1, (self.size // 2) + 1):
             print(" PARENT : " + str(self.heap[i]) +
                   " LEFT CHILD : " + str(self.heap[2 * i]) +
                   " RIGHT CHILD : " + str(self.heap[2 * i + 1]))
-    
+
     
 
 
-# mh = maxHeap(15)
-# mh.heap_insert(5)
+# mh = maxHeap(6)
+# mh.heap_insert(1)
+# mh.heap_insert(2)
 # mh.heap_insert(3)
-# mh.heap_insert(17)
-# mh.heap_insert(10)
-# mh.heap_insert(84)
-# mh.heap_insert(19)
 # mh.heap_insert(6)
-# mh.heap_insert(22)
-# mh.heap_insert(9)
-# print("The Max val is " + str(mh.max_element()))
-# print("The Max val is " + str(mh.max_element()))
+# mh.heap_insert(7)
+# mh.heap_insert(8)
+# print(str(mh.Print()))
 
 
 class minheap:
@@ -161,17 +159,83 @@ class minheap:
                   " LEFT CHILD : " + str(self.heap[2 * i]) +
                   " RIGHT CHILD : " + str(self.heap[2 * i + 1]))
 
+    #to chek whether the heap is valid
+    def validheap(self,heap,n,i):
+        #base case of recursion
+        if(i>=int((n-1)/2)):
+            return True 
+
+        if(heap[i]>=heap[2*i+1] and heap[i]>=heap[2*i+2] and self.validheap(heap,n,2*i+1)
+            and  self.validheap(heap,n,2*i+2) ):
+                return True
+        else:
+            return False
+
+
+
+
+class sol:
+    #to main a heap we need heapify
+    #converting Min to max
+    # we start from right most botton of the parent and keep checking its maintaing a max heap , else we swap and keep in track
+    def heapify(self,heap,pos,n):
+        leftchild=2*pos+1
+        rightchild=2*pos+2
+        largest=pos #assumption
+        
+        if leftchild< n and heap[largest] <heap[leftchild]:
+            largest=leftchild
+        if rightchild <n and heap[largest] <heap[rightchild]:
+            largest=rightchild
+        if largest!=pos:
+         # we have found a parent lesser than child
+            heap[pos],heap[largest]=heap[largest],heap[pos]
+            self.heapify(heap, largest, n)
+    
+    def rearrange(self,arr,n):
+        for i in range((n-2)//2,-1,-1):#to start from rightmost parent
+            self.heapify(arr, i, n)
+        print(arr)
+
+
+
+   
+s=sol()
+arr = [3, 5, 9, 6, 8, 20, 10, 12, 18, 9]
+print(s.rearrange(arr,len(arr)))
+
+
+        
+
+
+
+
+
+
+
+
+
+
 
 print('The minHeap is ') 
 minh = minheap(15) 
-minh.heap_insert(5) 
-minh.heap_insert(3) 
-minh.heap_insert(17) 
-minh.heap_insert(10) 
-minh.heap_insert(84) 
-minh.heap_insert(19) 
-minh.heap_insert(6) 
-minh.heap_insert(22) 
-minh.heap_insert(9) 
+# minh.heap_insert(5) 
+# minh.heap_insert(3) 
+# minh.heap_insert(17) 
+# minh.heap_insert(10) 
+# minh.heap_insert(84) 
+# minh.heap_insert(19) 
+# minh.heap_insert(6) 
+# minh.heap_insert(22) 
+# minh.heap_insert(9) 
 minh.Print() 
-print("The Min val is " + str(minh.min_element_get())) 
+# print("The Min val is " + str(minh.min_element_get())) 
+
+
+arr = [90, 100, 10, 7, 12, 2, 7, 3]  
+n = len(arr) - 1
+
+if minh.validheap(arr, n,0): 
+    print("Yes") 
+else: 
+    print("No") 
