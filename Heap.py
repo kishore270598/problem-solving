@@ -1,3 +1,4 @@
+import heapq
 class maxHeap:
     def __init__(self,max_size):
         self.max_size=max_size
@@ -30,7 +31,10 @@ class maxHeap:
         if self.size>=self.max_size:
             #we have reached the limit
             return
+        print(self.heap)
+        print(self.size)
         self.size+=1
+
         self.heap[self.size]=element
         current=self.size
         while self.heap[current]>self.heap[self.parent(current)]:#we swap the element
@@ -74,14 +78,14 @@ class maxHeap:
 
     
 
-
-# mh = maxHeap(6)
-# mh.heap_insert(1)
+# mh = maxHeap(7)
+# mh.heap_insert(5)
 # mh.heap_insert(2)
+# mh.heap_insert(4)
+# mh.heap_insert(1)
 # mh.heap_insert(3)
 # mh.heap_insert(6)
-# mh.heap_insert(7)
-# mh.heap_insert(8)
+# mh.heap_insert(0)
 # print(str(mh.Print()))
 
 
@@ -191,51 +195,109 @@ class sol:
          # we have found a parent lesser than child
             heap[pos],heap[largest]=heap[largest],heap[pos]
             self.heapify(heap, largest, n)
-    
+  
+# s=sol()
+# arr = [3,2,3,1,2,4,5,5,6]
+# print(s.rearrange(arr,len(arr)))
+
+class Mproblems_heap:   
     def rearrange(self,arr,n):
         for i in range((n-2)//2,-1,-1):#to start from rightmost parent
             self.heapify(arr, i, n)
         print(arr)
 
+    def findKthLargest(self, nums, k):
+        #heap_insert
+        heap=[0]*(len(nums)+1)
+        heap[0]=9999999
+        n=len(nums)
+        size=0
+        def insert_heap(nums,element,n,heap,size):
+            if size>=n:
+                #we have reached the limit
+                return
+            heap[size]=element
+            current=size
+            while heap[current]>heap[current//2]:#we swap the element
+                heap[current],heap[current//2]=heap[current//2],heap[current]
+                current=current//2
+        for element in nums:
+            size+=1
+            insert_heap(nums,element,n,heap,size)
+        print(heap)
+        heap.pop(0)
+        print(heap,size)
+        pos1=len(nums)
+        def isLeaf(pos,n): # to check whether the current pos is a leaf so it should be greater than the parent
+        #and lesser than the size
+            if pos >= (n//2) and pos <= n:
+                return True
+            return False 
+        #--------------------------------------------------------
+        def max_heap(pos,heap,n):
+            # to check whether the current pos is a leaf so it should be greater than the parent
+            #and lesser than the size
+            leftchild=2*pos+1
+            rightchild=2*pos+2
+            if not isLeaf(pos,n):
+                if (heap[pos] < heap[leftchild] or
+                    heap[pos] < heap[rightchild]):
+                    # which means we are not following the strutture 
+                    if (heap[leftchild] > 
+                        heap[rightchild]):
+                        heap[pos],heap[leftchild]=heap[leftchild],heap[pos]
+                        max_heap(leftchild,heap,n) # to keep on checking the branch
 
-
-   
-s=sol()
-arr = [3, 5, 9, 6, 8, 20, 10, 12, 18, 9]
-print(s.rearrange(arr,len(arr)))
-
-
+                    # Swap with the right child and heapify
+                    # the right child
+                    else:
+                        heap[pos],heap[rightchild]=heap[rightchild],heap[pos]
+                        max_heap(rightchild,heap,n)
+        #--------------------------------------------------------
+        size=-1
+        while (pos1>0):
+            pop=heap[0]
+            heap[0]=heap[size] # we swap the last element to the starting
+            heap[size]=pop
+            size-=1
+            max_heap(0,heap,n) # we maintain the order
+            pos1-=1
+        print(heap)
         
 
 
 
 
+       
+    
+
+
+m=Mproblems_heap()   
+nums=[3,2,3,1,2,4,5,5,6]
+k =4
+print(m.findKthLargest(nums,k))
 
 
 
+# print('The minHeap is ') 
+# minh = minheap(15) 
+# # minh.heap_insert(5) 
+# # minh.heap_insert(3) 
+# # minh.heap_insert(17) 
+# # minh.heap_insert(10) 
+# # minh.heap_insert(84) 
+# # minh.heap_insert(19) 
+# # minh.heap_insert(6) 
+# # minh.heap_insert(22) 
+# # minh.heap_insert(9) 
+# minh.Print() 
+# # print("The Min val is " + str(minh.min_element_get())) 
 
 
+# arr = [90, 100, 10, 7, 12, 2, 7, 3]  
+# n = len(arr) - 1
 
-
-print('The minHeap is ') 
-minh = minheap(15) 
-# minh.heap_insert(5) 
-# minh.heap_insert(3) 
-# minh.heap_insert(17) 
-# minh.heap_insert(10) 
-# minh.heap_insert(84) 
-# minh.heap_insert(19) 
-# minh.heap_insert(6) 
-# minh.heap_insert(22) 
-# minh.heap_insert(9) 
-minh.Print() 
-# print("The Min val is " + str(minh.min_element_get())) 
-
-
-arr = [90, 100, 10, 7, 12, 2, 7, 3]  
-n = len(arr) - 1
-
-if minh.validheap(arr, n,0): 
-    print("Yes") 
-else: 
-    print("No") 
+# if minh.validheap(arr, n,0): 
+#     print("Yes") 
+# else: 
+#     print("No") 
