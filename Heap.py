@@ -265,17 +265,49 @@ class Mproblems_heap:
         print(heap)
         
 
-
-
-
-       
+class heapsort:
+    #to main a heap we need heapify
+    #converting Min to max
+    # we start from right most botton of the parent and keep checking its maintaing a max heap , else we swap and keep in track
+    def heapify(self,heap,pos,n):
+        leftchild=2*pos+1
+        rightchild=2*pos+2
+        largest=pos #assumption
+        
+        if leftchild< n and heap[largest] <heap[leftchild]:
+            largest=leftchild
+        if rightchild <n and heap[largest] <heap[rightchild]:
+            largest=rightchild
+        if largest!=pos:
+         # we have found a parent lesser than child
+            heap[pos],heap[largest]=heap[largest],heap[pos]
+            self.heapify(heap, largest, n)
     
+    def element_insert_heap(self,arr):
+        n=len(arr)
+        for i in range((n//2)-1,-1,-1):
+            self.heapify(arr,i,n)
+        #first we just heapify the array by checking the each pos from bot right node to the parent and we make it as max heap
+        # then we take position from right most leaf and swap to the element first element since the max element is first we swap with the last to make a increasing 
+        #array (heap sort )
+        for i in range(n-1,-1,-1):
+            arr[i],arr[0]=arr[0],arr[i]
+            self.heapify(arr,0,i)
+        return arr
+         
+h=heapsort()
+arr=[1,4,5,1,3]
+print(h.element_insert_heap(arr))
 
 
-m=Mproblems_heap()   
-nums=[3,2,3,1,2,4,5,5,6]
-k =4
-print(m.findKthLargest(nums,k))
+
+
+
+
+# m=Mproblems_heap()   
+# nums=[3,2,3,1,2,4,5,5,6]
+# k =4
+# print(m.findKthLargest(nums,k))
 
 
 
