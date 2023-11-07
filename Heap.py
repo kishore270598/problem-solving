@@ -294,10 +294,76 @@ class heapsort:
             arr[i],arr[0]=arr[0],arr[i]
             self.heapify(arr,0,i)
         return arr
-         
-h=heapsort()
-arr=[1,4,5,1,3]
-print(h.element_insert_heap(arr))
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+    
+
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        a=[]
+        n=len(lists)
+        for i in range(n):
+            head=lists[i]
+            while(head!=None):
+                a.append(head.val)
+                head=head.next
+        a=self.element_insert_heap(a)
+        root = None
+        for i in range(0, len(a), 1): 
+            root = self.insert(root, a[i]) 
+        
+        return root 
+
+    def insert(self,root, item): 
+        temp = ListNode(item,None) 
+        
+        if (root == None): 
+            root = temp 
+        else : 
+            ptr = root 
+            while (ptr.next != None): 
+                ptr = ptr.next
+            ptr.next = temp 
+        
+        return root 
+
+        
+    def heapify(self,heap,pos,n):
+        leftchild=2*pos+1
+        rightchild=2*pos+2
+        largest=pos #assumption
+        
+        if leftchild< n and heap[largest] <heap[leftchild]:
+            largest=leftchild
+        if rightchild <n and heap[largest] <heap[rightchild]:
+            largest=rightchild
+        if largest!=pos:
+         # we have found a parent lesser than child
+            heap[pos],heap[largest]=heap[largest],heap[pos]
+            self.heapify(heap, largest, n)
+    
+    def element_insert_heap(self,arr):
+        n=len(arr)
+        for i in range((n//2)-1,-1,-1):
+            self.heapify(arr,i,n)
+        #first we just heapify the array by checking the each pos from bot right node to the parent and we make it as max heap
+        # then we take position from right most leaf and swap to the element first element since the max element is first we swap with the last to make a increasing 
+        #array (heap sort )
+        for i in range(n-1,-1,-1):
+            arr[i],arr[0]=arr[0],arr[i]
+            self.heapify(arr,0,i)
+        return arr
+        
+
+
+
+h=linked_heapsort()
+lists = [1, 4, 5, 1, 3, 4, 2, 6]
+print(h.element_insert_heap(lists))
 
 
 
