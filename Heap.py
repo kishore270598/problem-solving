@@ -303,7 +303,7 @@ class heapsort:
     
 
 class Solution:
-    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+    def mergeKLists(self, lists):
         a=[]
         n=len(lists)
         for i in range(n):
@@ -359,11 +359,54 @@ class Solution:
         return arr
         
 
+#Replace Each Element Of Array With Its Corresponding Rank
+class Rank:
+    def heapify(self,heap,pos,n):
+        leftchild=2*pos+1
+        rightchild=2*pos+2
+        largest=pos #assumption
+        
+        if leftchild< n and heap[largest] <heap[leftchild]:
+            largest=leftchild
+        if rightchild <n and heap[largest] <heap[rightchild]:
+            largest=rightchild
+        if largest!=pos:
+         # we have found a parent lesser than child
+            heap[pos],heap[largest]=heap[largest],heap[pos]
+            self.heapify(heap, largest, n)
+    
+    def element_insert_heap(self,arr):
+        temp_arr=[]
+        temp_arr=arr
+        for i in range(0,len(arr),1):
+            temp_arr[i]=arr[i]
+        n=len(arr)
+        for i in range((n//2)-1,-1,-1):
+            self.heapify(arr,i,n)
+        #first we just heapify the array by checking the each pos from bot right node to the parent and we make it as max heap
+        # then we take position from right most leaf and swap to the element first element since the max element is first we swap with the last to make a increasing 
+        #array (heap sort )
+        for i in range(n-1,-1,-1):
+            arr[i],arr[0]=arr[0],arr[i]
+            self.heapify(arr,0,i)
+        
+        ranks={}
+        temp=1
+        for i in range(0,len(arr),1):
+            if(arr[i] not in ranks):
+                ranks[arr[i]]=temp
+                temp+=1
+        k=[]
+        for i in range(0,len(temp_arr),1):
+            if temp_arr[i] in ranks:
+                k.append(ranks[temp_arr[i]])
 
+        print(k)
+        
 
-h=linked_heapsort()
-lists = [1, 4, 5, 1, 3, 4, 2, 6]
-print(h.element_insert_heap(lists))
+# r=Rank()
+# lists = [4,7,2,90,90]
+# print(r.element_insert_heap(lists))
 
 
 
@@ -392,10 +435,38 @@ print(h.element_insert_heap(lists))
 # # print("The Min val is " + str(minh.min_element_get())) 
 
 
-# arr = [90, 100, 10, 7, 12, 2, 7, 3]  
-# n = len(arr) - 1
+class Hand:
+    #we need to check whether the len is divisible to create as group size
+    #sine its should be consecutive we use a hashmap to do a count 
+    # we need a heap min 
+    def isNStraightHand(self, hand, groupSize):
+        if(len(hand)%groupSize!=0):
+            return False
+        count={}
+        for element in hand:
+            count[element]=1 +count.get(element,0)
+        minH=list(count.keys())
+        heapq.heapify(minH)
+        while minH:
+            first=minH[0]
+            for i in range(first,first+groupSize,1):
+                if i not in count:
+                    return False
+                count[i]-=1
+                if count[i]==0:
+                    #THIS will be break the condition where we miss the min value with the consecutive values
+                    # always we need to pop the minheap 0 index value
+                    if i!=minH[0]:
+                        return False
+                    heapq.heappop(minH)
+        return True
+                
 
-# if minh.validheap(arr, n,0): 
-#     print("Yes") 
-# else: 
-#     print("No") 
+        
+
+
+r=Hand()
+lists = [1,2,3,6,2,3,4,7,8]
+print(r.isNStraightHand(lists,3))
+
+
