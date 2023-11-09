@@ -1,4 +1,6 @@
 import heapq
+from collections import Counter
+from collections import deque 
 class maxHeap:
     def __init__(self,max_size):
         self.max_size=max_size
@@ -460,13 +462,43 @@ class Hand:
                         return False
                     heapq.heappop(minH)
         return True
+
+    def leastInterval(self, tasks, n):
+        #Input: tasks = ["A","A","A","B","B","B"], n = 2
+        # Output: 8
+        # Explanation: 
+        # A -> B -> idle -> A -> B -> idle -> A -> B
+        # There is at least 2 units of time between any two same tasks.
+        #INT WE NEED TO TAKE THE MAXIMUM VALUE AND FILL WITH THE OTHER TASK
+        #we required a maxheap,a que to hold the time and the count
+        #the count of characters hashmap
+        count={}
+        count=Counter(tasks)
+        time=0 #to maintain when we can add another task 
+        time_c=deque() #[2 valuescount which holds the used task ,time when it can be avalaible to add]
+        maxHeap=[-cnt for cnt in count.values()]
+        heapq.heapify(maxHeap)
+        while maxHeap or time_c:
+            time+=1
+            if maxHeap:
+                cnt=1+ heapq.heappop(maxHeap) # since we are taking negatvie we are decrementing 
+                if cnt!=0:
+                    time_c.append([cnt,time+n])
+            if time_c and time_c[0][1]==time: #possible to add the task in our 
+                heapq.heappush(maxHeap,time_c.popleft()[0])
                 
+        return time
+
+
+                
+            
 
         
 
 
 r=Hand()
-lists = [1,2,3,6,2,3,4,7,8]
-print(r.isNStraightHand(lists,3))
+tasks = ["A","A","A","B","B","B"]
+n = 2
+print(r.leastInterval(tasks,n))
 
 
