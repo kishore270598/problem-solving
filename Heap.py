@@ -473,7 +473,7 @@ class Hand:
         #we required a maxheap,a que to hold the time and the count
         #the count of characters hashmap
         count={}
-        count=Counter(tasks)
+        
         time=0 #to maintain when we can add another task 
         time_c=deque() #[2 valuescount which holds the used task ,time when it can be avalaible to add]
         maxHeap=[-cnt for cnt in count.values()]
@@ -488,17 +488,81 @@ class Hand:
                 heapq.heappush(maxHeap,time_c.popleft()[0])
                 
         return time
+    
+    def topKFrequent(self, nums, k):
+        #we will be holding a each freq of len size that is maximum freq of a digit can occur
+        # in that freq index we will be holding the list
+        #************bucket sort******************
+        count={}
+        freq=[[] for i in range(0,len(nums)+1,1)]
+        for n in nums:
+            count[n]=1+count.get(n,0)
+        print(count.items())
+        #dict_items([(1, 3), (2, 2), (3, 2)])
+        #nums = [1,1,1,2,2,3,3] for the below line so for frq we will be holding the values
+        for n,c in count.items():
+            freq[c].append(n)
+        res=[]
+        for i in range(len(nums),-1,-1):
+            for n in freq[i]:#for each freq it contains a list
+                res.append(n)
+                if(len(res)==k):
+                    return res
+class Solution:
+    def solveA(self, A, B, c):
+        maxHeap_a=[-element for element in A]
+        maxHeap_b=[-element for element in B]
+        heapq.heapify(maxHeap_a)
+        heapq.heapify(maxHeap_b)
+        a=0
+        z=[]
+        for i in range(0,len(A),1):
+            for j in range(0,len(B),1):
+                z.append(-(maxHeap_a[i]+maxHeap_b[j]))
+        z=sorted(z)
+        z=z[::-1]
+        print(z)
+        return z[0:c]
+    def solve(self, A, B, K):
+        n=len(A)
+        ans = []
+        A.sort()
+        B.sort()
+        pq = []
+        index = set()
+        #conifrm last 2 elements are must be highest combination so we add it and add it in set 
+        #in this set we hold the index
+        heapq.heappush(pq, (A[-1] + B[-1], (n - 1, n - 1)))
+        index.add((n - 1, n - 1))
+    
+        while K > 0:
+            p = heapq.heappop(pq)
+            sum_val, (i, j) = p
+            ans.append(sum_val)
+            #checking the diagonals to check the sum and maintaing the heap
+            if (i - 1, j) not in index:
+                heapq.heappush(pq, (A[i - 1] + B[j], (i - 1, j)))
+                index.add((i - 1, j))
+    
+            if (i, j - 1) not in index:
+                heapq.heappush(pq, (A[i] + B[j - 1], (i, j - 1)))
+                index.add((i, j - 1))
+    
+            K -= 1
+    
+        return ans
 
 
-                
-            
-
-        
 
 
-r=Hand()
+
+
+
+
+r=Solution()
 tasks = ["A","A","A","B","B","B"]
-n = 2
-print(r.leastInterval(tasks,n))
-
+A = [ 58, 38, 60 ]
+B = [ 58, 38, 60 ]
+C = 2
+print(r.solve(A,B,C))
 
