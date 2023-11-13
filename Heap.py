@@ -551,6 +551,22 @@ class Solution:
             K -= 1
     
         return ans
+class codeninja:
+    def ropes(self,arr):
+        #we hold as stack and put inside the heap and add to it
+        #Connect `n` ropes with minimal cost
+        minHeap=[element for element in arr]
+        first=0
+        second=0
+        heapq.heapify(minHeap)
+        print(minHeap)
+        res=0
+        while (len(minHeap)>1):
+            first=heapq.heappop(minHeap)
+            second=heapq.heappop(minHeap)
+            res+=first+second
+            heapq.heappush(minHeap,first+second)
+        return res
 
 
 
@@ -559,10 +575,12 @@ class Solution:
 
 
 
-r=Solution()
-tasks = ["A","A","A","B","B","B"]
-A = [ 58, 38, 60 ]
-B = [ 58, 38, 60 ]
-C = 2
-print(r.solve(A,B,C))
+
+
+
+
+
+r=codeninja()
+A = [4,3,2,6]
+print(r.ropes(A))
 
