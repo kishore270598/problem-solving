@@ -567,20 +567,40 @@ class codeninja:
             res+=first+second
             heapq.heappush(minHeap,first+second)
         return res
+    
+class MedianFinder:
+
+    def __init__(self):
+        #large,small heap  min heap,max heap
+        #we need to maintian 
+        self.large,self.small=[],[] 
+
+    def addNum(self, num: int) -> None:
+        heapq.heappush(self.small,-1 * num)
+        #to maintain the small heap will hold always the value less the the large heap
+        # since 0 index holds max value and min value 
+        if(self.small and self.large and (-1 * self.small[0] >self.large[0])):
+            val=-1 * heapq.heappop(self.small)
+            heapq.heappush(self.large,val)
+
+        #if the len has more
+        if len(self.small) >len(self.large)+1 :
+            val=-1 * heapq.heappop(self.small)
+            heapq.heappush(self.large,val)
+        if len(self.large) > len(self.small)+1 :
+            val= heapq.heappop(self.large)
+            heapq.heappush(self.small,-1*val)
+    
+    def findMedian(self) -> float:
+        if (len(self.small) > len(self.large)):
+            return -1 *self.small[0]
+        if (len(self.large) > len(self.small)):
+            return self.large[0]
+        return (-1* self.small[0] +self.large[0])/2
 
 
 
-
-
-
-
-
-
-
-
-
-
-r=codeninja()
+r=MedianFinder()
 A = [4,3,2,6]
-print(r.ropes(A))
+print(r.median(A))
 
