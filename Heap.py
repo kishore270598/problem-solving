@@ -1,6 +1,7 @@
 import heapq
 from collections import Counter
 from collections import deque 
+from collections import defaultdict
 class maxHeap:
     def __init__(self,max_size):
         self.max_size=max_size
@@ -599,8 +600,63 @@ class MedianFinder:
         return (-1* self.small[0] +self.large[0])/2
 
 
-
 r=MedianFinder()
 A = [4,3,2,6]
 print(r.median(A))
+
+class Twitter:
+
+    def __init__(self):
+        self.count=0 # to hold the recent tweet a track
+        self.tweetmap=defaultdict(list) # this will include the [(COUNT,TWEET ID)]
+        self.followmap=defaultdict(set) #for a id what and person he follows 
+        
+
+    def postTweet(self, userId: int, tweetId: int) -> None:
+        self.tweetmap[userId].append([self.count,tweetId])
+        self.count-=1
+
+    def getNewsFeed(self, userId: int) -> List[int]:
+        res=[]
+        minHeap=[]
+        self.followmap[userId].add(userId)#person follows himself
+        for followguy in self.followmap[userId]: #THIS WILL GIVE THE GUYS WHO AND ALL USERID IS FOLLOWING
+            if followguy in self.tweetmap:
+                index=len(self.tweetmap[followguy])-1 #the last tweet
+                count,tweetid=self.tweetmap[followguy][index]
+                minHeap.append([count,tweetid,followguy,index-1])#to make sure we collect the all the tweet of the that follower
+        heapq.heapify(minHeap)
+        while minHeap and len(res)<10:
+            count,tweetid,followguy,index=heapq.heappop(minHeap)
+            res.append(tweetid)
+            if(index >=0):
+                count,tweetid=self.tweetmap[followguy][index]
+                heapq.heappush(minHeap,[count,tweetid,followguy,index-1])
+        return res   
+        
+
+    def follow(self, followerId: int, followeeId: int) -> None:
+        self.followmap[followerId].add(followeeId)
+        
+
+    def unfollow(self, followerId: int, followeeId: int) -> None:
+        if followeeId in self.followmap[followerId]:
+            self.followmap[followerId].remove(followeeId)
+
+        
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.band=k
+        self.minHeap=[]
+        for element in nums:
+            self.minHeap.append(element)
+        heapq.heapify(self.minHeap)
+    
+    def add(self, val: int) -> int:
+        heapq.heappush(self.minHeap,val)
+        while(len(self.minHeap)>self.band):
+            heapq.heappop(self.minHeap)
+        return self.minHeap[0]
+
 
