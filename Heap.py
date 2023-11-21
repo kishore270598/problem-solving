@@ -604,8 +604,7 @@ r=MedianFinder()
 A = [4,3,2,6]
 print(r.median(A))
 
-class Twitter:
-
+class twitter:
     def __init__(self):
         self.count=0 # to hold the recent tweet a track
         self.tweetmap=defaultdict(list) # this will include the [(COUNT,TWEET ID)]
