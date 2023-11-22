@@ -37,11 +37,55 @@ class Solution:
                 finalvalue+=(arr[i].value /arr[i].weight) *remain
                 break
         return finalvalue 
+    
+    def minCoins(self, coins, M, V):
+        right=0
+        coins_=sorted(coins,reverse=True)
+        res=set()
+        current_sum=0
+        for i in range(0,len(coins_),1):
+            while V>=coins_[i]:
+                V-=coins_[i]
+                res.add(coins_[i])
+        return res
+    
+    def lemonadeChange(self, bills):
+        current_change=0
+        if(bills[0]!=5):
+            return False
+        current_change=5    
+        for i in range(1,len(bills),1):
+            if(bills[i]==10):
+                if(current_change<5):
+                    return False
+                current_change+=5
+            elif(bills[i]==20):
+                if(current_change<15):
+                    return False
+                else:
+                    current_change-=10
+            else:
+                current_change+=5
+        return True
+                    
+
+
+
+
+
+            
+            
+                 
+               
+
+
+          
 
 
     
-k=greedy()
-s=[1,1]
-g=[1,2,3]
-ans=k.findContentChildren(g,s)
+k=Solution()
+V = 11
+M = 3
+coins=[5,5,5,10,20]
+ans=k.lemonadeChange(coins)
 print(ans)
