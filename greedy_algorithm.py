@@ -67,25 +67,50 @@ class Solution:
             else:
                 current_change+=5
         return True
-                    
 
-
-
-
-
-            
-            
-                 
-               
-
-
-          
-
-
+    def checkValidString(self, s):
+        #we will be holding 2 var 
+        # with * possible as left left max and *  as right left min
+        left_min=0
+        left_max=0
+        for c in s:
+            if(c=='('):
+                left_max+=1
+                left_min+=1
+            elif(c==')'):
+                left_max-=1
+                left_min-=1
+            else:
+                left_max+=1
+                left_min-=1
+            if(left_max<0):
+                return False
+            if(left_min<0):
+                left_min=0
+        return left_min==0
     
+    def kItemsWithMaximumSum(self, numOnes: int, numZeros: int, numNegOnes: int, k: int) -> int:
+        if(numOnes>=k):
+            return k
+        current_max=0
+        while(k>0):
+            if(numOnes!=0 and numOnes<k):
+                current_max+=numOnes
+                k-=1*(numOnes)
+                numOnes=0
+            elif(numZeros!=0 and k!=0):
+                k-=1*(numZeros)
+                numZeros=0
+            elif(k!=0):
+                current_max+=k*(-1)
+                k=0
+        return current_max
+
+
+   
 k=Solution()
 V = 11
 M = 3
-coins=[5,5,5,10,20]
-ans=k.lemonadeChange(coins)
+s='011100'
+ans=k.kItemsWithMaximumSum(3,2,0,4)
 print(ans)
