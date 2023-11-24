@@ -105,12 +105,69 @@ class Solution:
                 current_max+=k*(-1)
                 k=0
         return current_max
+    def maximumMeetings(start: List[int], end: List[int]) -> int:
+            meetings=[]
+            current_meeting=0
+            max_meeting=0
+            no_meeting=0
+            left,right=0,0
+            for i in range(0,len(start),1):
+                meetings.append((end[i],start[i]))
+            meetings=sorted(meetings)
+            #current_meeting
+            while (left<len(meetings)):
+                if(right<len(meetings) and current_meeting<=meetings[right][1]):
+                    current_meeting=meetings[right][0]
+                    no_meeting+=1
+                if(right==len(meetings)):
+                    max_meeting=max(max_meeting,no_meeting)
+                    no_meeting=0
+                    left+=1
+                    right=left
+                    current_meeting=0
+                else:
+                    right+=1
+            return max_meeting    
 
 
-   
-k=Solution()
+class meeting:
+    def __init__(self, start, end, pos):
+        self.start = start
+        self.end = end
+        self.pos = pos
+
+class Solution:
+    def maxMeetings(self, s, e, n) :
+        meet = [meeting(s[i], e[i], i + 1) for i in range(n)]
+        sorted(meet, key=lambda x: (x.end, x.pos))
+        answer = []
+        limit = meet[0].end
+        answer.append(meet[0].pos)
+        for i in range(1, n):
+            if meet[i].start > limit:
+                limit = meet[i].end
+                answer.append(meet[i].pos)
+        print("The order in which the meetings will be performed is ")
+        for i in answer:
+            print(i, end=" ")
+
+
+    def canJump(self, nums: List[int]) -> bool:
+        goal=0
+        for i in range(len(nums)-1,-1,-1):
+            if i+nums[i]>=goal:# u can able to reach it so greater than
+                goal=i # since greedy apporch we are reducing the goal to reach our starting point
+
+        if(goal==0):
+            return True # we have reached the starting point
+        else:
+            return False
+
+
+k=meeting1()
 V = 11
 M = 3
-s='011100'
-ans=k.kItemsWithMaximumSum(3,2,0,4)
+start = [1, 3, 0, 5, 8, 5]
+end = [2, 4, 5, 7, 9, 9]
+ans=k.maximumMeetings(start,end)
 print(ans)
