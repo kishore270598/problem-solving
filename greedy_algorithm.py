@@ -163,6 +163,25 @@ class Solution:
         else:
             return False
 
+    def jump2(self, nums: List[int]) -> int:
+        #2 pointers to decide the boundary using sliding window 
+        # [ [2],[3(l),1(r)],1,4] 
+        # each index holds the value the maximum jump with that we see set the boundary( min ,max) the max is farest
+        # we have far var which holds the maximum index it can reach
+        #farest value will be the min value to reach the last index in lesser time 
+        left=0
+        right=0
+        res=0
+
+        while right <len(nums)-1:
+            farest=0
+            for i in range(left ,right+1,1):# looping through the boundary
+                farest=max(farest,i+nums[i])
+            res+=1
+            left+=1 # setting to the boundary 
+            right=farest # setting to the boundary
+        return res
+
 
 k=meeting1()
 V = 11
