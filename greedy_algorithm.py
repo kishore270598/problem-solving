@@ -105,7 +105,7 @@ class Solution:
                 current_max+=k*(-1)
                 k=0
         return current_max
-    def maximumMeetings(start: List[int], end: List[int]) -> int:
+    def maximumMeetings(start, end):
             meetings=[]
             current_meeting=0
             max_meeting=0
@@ -136,7 +136,15 @@ class meeting:
         self.end = end
         self.pos = pos
 
-class Solution:
+class Train:
+    def __init__(self,start,end):
+        self.start=start
+        self.end=end
+    
+    def __lt__(self,other): # other (train(arr,dep))
+        return self.start <other.start
+
+class Solution1:
     def maxMeetings(self, s, e, n) :
         meet = [meeting(s[i], e[i], i + 1) for i in range(n)]
         sorted(meet, key=lambda x: (x.end, x.pos))
@@ -152,7 +160,7 @@ class Solution:
             print(i, end=" ")
 
 
-    def canJump(self, nums: List[int]) -> bool:
+    def canJump(self, nums):
         goal=0
         for i in range(len(nums)-1,-1,-1):
             if i+nums[i]>=goal:# u can able to reach it so greater than
@@ -163,7 +171,7 @@ class Solution:
         else:
             return False
 
-    def jump2(self, nums: List[int]) -> int:
+    def jump2(self, nums):
         #2 pointers to decide the boundary using sliding window 
         # [ [2],[3(l),1(r)],1,4] 
         # each index holds the value the maximum jump with that we see set the boundary( min ,max) the max is farest
@@ -182,11 +190,73 @@ class Solution:
             right=farest # setting to the boundary
         return res
 
+    def minimumPlatform(self,n,at,dt):
+        at.sort()
+        dt.sort()
+        plat=1
+        res=1
+        left,right=0,1
+        while (left<n and right<n):
+            if(at[right]<=dt[left]):
+                plat+=1
+                right+=1
+            elif(at[right]>dt[left]):
+                plat-=1
+                left+=1
+            res=max(res,plat)
+        return res
 
-k=meeting1()
-V = 11
-M = 3
-start = [1, 3, 0, 5, 8, 5]
-end = [2, 4, 5, 7, 9, 9]
-ans=k.maximumMeetings(start,end)
+class job:
+    def __int__(self,jobid,deadline,profit):
+        self.jobid=jobid
+        self.deadline=deadline
+        self.profit=profit
+    
+
+
+class Solution:
+    
+    #Function to find the maximum profit and the number of jobs done.
+    def JobScheduling(self,Jobs,n):
+                # we sort in reverse to make a maxmium profit
+        # finding the maximum job deadline to make sure we maximum profit doing that slot
+        Jobs.sort(key=lambda x: x.profit, reverse=True)
+        max_job=Jobs[0].deadline
+        for i in range(1, len(Jobs)):
+            max_job = max(max_job, Jobs[i].deadline)
+        slot=[-1]*(max_job+1)
+        countJobs=0
+        jobprofit=0
+        for i in range(len(Jobs)):# we assign the last date
+        #to make sure we complete other jobs before that
+            for j in range(Jobs[i].deadline,0,-1):
+                if(slot[j]==-1):# if the slot is empty we reduce to less deadline and complete that on time
+                    slot[j]=i
+                    countJobs+=1
+                    jobprofit+=Jobs[i].profit
+                    break
+        return countJobs,jobprofit
+    
+    def candy(self, ratings: List[int]) -> int:
+        #intuition  
+        # when a element [ 1,2]  2 IS Greater than 1 so we just add the (candy of 1 ) + for 2 this is left right
+        # same we follow left to right to set the candy but we put max since already we have assigned some when going left to right
+        arr=[1]*len(ratings)
+        for i in range(1,len(ratings),1):
+            if ratings[i-1]<ratings[i]:
+                arr[i]=ratings[i-1]+1
+        
+        for i in range(len(ratings)-2,-1,-1):
+            if ratings[i]>ratings[i+1]:
+                arr[i]=max(arr[i],ratings[i+1]+1)
+        return sum(arr)
+
+
+        
+            
+
+
+k=Solution()
+Jobs = [[1,4,20],[2,1,10],[3,1,40],[4,1,30]]
+ans=k.jobScheduling(Jobs,len(Jobs))
 print(ans)
