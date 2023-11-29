@@ -250,7 +250,23 @@ class Solution:
             if ratings[i]>ratings[i+1]:
                 arr[i]=max(arr[i],ratings[i+1]+1)
         return sum(arr)
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        #case 1: where new intervals are lesser than the current intervals-->
+        # we return the new interval and plus the intervals
+        #case 2 : where the new intervals are overlapping we take the min of the first range and max of of the last range
 
+        res=[] #be the new result 
+        for i in range(len(intervals)):
+            if newInterval[1]<intervals[i][0]:
+                res.append(newInterval)
+                return res+intervals[i:] 
+            elif intervals[i][1] <newInterval[0]:
+                res.append(intervals[i])
+            else:
+                newInterval=[min(intervals[i][0],newInterval[0]),max(intervals[i][1],newInterval[1])]
+            
+        res.append(newInterval)
+        return res
 
         
             
