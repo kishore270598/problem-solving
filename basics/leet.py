@@ -21,6 +21,24 @@ class Solution:
             ch=(string[element])
             uniq_char.add(string[element])
         print(uniq_char)
+    
+    def splitNum(self, num: int) -> int:
+        z=[]
+        while num!=0:
+            z.append(num%10)
+            num=num//10
+        z=sorted(z)
+        a=''
+        b=''
+        for i in range(len(z)):
+            if(i%2==0):
+                a+=str(z[i])
+            else:
+                b+=str(z[i])
+
+        a=int(a)
+        b=int(b)
+        return a+b
 
         
 s=Solution()
