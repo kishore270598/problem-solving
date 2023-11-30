@@ -237,7 +237,7 @@ class Solution:
                     break
         return countJobs,jobprofit
     
-    def candy(self, ratings: List[int]) -> int:
+    def candy(self, ratings):
         #intuition  
         # when a element [ 1,2]  2 IS Greater than 1 so we just add the (candy of 1 ) + for 2 this is left right
         # same we follow left to right to set the candy but we put max since already we have assigned some when going left to right
@@ -250,7 +250,10 @@ class Solution:
             if ratings[i]>ratings[i+1]:
                 arr[i]=max(arr[i],ratings[i+1]+1)
         return sum(arr)
-    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+    #######################
+    # inserting intervals #
+    #######################
+    def insert(self, intervals, newInterval):
         #case 1: where new intervals are lesser than the current intervals-->
         # we return the new interval and plus the intervals
         #case 2 : where the new intervals are overlapping we take the min of the first range and max of of the last range
@@ -267,12 +270,48 @@ class Solution:
             
         res.append(newInterval)
         return res
+    ##############################
+    ###    merge intervals   #####
+    ##############################
+    def merge(self, intervals):
+        #sort the array 
+        #we take start and end of the array and compare with a new array
+        intervals.sort(key=lambda i:i[0] )
+        output=[intervals[0]] # taking the first element 
+
+        for start,end in intervals[1:]:
+            lastend=output[-1][1] #lastest value
+            if lastend >=start: #which means over lapping
+                output[-1][1]=max(end,output[-1][1]) #decarling the end
+            else:
+                output.append([start,end])
+
+        return output 
+    ########################################
+    ### remove the overlapping intervals ###
+    ########################################
+    def eraseOverlapIntervals(self, intervals):
+        #we take start (2) index element and prev end
+        # if that is not greater than the prev element we take the min and and set the prevend. increment the del counter
+        # else we update the current end
+        res=0
+        intervals.sort()
+        prev_end=intervals[0][1]
+        for start,end in intervals[1:]:# starting from second index
+            if start>=prev_end:# as expected the intervals are there
+                prev_end=end
+            else:
+                res+=1 # removal is required so counting it
+                prev_end=min(prev_end,end) # to make sure we are in the correct intervals not removing more
+
+        return res
 
         
+
             
 
 
 k=Solution()
-Jobs = [[1,4,20],[2,1,10],[3,1,40],[4,1,30]]
-ans=k.jobScheduling(Jobs,len(Jobs))
+intervals =[[1,100],[11,22],[1,11],[2,12]]
+ans=k.merge_2(intervals)
 print(ans)
