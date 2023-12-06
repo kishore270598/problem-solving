@@ -73,9 +73,9 @@ class Traversal:
             #since we push in stack we push it first right and left then pop left first
             res.append(currentNode.data)
             if currentNode.right:
-                stack.append(currentNode.left)
-            if currentNode.right:
                 stack.append(currentNode.right)
+            if currentNode.left:
+                stack.append(currentNode.left)
         return res
     def postorder_traversal(self,root):
         res = []
@@ -104,6 +104,44 @@ class Traversal:
                     curr_node = None
             
         return res    
+    #LEVEL ORDER TRAVERSAL 
+    #FIND THE HEIGHT
+    def levelOrder(self, root):
+        def find_height(node):
+            #base case to break the recursion
+            if node is None:
+                return 0
+            else:
+                lheight=find_height(node.left)
+                rheight=find_height(node.right)
+
+                if lheight>rheight:
+                    return lheight+1
+                else:
+                    return rheight+1   
+       
+        def printCurrentLevel(root, level,ans):
+
+            if root is None:
+                return 
+            if level == 1:
+                ans.append(root.val)
+            elif level>1:
+                printCurrentLevel(root.left,level-1,ans)
+                printCurrentLevel(root.right ,level-1,ans)
+        
+        h=find_height(root)
+        z=[]
+        for i in range(1,h+1,1):
+            ans=[]
+            printCurrentLevel(root,i,ans)
+            z.append(ans)
+        return z 
+            
+    
+
+
+
 
 
 
@@ -117,7 +155,9 @@ root.right = Node(3)
 root.right.left = Node(6)
 root.right.right = Node(7)
 root.right.left.left = Node(9)
-print(t.postorder_traversal(root))
+coins = [100000]
+target = 100000
+print(t.minimumAddedCoins(coins,target))
     
 
 

@@ -43,9 +43,78 @@ class Test:
         for i in range (2,k+1,1):
             val*=i
         return val
-       
+    
+            #coins = [1,4,10], target = 19
+
+    #2952. Minimum Number of Coins to be Added
+    def minimumAddedCoins(self,nums,target):
+        ans=[]
+        subset=[]
+        sum_=set()  
+
+        def findPowerSet(index):
+            if index>=len(nums):
+                ans.append(subset.copy())
+                return
+            subset.append(nums[index])
+            findPowerSet(index+1)
+            subset.pop()
+            findPowerSet(index+1)
+        #check the sum of subseq
+        def findthesum(ans):
+            for i in range(len(ans)):
+                sum_.add(sum(ans[i]))
+            sum_.remove(0)
+
+        findPowerSet(0)
+        findthesum(ans)
+        coins_add=0
+        for i in range(1,target+1,1):
+            if i not in sum_:
+                nums.append(i)
+                coins_add+=1
+                ans=[]
+                subset=[]
+                #check every time 
+                findPowerSet(0)
+                findthesum(ans)
+                if(len(sum_)>=target):
+                    break
+        return coins_add
+    def minimumAddedCoins(self,nums,target):
+                nums.sort()
+                coins_count=0
+                current_sum=0
+                index=0
+                while current_sum<target:
+                    if len(nums)>index and nums[index]<=current_sum+1:
+                        current_sum+=nums[index]
+                        index+=1
+                    else:
+                        current_sum+=current_sum+1
+                        coins_count+=1
+                return coins_count   
+    def totalMoney(self, n: int) -> int:
+        flag=1
+        main_flag=1
+        sum_=0
+        k=1
+        while(k<n+1):
+            if(k%7==0):
+                print(flag,'+')
+                sum_+=flag
+                flag=main_flag+1
+                main_flag+=1
+
+            else:
+                print(flag,'+')
+                sum_+=flag
+                flag+=1
+            k+=1
+        return sum_
+    
 a=Test()
-result=a.getRow()
+print(a.totalMoney(20))
 
 
 
