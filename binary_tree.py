@@ -47,19 +47,19 @@ class Traversal:
     #iterative way#
     #Left Subtree→ Root→ Right Subtree
     def inorder_traversal(self,root):
-        res=[]
-        if not root:
-            return res
-        stack=[]
+        #we need a stack to add the nodes .we always travel to left to reach the null (leaf)
+        #once we reach it we just assign to result list
+        #travel back to right and append that 
         currentNode=root
+        stack=[]
+        res=[]
         while currentNode or stack:
             while currentNode:
                 stack.append(currentNode)
                 currentNode=currentNode.left
-            currentNode=stack.pop() # we just assignthe last leaf
+            currentNode=stack.pop()
             res.append(currentNode.data)
-            currentNode=currentNode.right # we go for next right
-
+            currentNode=currentNode.right
         return res
     #preorder
     # Root-->left--> right
@@ -78,32 +78,42 @@ class Traversal:
                 stack.append(currentNode.left)
         return res
     def postorder_traversal(self,root):
-        res = []
-        if not root:
-            return res
-        curr_node = root
-        stack = []
-        right_stack = []
-        while stack or curr_node:
-            if curr_node:
-                if curr_node.right:
-                    right_stack.append(curr_node.right)
-                    print(right_stack)
-                stack.append(curr_node)
-                print(stack)
-                curr_node = curr_node.left
-            else:
-                curr_node = stack[-1]
-                if right_stack and curr_node.right == right_stack[-1]:
-                    curr_node = right_stack.pop()
-                else:
-                    res.append(curr_node.data)
-                    print(res)
-                    print(stack)
-                    stack.pop()
-                    curr_node = None
+        if root is None: 
+            return
+        ans=[]
+        stack=[]
+        #one stack iterative method
+        currentNode=root
+        while(True): 
+            while (root): 
+                # Push root's right child and then root to stack 
+                if root.right is not None: 
+                    stack.append(root.right) 
+                stack.append(root) 
+    
+                # Set root as root's left child 
+                root = root.left 
             
-        return res    
+            # Pop an item from stack and set it as root 
+            root = stack.pop() 
+    
+            # If the popped item has a right child and the 
+            # right child is not processed yet, then make sure 
+            # right child is processed before root 
+            if stack and  (root.right is not None and
+                stack[-1] == root.right): 
+                stack.pop() # Remove right child from stack 
+                stack.append(root) # Push root back to stack 
+                root = root.right # change root so that the 
+                                # right childis processed next 
+    
+            # Else print root's data and set root as None 
+            else: 
+                ans.append(root.val) 
+                root = None
+    
+            if (len(stack) <= 0): 
+                    return ans 
     #LEVEL ORDER TRAVERSAL 
     #FIND THE HEIGHT
     def levelOrder(self, root):
@@ -157,7 +167,7 @@ root.right.right = Node(7)
 root.right.left.left = Node(9)
 coins = [100000]
 target = 100000
-print(t.minimumAddedCoins(coins,target))
+print(t.postorder_traversal3(root))
     
 
 
