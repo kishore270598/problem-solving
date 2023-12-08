@@ -147,6 +147,35 @@ class Traversal:
             printCurrentLevel(root,i,ans)
             z.append(ans)
         return z 
+    def getTreeTraversal(self,root):
+        res=[]
+        def preorder(res,root):
+            if root is None:
+                return
+            res.append(root.data) 
+            preorder(res,root.left)
+            preorder(res,root.right)
+        preorder(res,root)
+        print(res)
+        res=[]
+        def inorder(res,root):
+            if root is None:
+                return
+            inorder(res,root.left)
+            res.append(root.data)
+            inorder(res,root.right)  
+        inorder(res,root)
+        print(res)
+    #postorderTraversal 
+        res=[]
+        def postorder(res,root):
+            if root is None:
+                return
+            postorder(res,root.left)
+            postorder(res,root.right)  
+            res.append(root.data)
+        postorder(res,root)
+        print(res)
             
     
 
@@ -167,7 +196,7 @@ root.right.right = Node(7)
 root.right.left.left = Node(9)
 coins = [100000]
 target = 100000
-print(t.postorder_traversal3(root))
+print(t.getTreeTraversal(root))
     
 
 
