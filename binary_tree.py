@@ -179,24 +179,93 @@ class Traversal:
             
     
 
+    #find the height
+    def maxDepth(self, root):
+        def find_height(node):
+            if node is None:
+                return 0
+            else:
+                rheight=find_height(node.right)
+                lheight=find_height(node.left)
+                print(rheight,lheight)
+                if(rheight >lheight):
+                    return rheight+1
+                else:
+                    return lheight+1
+               
+        h=find_height(root)
+        return h 
+    
+    def isBalanced(self, root) -> bool:
+
+        def find_height(node):
+            if node is None:
+                return 0
+            else:
+                #we track the level by level
+                rheight=find_height(node.right)
+                if(rheight==-1):
+                    return -1
+                lheight=find_height(node.left)
+                if(lheight==-1):
+                    return -1
+                if abs(lheight-rheight)>1:
+                    #it means its not a balanced tree (height tree)
+                    return -1
+                
+                return max(lheight,rheight)+1
 
 
+
+
+        if(find_height(root)!=-1):
+            return True
+        else:
+            return False
+
+    def diameterOfBinaryTree(self, root):
+        diameter=[0]
+        def find_height(node):
+            if node is None:
+                return 0
+            else:
+                lheight=find_height(node.left)
+                rheight=find_height(node.right)
+                diameter[0]=max(diameter[0],lheight+rheight)
+                return max(lheight, rheight)+1
+        find_height(root)
+        return diameter[0]
+
+    def maxPathSum(self, root):
+        max_path = float("-inf")
+        if root.left is None and root.right is None:
+            return root.val
+        def find_path(root):
+            nonlocal max_path
+            if root is None:
+                return 0
+            #to avoid the negative so we negalte with 0
+            leftpath_sum=max(0,find_path(root.left))
+            rightpath_sum=max(0,find_path(root.right))
+            max_path=max(max_path,leftpath_sum+rightpath_sum+root.val)
+            return root.val+max(leftpath_sum,rightpath_sum)
+        find_path(root)
+        return max_path
+
+
+
+        
+#[1, '(', 2, '(', 4,')',')', '(', 3, ')']
 
 
 
 t=Traversal()
 root = Node(1)
-root.left = Node(2)
-root.left.right = Node(5)
-root.left.right.left = Node(8)
-root.left.left = Node(4)
-root.right = Node(3)
-root.right.left = Node(6)
-root.right.right = Node(7)
-root.right.left.left = Node(9)
+root.right=Node(2)
+root.right.right=Node(3)
 coins = [100000]
 target = 100000
-print(t.getTreeTraversal(root))
+print(t.isBalanced(root))
     
 
 
