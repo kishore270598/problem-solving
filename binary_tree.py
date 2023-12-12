@@ -252,6 +252,94 @@ class Traversal:
         find_path(root)
         return max_path
 
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        def preorder(p,q):
+            if p is None or q is None:
+                return (p==q)
+            return (p.val==q.val) and preorder(p.right,q.right) and preorder(p.left,q.left)
+        return preorder(p,q)
+
+
+
+    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        #iterative method
+        #we will take a current node and iterate, we add the next which is childerns list
+        #when we reach a level even we reverse the current node list and apped with the list
+        res=[] #result
+        if not root:
+            return res
+        curr=[root]
+        nxt=[] #to hold the childerns 
+        level=1
+
+        while curr:
+            for i in curr:
+                if i.left:#since we start with zig zag left
+                    nxt.append(i.left)
+                if i.right:
+                    nxt.append(i.right)
+
+            if level%2==0:
+                curr.reverse()
+            res.append([i.val for i in curr])
+            curr=nxt #to set the childern for next flow
+            if nxt:
+                level+=1
+            nxt=[]
+        return res
+    def traverseBoundary(root):
+        #we need to first traverse through left till exculding
+        # we need to inorder and without the root for the leaf nodes
+        # we need to right boundary starting from the base print the first bottom root right then left 
+        res=[]
+        #left traversal
+        def printleft(root,res):
+            if root:
+                if root.left:
+                    res.append(root.data)
+                    printleft(root.left,res)
+                else:
+                    print(root.data)
+                    printleft(root.right,res)
+        def printleaf(root,res):
+            if(root):
+                printleaf(root.left,res) 
+                if root.left is None and root.right is None:
+                    res.append(root.data)
+                printleaf(root.right,res)
+
+        def printRightbottom(root,res):
+            if root:
+                if root.right:
+                    printRightbottom(root.right,res)
+                    res.append(root.data)
+                elif(root.left):
+                    printRightbottom(root.left,res)
+                    res.append(root.data)
+        def printBoundary(root,res):
+            if (root):
+                res.append(root.data) #base root
+                printleft(root.left,res)
+                printleaf(root.left,res)
+                printleaf(root.right,res)
+                printRightbottom(root.right,res)
+        printBoundary(root,res)
+            
+                
+
+
+            
+
+
+        
+
+
+
+
+
+
+
+
 
 
         
