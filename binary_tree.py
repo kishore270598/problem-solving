@@ -1,3 +1,5 @@
+from collections import defaultdict 
+from collections import deque 
 class Node:
     def __init__(self,data) -> None:
         self.left=None
@@ -252,7 +254,7 @@ class Traversal:
         find_path(root)
         return max_path
 
-    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+    def isSameTree(self, p, q):
         def preorder(p,q):
             if p is None or q is None:
                 return (p==q)
@@ -261,7 +263,7 @@ class Traversal:
 
 
 
-    def zigzagLevelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+    def zigzagLevelOrder(self, root):
         #iterative method
         #we will take a current node and iterate, we add the next which is childerns list
         #when we reach a level even we reverse the current node list and apped with the list
@@ -325,23 +327,50 @@ class Traversal:
                 printRightbottom(root.right,res)
         printBoundary(root,res)
             
-                
 
-
-            
-
-
-        
-
-
-
-
-
-
-
-
-
-
+    def verticalTraversal(self, root):
+        # we maintain a que
+        # since we go vertical line colunm will is negative we go with that as key
+        # we keep adding the left right que in the correct dic key values [right,node value]
+        q=deque()
+        d=defaultdict(list)
+        q.append([root,0,0])
+        while q:
+            node,c,r=q.popleft()
+            d[c].append([r,node.val])
+            if node.left:
+                q.append([node.left,c-1,r+1])
+            if node.right:
+                q.append([node.right,c+1,r+1])
+        ans=[]
+        #since we do have a mutiple list of list
+        for i in sorted(d):
+            temp=d[i]
+            temp.sort()# sorting by their values
+            t=[]
+            for j in temp:
+                t.append(j[1]) 
+            ans.append(t)
+        return ans
+    def topView(self,root):
+        q=deque()
+        ans=[]
+        d=defaultdict(list)
+        q.append([root,0])
+        while q:
+            node,line=q.popleft()
+            if line not in d:
+                d[line]=node.val
+            if node.left:
+                q.append([node.left,line-1])
+            if node.right:
+                q.append([node.right,line+1])
+        print(d)
+        #since we do have a mutiple list of list
+        for i in sorted(d):
+            ans.append(d[i])
+        print(ans)
+        return ans
         
 #[1, '(', 2, '(', 4,')',')', '(', 3, ')']
 
@@ -351,9 +380,11 @@ t=Traversal()
 root = Node(1)
 root.right=Node(2)
 root.right.right=Node(3)
+root.left=Node(5)
+root.left.left=Node(9)
 coins = [100000]
 target = 100000
-print(t.isBalanced(root))
+print(t.topView(root))
     
 
 
