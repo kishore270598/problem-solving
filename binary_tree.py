@@ -371,6 +371,39 @@ class Traversal:
             ans.append(d[i])
         print(ans)
         return ans
+    
+    def bottomView(root):
+        q=deque()
+        d=defaultdict(list)
+        q.append([root,0])
+        while q:
+            node,line=q.popleft()
+            #since we take the bottom we just replace the existing value so that it will take the 
+            #latest value that leaf node
+            d[line]=node.data
+            if node.left:
+                q.append([node.left,line-1])
+            if node.right:
+                q.append([node.right,line+1])
+        res=[]
+        #since we do have a mutiple list of list
+        for i in sorted(d):
+            res.append(d[i])
+        return res
+    
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        res=[]
+        #when we attain the size level it means that is first node of the level and we append the right
+        def inordertravesal(root,res,level):
+            if root is None:
+                return
+            if len(res)==level:
+                res.append(root.val)
+            inordertravesal(root.right,res,level+1)
+            inordertravesal(root.left,res,level+1)
+
+        inordertravesal(root,res,0)
+        return res
         
 #[1, '(', 2, '(', 4,')',')', '(', 3, ')']
 
