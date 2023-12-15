@@ -730,6 +730,21 @@ class Recursion_problems:
                     findtheoperation(j+1,exp+"*" +str(currentsum),Total-prevsum +(prevsum*currentsum),prevsum*currentsum,s,target)
         findtheoperation(0,"",0,0,s,target)
         return ans 
+    def isSymmetric(self, root: Optional[TreeNode]):
+        if root==None:
+            return True
+
+        def issymmetricdfs(root1,root2):
+            if not root1 and not root2:
+                return True
+            if not root1 or not root2:
+                return False
+            if root1.val!=root2.val:
+                return False
+            return  issymmetricdfs(root1.right,root2.left) and issymmetricdfs(root1.left,root2.right) 
+        if(issymmetricdfs(root.left,root.right)):
+            return True
+        return False
     
 
 
