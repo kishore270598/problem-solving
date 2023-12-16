@@ -391,7 +391,7 @@ class Traversal:
             res.append(d[i])
         return res
     
-    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+    def rightSideView(self, root):
         res=[]
         #when we attain the size level it means that is first node of the level and we append the right
         def inordertravesal(root,res,level):
@@ -404,6 +404,48 @@ class Traversal:
 
         inordertravesal(root,res,0)
         return res
+
+        #Root to Node Path in Binary Tree
+    def roottopath(self,root,x):
+        arr=[]
+        def inorder(root,arr,x):
+            if root is None:
+                return False
+            #we add the element
+            arr.append(root.data)
+            #we check its correct or not
+            if root.data==x:
+                return True
+            #if its wrong it will be poped and below check will not happen
+            if inorder(root.left,arr,x) or inorder(root.right,arr,x):
+                return True
+            arr.pop()
+            return False
+        inorder(root,arr,x)
+        return arr
+    
+
+    def lowestCommonAncestor(self, root, p, q):
+        #we need traverse till we reach p and q
+        # return the p and q their roots in recursive manner
+        # when any side we notice the null we take the value of the root 
+        #if both we receive it means the root is the ancestor
+
+        def traverse(root,p,q):
+            #base case
+            if root is None or root==p or root==q:
+                return root
+            left=traverse(root.left,p,q)
+            right=traverse(root.right,p,q)
+            #right check
+            if right is None:
+                return left
+            #left check
+            elif left is None:
+                return right
+            else:
+                return root
+        return traverse(root,p,q)    
         
 #[1, '(', 2, '(', 4,')',')', '(', 3, ')']
 
@@ -417,7 +459,7 @@ root.left=Node(5)
 root.left.left=Node(9)
 coins = [100000]
 target = 100000
-print(t.topView(root))
+print(t.roottopath(root,9))
     
 
 
