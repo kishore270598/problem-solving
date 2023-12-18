@@ -141,14 +141,93 @@ class Test:
             j += 1
 
         return ans
+       
+    def divideArray(self, nums, k):
+        main_array=sorted(nums)
+        ans=[]
+        if len(nums)%3!=0:
+                return ans
+        required_sub=len(nums)//3
+        left=0
+        right=0
+        flag=0
+        sub_array=0
+        temp=[]
+        while left<=len(nums)-2 and right<=len(nums)-1:
+                if abs(main_array[left]-main_array[right])<=k:
+                        flag+=1
+                        temp.append(main_array[right])
+                right+=1
+                if(flag%3==0):
+                        sub_array+=1
+                        ans.append(temp)
+                        left=right
+                        right=left
+                        flag=0
+                        temp=[]
+        if (required_sub==sub_array):
+                return ans
+        else:
+                return []
+        
+    def minimumCost(self, nums):
+        min_=min(nums)
+        max_=max(nums)
+        min_cost_val=0
+        min_cost=0
+
+        def palindrome(x):
+            rev =x
+            sum = 0
+            if x%10==0 or x<0:
+                return False
+            while rev > 0:
+                r = rev % 10
+                sum = sum * 10 + r
+                rev = rev // 10
+            if sum == x:
+                return True
+            
+        for i in range(min_,max_+1,1):
+             if palindrome(i):
+                min_cost_val=i
+                break
+        for element in nums:
+             min_cost+=abs(min_cost_val-element)
+        return min_cost
+    
+    def widthOfBinaryTree(self, root):
+        #we need to index the each node
+        # with the formula left(2*i +1) and right(2*i+2)
+        #to overflow stack issue we take the min of the first element and sub then we find the left and right index
+        # in a dict set you will hold a maximum and minum of the level ( we need to do  a level order traversal)
+        dict_=dict()
+        self.max_diff = 0
+        def level_order(root,index_,level,dict_):
+            if root is None:
+                return None
+            dict_.setdefault(level, [index_, index_])
+            #min
+            dict_[level][0]=min(dict_[level][0],index_)
+            #max
+            dict_[level][1]=max(dict_[level][1],index_)
+            self.max_diff=max(self.max_diff,dict_[level][1]-dict_[level][0])
+            level_order(root.right,2*index_,level+1,dict_)
+            level_order(root.left,2*index_+1,level+1,dict_)
             
 
-    
+        level_order(root,0,0,dict_)
+        return self.max_diff+1
+             
+
+
+
+            
 a=Test()
 
-nums=[1,3,2,3]
-target = 2
-print(a.countSubarrays(nums, target))
+nums=[10,12,13,14,15]
+k=3
+print(a.minimumCost(nums))
 
 
 
