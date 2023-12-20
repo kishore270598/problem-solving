@@ -196,28 +196,8 @@ class Test:
              min_cost+=abs(min_cost_val-element)
         return min_cost
     
-    def widthOfBinaryTree(self, root):
-        #we need to index the each node
-        # with the formula left(2*i +1) and right(2*i+2)
-        #to overflow stack issue we take the min of the first element and sub then we find the left and right index
-        # in a dict set you will hold a maximum and minum of the level ( we need to do  a level order traversal)
-        dict_=dict()
-        self.max_diff = 0
-        def level_order(root,index_,level,dict_):
-            if root is None:
-                return None
-            dict_.setdefault(level, [index_, index_])
-            #min
-            dict_[level][0]=min(dict_[level][0],index_)
-            #max
-            dict_[level][1]=max(dict_[level][1],index_)
-            self.max_diff=max(self.max_diff,dict_[level][1]-dict_[level][0])
-            level_order(root.right,2*index_,level+1,dict_)
-            level_order(root.left,2*index_+1,level+1,dict_)
-            
 
-        level_order(root,0,0,dict_)
-        return self.max_diff+1
+    
              
 
 

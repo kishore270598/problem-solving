@@ -446,7 +446,117 @@ class Traversal:
             else:
                 return root
         return traverse(root,p,q)    
+    
+    def widthOfBinaryTree(self, root):
+        #we need to index the each node
+        # with the formula left(2*i +1) and right(2*i+2)
+        #to overflow stack issue we take the min of the first element and sub then we find the left and right index
+        # in a dict set you will hold a maximum and minum of the level ( we need to do  a level order traversal)
+        dict_=dict()
+        self.max_diff = 0
+        def level_order(root,index_,level,dict_):
+            if root is None:
+                return None
+            dict_.setdefault(level, [index_, index_])
+            #min
+            dict_[level][0]=min(dict_[level][0],index_)
+            #max
+            dict_[level][1]=max(dict_[level][1],index_)
+            self.max_diff=max(self.max_diff,dict_[level][1]-dict_[level][0])
+            level_order(root.right,2*index_,level+1,dict_)
+            level_order(root.left,2*index_+1,level+1,dict_)
+            
+
+        level_order(root,0,0,dict_)
+        return self.max_diff+1
+    def reverseTraversal(root):
+        # we go by reverse method
+        # we start from root and check the child if less then assigin the root val to childs
+        # same is followed till leaf node
+        #then we update the root after that 
+        def reverse(root):
+            if root is None:
+                return 
+            child=0
+            if root.left!=None:
+                child+=root.left.data
+            if root.right!=None:
+                child+=root.right.data
+            
+            if child>=root.val:
+                root.data=child
+            else:
+                if(root.right!=None):
+                    root.right.val=root.data
+                elif(root.left!=None):
+                    root.left.val=root.data
+            reverse(root.left)
+            reverse(root.right)
+            tot=0
+            if root.left!=None:
+                tot+=root.left.data
+            if root.right!=None:
+                tot+=root.right.data
+            if (root.left!=None or root.right!=None):
+                root.data=tot
         
+
+    def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
+        #first we need to map the child with its parent node
+        # we need 2 hash maps to store visted and parent node
+        # once marked till we reach the K we check the length
+        parent=dict()
+        self.markparents(root,parent)
+        visted=dict()
+        q=deque([target])
+        visted[target]=True
+        curr=0 #to send the level a distance
+        while q:
+            size=len(q)
+            # which means we attained the k length
+            if curr==k:
+                break
+            #in three directions we move
+            for _ in range(size):
+                node=q.popleft()
+                if node.left and node.left not in visted:
+                    q.append(node.left)
+                    visted[node.left]=True
+                if node.right and node.right not in visted:
+                    q.append(node.right)
+                    visted[node.right]=True
+                if node in parent and parent[node] not in visted:
+                    q.append(parent[node])
+                    visted[parent[node]]=True
+            curr+=1
+        
+        return [node.val for node in q]
+
+
+    def markparents(self,root,parent):
+        queue=deque([root])
+        #TO SET THE CHILD PARENT LINK
+        while queue:
+            curr=queue.popleft()
+            if curr.left:
+                parent[curr.left]=curr
+                queue.append(curr.left)
+            if curr.right:
+                parent[curr.right]=curr
+                queue.append(curr.right)        
+
+
+
+
+
+
+
+
+
+
+
+
+
 #[1, '(', 2, '(', 4,')',')', '(', 3, ')']
 
 
