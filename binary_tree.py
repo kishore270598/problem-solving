@@ -543,7 +543,34 @@ class Traversal:
                 queue.append(curr.left)
             if curr.right:
                 parent[curr.right]=curr
-                queue.append(curr.right)        
+                queue.append(curr.right)   
+    def countNodes(self, root):
+        #using the formula (2*h +1)  
+        def gettheheight_left(root):
+            curr=0
+            while root:
+                curr+=1
+                root=root.left
+            return curr
+        def gettheheight_right(root):
+            curr=0
+            while root:
+                curr+=1
+                root=root.right
+            return curr
+        
+        if root is None:
+            return 0
+        lheight=gettheheight_left(root)
+        rheight=gettheheight_right(root)
+
+        if lheight==rheight:
+            return 2**rheight-1
+        else:
+            return self.countNodes(root.left)+self.countNodes(root.right)+1
+    
+
+
 
 
 
