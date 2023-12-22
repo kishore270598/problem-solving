@@ -568,6 +568,28 @@ class Traversal:
             return 2**rheight-1
         else:
             return self.countNodes(root.left)+self.countNodes(root.right)+1
+        
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        #with the help of preorder, inorder we take inorder(root) reference
+        #traverse through the preorder data
+        #we need to create a hashmap for inorder with the index
+        inorder_map=dict()
+        for i ,val in enumerate(inorder):
+            inorder_map[val]=i
+        
+        def printbinary(preorder_start,preorder_end,inorder_start,inorder_end):
+            if preorder_start > preorder_end:
+                return None
+            # Create a new node using the first element in the preorder list  
+            root_val= preorder[preorder_start]
+            root=TreeNode(root_val)#we take the root from preorder[0]
+            # Find the index of the root element in the inorder list
+            inroot=inorder_map[root_val] #we take that inorder index
+            numsLeft = inroot - inorder_start # we subtract with the 
+            root.left=printbinary(preorder_start+1,preorder_start+numsLeft,inorder_start,inroot-1)
+            root.right=printbinary(preorder_start+numsLeft+1,preorder_end,inroot+1,inorder_end)
+            return root
+        return printbinary(0,len(preorder)-1,0,len(inorder)-1)    
     
 
 
