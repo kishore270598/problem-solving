@@ -616,7 +616,62 @@ class Traversal:
     
 
 
+    def serialize(self, root):
+        #level order traversal 
+        # we need to convert a tree into a string
+        res=[]
+        def DFS(root):
+            if root is None:
+                res.append('N')
+                return
+            res.append(str(root.val))
+            DFS(root.left)
+            DFS(root.right)
+        DFS(root)
+        return ",".join(res)
 
+    def deserialize(self, data):
+        #SPLIT THE VALUES
+        values=data.split(",")
+        self.index=0
+        def DFS():
+            if values[self.index]=='N':
+                self.index+=1
+                return
+            root=TreeNode(int(values[self.index]))
+            self.index+=1
+            root.left=DFS()
+            root.right=DFS()
+            return root
+        return DFS()
+    def inorder_traversal_Morris(self,root):
+        res=[]
+        curr=root
+        while(curr!=None):
+            #first case if left has null then move to right and print it
+            if curr.left==None:
+                res.append(curr.val)
+                curr=curr.right
+            else:
+                #if we have left find the right most and link with the root 
+                #since its inorder we check the right most of left (left - root - right)
+                # so we link the right most to the root thread
+                prev=curr.left
+                #checking already a thread is linked
+                while (prev.right and prev.right!=curr):
+                    prev=prev.right
+                #this above while to check the rightmost
+                if prev.right==None:
+                    prev.right=curr
+                    curr=curr.left
+                #if there is no link form a link
+
+                else:#maybe there is a link
+                    #visting again so cut the link
+                    prev.right=None
+                    res.append(curr.val)
+                    curr=curr.right
+        return res
 
 
 
