@@ -672,6 +672,35 @@ class Traversal:
                     res.append(curr.val)
                     curr=curr.right
         return res
+    def preorder_traversal_Morris(self,root):
+        #root left right
+        res=[]
+        curr=root
+        #since we start with the root we add to resultant array/list
+        while (curr!=None):
+            res.append(curr)
+            #edge case left is not avalaible
+            if curr.left==None:
+                res.append(curr.val)
+    
+    def flatten(self, root: Optional[TreeNode]) -> None:
+        def dfs(root):
+            if root==None:
+                return root
+            leftTail=dfs(root.left)
+            rightTail=dfs(root.right)
+            if leftTail:
+                #end of leaf node root
+                leftTail.right=root.right
+                root.right=root.left
+                root.left=None
+            return rightTail or leftTail or root
+        return dfs(root)         
+            
+     
+    
+
+
 
 
 
