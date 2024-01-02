@@ -132,6 +132,58 @@ class Binary_search_tree:
         return main_root
 
 
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        def inorder(res,root):
+            if root is None:
+                return
+            inorder(res,root.left)
+            res.append(root.val)
+            inorder(res,root.right)  
+        res=[]
+        inorder(res,root)
+        return res[k-1]
+    
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        def inorder(res,root):
+            if root is None:
+                return
+            inorder(res,root.left)
+            res.append(root.val)
+            inorder(res,root.right)  
+        res=[]
+        inorder(res,root,prev)
+        for i in range(1,len(res),1):
+            if res[i]<=res[i-1]:
+                return False
+        
+        return True     
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        # def traverse(root,p,q):
+        #     #base case
+        #     if root is None or root==p or root==q:
+        #         return root
+        #     left=traverse(root.left,p,q)
+        #     right=traverse(root.right,p,q)
+        #     #right check
+        #     if right is None:
+        #         return left
+        #     #left check
+        #     elif left is None:
+        #         return right
+        #     else:
+        #         return root
+        # return traverse(root,p,q)
+
+        if root is None:
+            return None
+        cur=root.val
+        #means if the value is greater its there in right means go right
+        if cur<p.val and cur <q.val:
+            return self.lowestCommonAncestor(root.right,p,q)
+        if cur>p.val and cur >q.val:
+            return self.lowestCommonAncestor(root.left ,p,q)
+        return root
+       
 
 
 
