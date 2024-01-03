@@ -183,7 +183,60 @@ class Binary_search_tree:
         if cur>p.val and cur >q.val:
             return self.lowestCommonAncestor(root.left ,p,q)
         return root
-       
+    
+    
+    def bstFromPreorder(self, preorder: List[int]) -> Optional[TreeNode]:
+        if len(preorder)==0:
+            return None
+        #since its preorder root,left,right
+        root=TreeNode(preorder[0],None,None)
+        def connect(parent,child):
+            c=TreeNode(child,None,None)
+            if parent.val>child:
+                if parent.left is None:
+                    #till we reach the conditon like loop
+                    parent.left=c
+                    return
+                # we call the same function as a while loop
+                connect(parent.left,child)
+            if parent.val<child:
+                if parent.right is None:
+                    parent.right=c
+                    return
+                connect(parent.right,child)
+    
+        for element in preorder[1:]:
+            connect(root,element)
+        return root 
+    
+    def inorder(root, inorderArray):
+        if root is None:
+            return
+        
+        inorder(root.left, inorderArray)
+        inorderArray.append(root.data)
+        inorder(root.right, inorderArray)
+
+    def predecessorSuccessor(root, key):
+        # To store the inorder traversal of the BST.
+        inorderArray = []
+        inorder(root, inorderArray)
+
+        predecessor = -1
+        successor = -1
+
+        # Finding predecessor.
+        for i in range(len(inorderArray)):
+            if inorderArray[i] < key:
+                predecessor = inorderArray[i]
+
+        # Finding successor.
+        for i in range(len(inorderArray) - 1, -1, -1):
+            if inorderArray[i] > key:
+                successor = inorderArray[i]
+
+        # We are returning here.
+        return (predecessor, successor)          
 
 
 
