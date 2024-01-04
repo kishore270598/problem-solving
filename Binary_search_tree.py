@@ -239,8 +239,75 @@ class Binary_search_tree:
         return (predecessor, successor)          
 
 
+    class BSTIterator:
+        def __init__(self, root: Optional[TreeNode]):
+            self.index=0  
+            self.inorderlist=self.inorder(root)
+        
+        def next(self) -> int:
+            node= self.inorderlist[self.index]
+            self.index+=1
+            return node 
 
 
+        def hasNext(self) -> bool:
+            #if index check right exits
+            return self.index <len(self.inorderlist)
+
+
+        def inorder(self,root):
+            values=[]
+            def dfs(root):
+                if root is None:
+                    return None
+                dfs(root.left)
+                values.append(root.val)
+                dfs(root.right)
+            
+            dfs(root)
+            return values
+    #with space O(1) case
+    class BSTIterator:
+        def __init__(self, root: Optional[TreeNode]):
+            self.stack=[]
+            while root:
+                self.stack.append(root)
+                root=root.left
+        #we append all the left value
+        
+        def next(self) -> int:
+            node = self.stack.pop()
+            if node.right:
+                #there is some set of value on right
+                current = node.right
+                while current:
+                    self.stack.append(current)
+                    current = current.left
+            return node.val
+
+        def hasNext(self) -> bool:
+            return len(self.stack)>0
+    
+    def findTarget(self, root: Optional[TreeNode], k: int) -> bool:
+        val=[]
+        def dfs(root):
+            if root is None:
+                return None
+            dfs(root.left)
+            val.append(root.val)
+            dfs(root.right)
+        dfs(root)
+        left=0
+        right=len(val)-1
+        while left<right:
+            x=val[left]+val[right]
+            if x>k:
+                right-=1
+            elif x<k:
+                left+=1
+            else:
+                return True
+        return False
 
 
         
