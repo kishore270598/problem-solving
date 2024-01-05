@@ -308,7 +308,47 @@ class Binary_search_tree:
             else:
                 return True
         return False
+    
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        #INORDER TRAVERSAL
+        #WHENEVER WE ATTAIN THE NODE, WE CHECK THE PREV NODE IS GREATER
+        #2 case
+        # case 1: when the swapped element is adj
+        # case 2 : when the elements are in different pos
+        self.first=TreeNode()
+        self.middle=TreeNode()
+        self.last=TreeNode()
+        self.prev=TreeNode(float('-inf'))
+        self.first,self.middle,self.last=None,None,None
+        def dfs_inorder(root):
+            if root is None:
+                return None
+            dfs_inorder(root.left)
+            if self.prev!=None and root.val<self.prev.val:
+                if self.first==None:
+                    self.first=self.prev
+                    self.middle=root
+                #case is adj
+                else:
+                    #that means it has attainded the second violation
+                    #even though its second violation the middle will be occupied
+                    #that means a swap happening in a distatnce
+                    #we swap the last with first
+                    self.last=root
+            self.prev=root
+            dfs_inorder(root.right)
 
+        dfs_inorder(root)
+        if self.first!=None and self.last!=None:
+            t=self.first.val
+            self.first.val=self.last.val
+            self.last.val=t
+        elif self.first!=None and self.middle!=None:
+            t=self.first.val
+            self.first.val=self.middle.val
+            self.middle.val=t
+        
+        
 
         
         
