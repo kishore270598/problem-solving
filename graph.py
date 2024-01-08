@@ -24,3 +24,26 @@ class Graph:
             adjacencyList.append(adj)
         return adjacencyList
     
+    #bfs traversal 
+    def bfsOfGraph(self, V: int, adj: List[List[int]]) -> List[int]:
+        #we will create a visted array
+        visted=[0]*V
+        visted[0]=1
+        #first node as visted
+        que=[]
+        que.append(0)
+        bfs=[]
+        while que:
+            #taking the last node edge
+            node=que.pop(0)
+            bfs.append(node)
+            #for each edge we check the link and check whether we visted or not
+            for element in adj[node]:
+                #check its visted or not
+                if visted[element]==0:
+                    visted[element]=1
+                    que.append(element)
+        
+        # code here
+
+        return bfs
