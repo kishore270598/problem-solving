@@ -23,7 +23,6 @@ class Graph:
             adj = [i] + graph_[i]
             adjacencyList.append(adj)
         return adjacencyList
-    
     #bfs traversal 
     def bfsOfGraph(self, V: int, adj: List[List[int]]) -> List[int]:
         #we will create a visted array
@@ -43,7 +42,56 @@ class Graph:
                 if visted[element]==0:
                     visted[element]=1
                     que.append(element)
-        
         # code here
-
         return bfs
+    
+    def dfsOfGraph(self, V, adj):
+        visted=[0]*V
+        ans=[]
+        def dfs(node):
+            ans.append(node)
+            visted[node]=1
+            #for each edge check the adj nodes and find the depth
+            for element in adj[node]:
+                if visted[element]==0:
+                    
+                    dfs(element)
+            
+        dfs(0)
+        return ans
+    
+
+    def bfsOfGraph(self,v, adj,visted):
+        #we will create a visted array
+        visted[v]=1
+        #first node as visted
+        que=[]
+        que.append(v)
+        while que:
+            #taking the last node edge
+            node=que.pop(0)
+            #for each edge we check the link and check whether we visted or not
+            for element in adj[node]:
+                #check its visted or not
+                if visted[element]==0:
+                    visted[element]=1
+                    que.append(element)
+
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
+        adj=defaultdict(list)
+        #we are creating adj list which hold the nodes link
+        for i in range(0, len(isConnected[0]),1):
+            for j in range(0,len(isConnected[0]),1):
+                if isConnected[i][j]==1:
+                        adj[i].append(j)
+        visted=[0]*len(isConnected)
+        #visted array
+        count=0
+        #for each element we check the connection
+        for element in range(0,len(isConnected),1):
+            #since we check the connection if there is a node linked it will be marked 
+            if visted[element]==0:
+                # whenever we check a missed out we add a count that will be a province
+                self.bfsOfGraph(element,adj,visted)
+                count+=1
+        return count
