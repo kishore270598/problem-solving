@@ -239,7 +239,7 @@ class Traversal:
         return diameter[0]
 
     def maxPathSum(self, root):
-        max_path = float("-inf")
+        max_path = float("- ")
         if root.left is None and root.right is None:
             return root.val
         def find_path(root):
