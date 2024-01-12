@@ -148,6 +148,35 @@ class Graph:
         dfs(sr, sc)
         return image
     
+    def isCycle(self, V , adj):
+            #we need to create a detect functions to avoid compoents
+            #this is Bfs Intuition
+            #check level by and make sure u carry the parent
+            # when u go level but a node is reached before u and u didn't come from that node(not a parent)
+            #that makes a cycle
+            visted=[0]*V
+            def detect_cycle(src,adj,visted):
+                visted[src]=1
+                que=deque()
+                que.append((src,-1))
+                while que:
+                    node,parent=que.popleft()
+                    for element in adj[node]:
+                        if visted[element]==0:
+                            visted[element]=1
+                            que.append((element,node))
+                        #main condition of cycle
+                        elif parent!=element:
+                            return True
+            for i in range(0,V,1):
+                if visted[i]!=1:
+                    if(detect_cycle(i,adj,visted)):
+                        return 1
+                        
+            return 0
+    
+                
+    
 g=Graph()
 grid = [[2,1,1],[1,1,0],[0,1,1]]
 ans=g.orangesRotting(grid)
