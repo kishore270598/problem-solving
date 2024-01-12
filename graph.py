@@ -174,6 +174,36 @@ class Graph:
                         return 1
                         
             return 0
+
+    def isCyclic(self, V, adj):
+        # since its directed graph we follow a dfs
+        #we track visted and path visted 
+        #whenever we are unable to find a path we unmark pathvisted 
+        #when a node is marked and path visted is not marked it means its a dfs
+        def detect_cycle(node,adj,visted,pathvisted):
+            visted[node]=1
+            pathvisted[node]=1
+            
+            for element in adj[node]:
+                if visted[element]!=1:
+                    if detect_cycle(element,adj,visted,pathvisted)==True:
+                        return True
+                elif pathvisted[element]==1:
+                    return True
+        
+            pathvisted[node]=0
+            return False
+        
+        pathvisted=[0]*V
+        visted=[0]*V
+        for i in range(0,V,1):
+            if visted[i]==0:
+                if detect_cycle(i,adj,visted,pathvisted)==True:
+                        return 1
+                        
+        return 0
+
+
     
                 
     
