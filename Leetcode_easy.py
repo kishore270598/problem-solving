@@ -197,6 +197,31 @@ class Test:
         return min_cost
     
 
+
+    
+    def halvesAreAlike(self, s):
+        left=0
+        right=len(s)-1
+        l=0
+        r=0
+        while (left<right):
+            if s[left].isalpha()==True:
+                print(s[left])
+                l+=1
+            if s[right].isalpha()==True:
+                r+=1
+            left+=1
+            right-=1
+        print(r,l)
+        if l==r:
+            return True
+        return False
+
+
+
+
+
+
     
              
 
@@ -207,7 +232,8 @@ a=Test()
 
 nums=[10,12,13,14,15]
 k=3
-print(a.minimumCost(nums))
+s='textbook'
+print(a.halvesAreAlike(s))
 
 
 
