@@ -130,7 +130,7 @@ class Graph:
         #means we have missed some 
         return -1 if visted else time
     
-    def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
+    def floodFill(self, image, sr: int, sc: int, color: int):
         #we need to go with the BFS ALGO since we are doing level
         # we need a que which holds the rooten orange
         #we mark it visted and mark the 4-directionally adjacent 
@@ -202,12 +202,102 @@ class Graph:
                         return 1
                         
         return 0
+    def updateMatrix(self, mat):
+        #BFS traversal METHOD 
+        #WITH CORD AND DISTANCE PARAM
+        n=len(mat)
+        m=len(mat[0])
+        min_=0
+        que=deque()
+        visted=set()
+        dist_=[[0 for x in range(n)] for y in range (m)]
+        # for i in range(0,n,1):
+        #     temp=[]
+        #     for j in range(0,m,1):
+        #         temp.append(0)
+        #     dist_.append(temp)
+        for i in range(0,n,1):
+            for j in range(0,m,1):
+                if mat[i][j]==0:
+                    que.append((i,j,0))
+                    visted.add((i,j))
+        while que:
+            i,j,dist=que.popleft()
+            dist_[i][j]=dist
+            for coord in ((i-1, j), (i+1, j), (i, j-1), (i, j+1)):
+                    if coord not in visted and coord[0]>=0 and coord[0]<n and coord[1]>=0 and coord[1]<m:
+                        visted.add(coord)
+                        que.append((coord[0],coord[1],dist+1))
 
+        return dist_
+    def updateMatrix(self, mat):
+        """
+        :type mat: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        m, n = len(mat), len(mat[0])
+        result = [row[:] for row in mat]
+        visited = set()
+        queue = deque()
 
-    
+        # Find all 0s and add them to the queue with distance 0
+        for i in range(m):
+            for j in range(n):
+                if mat[i][j] == 0:
+                    result[i][j] = 0
+                    visited.add((i, j))
+                    queue.append((i, j, 0))
+
+        directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+
+        # Perform BFS to update distances
+        while queue:
+            row, col, steps = queue.popleft()
+
+            for dr, dc in directions:
+                next_row, next_col = row + dr, col + dc
+
+                if 0 <= next_row < m and 0 <= next_col < n and (next_row, next_col) not in visited:
+                    result[next_row][next_col] = steps + 1
+                    visited.add((next_row, next_col))
+                    queue.append((next_row, next_col, steps + 1))
+
+        return result
+
+    def solve(self, mat):
+        """
+        :type board: List[List[str]]
+        :rtype: None Do not return anything, modify board in-place instead.
+        """
+        m, n = len(mat), len(mat[0])
+        result = mat
+        visited = set()
+        queue = deque()
+
+        # Find all 0s and add them to the queue with distance 0
+        for i in range(m):
+            for j in range(n):
+                if mat[i][j] == 'O' and i!=0 and j!=0 and j!=n-1 and i!=m-1:
+                    visited.add((i, j))
+                    queue.append((i, j))
                 
-    
+
+        directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+
+        # Perform BFS to update distances
+        while queue:
+            row, col, steps = queue.popleft()
+
+            for dr, dc in directions:
+                next_row, next_col = row + dr, col + dc
+                if 0 <= next_row < m and 0 <= next_col < n and (next_row, next_col) not in visited:
+                    visited.add((next_row, next_col))
+                    queue.append((next_row, next_col))
+
+        return result
+
+ 
 g=Graph()
-grid = [[2,1,1],[1,1,0],[0,1,1]]
-ans=g.orangesRotting(grid)
+mat = [[0,0,0],[0,1,0],[0,0,0]]
+ans=g.updateMatrix(mat)
 print(ans)
