@@ -309,11 +309,50 @@ class Graph:
 
 
         return mat
+    def numEnclaves(self, grid):
+        n=len(grid)
+        m=len(grid[0])
+        visted=[[0 for x in range(m)] for y in range (n)]
+        delrow=[-1, 0, +1, 0]
+        delcol=[0, 1, 0, -1]
+        def dfs(i,j,visted):
+            visted[i][j]=1
+            for k in range(0,4,1):
+                nrow=i+delrow[k]
+                ncol=j+delcol[k]
+                if nrow>=0 and nrow<n and ncol>=0 and ncol<m and visted[nrow][ncol]!=1 and grid[nrow][ncol]==1:
+                    dfs(nrow,ncol,visted)
+
+        #first col
+        for i in range(0,n,1):
+            if grid[i][0]==1 and visted[i][0]!=1:
+                dfs(i,0,visted)
+        #last col
+        for i in range(0,n,1):
+            if grid[i][m-1]==1 and visted[i][m-1]!=1:
+                dfs(i,m-1,visted)
+
+        #firstrow 
+        for i in range(0,m,1):
+            if grid[0][i]==1 and visted[0][i]!=1:
+                dfs(0,i,visted)
+        #lastrow
+        for i in range(0,m,1):
+            if grid[n-1][i]==1 and visted[n-1][i]!=1:
+                dfs(n-1,i,visted)
+        c=0
+        print(visted)
+        for i in range(0,n,1):
+            for j in range(0,m,1):
+                if grid[i][j]==1 and visted[i][j]!=1:
+                        c+=1
+
+        return c
 
 
 
  
 g=Graph()
-board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
-ans=g.solve(board)
+board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
+ans=g.sonumEnclaveslve(board)
 print(ans)
