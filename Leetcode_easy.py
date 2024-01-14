@@ -217,23 +217,50 @@ class Test:
             return True
         return False
 
-
-
-
-
-
-    
-             
-
-
-
+    def beautifulIndices(self, s, a, b, k):
+                        len_a=len(a)
+                        len_b=len(b)
+                        def check_string(str1,str2):
+                                return str1==str2
+                        res_a=[]
+                        for i in range(0,len(s),1):
+                                da=(len_a)
+                                if da+i<=len(s):
+                                        if(check_string(s[i:da+i],a)):
+                                                res_a.append(i)
+                        res_b=[]
+                        for i in range(0,len(s),1):
+                                db=len_b
+                                if db+i<=len(s):
+                                        if(check_string(s[i:db+i],b)):
+                                                res_b.append(i)
+                        res_a=sorted(res_a)
+                        res_b=sorted(res_b)
+                        ans=[]
+                        for i in res_a:
+                                for j in res_b:
+                                # Check if substrings match and absolute difference <= k
+                                    if abs(i - j) <= k:
+                                        ans.append(i)
+                                        break
+                                
+                                
+                                
+                                
+                        # for element in ans:
+                        #         z.append(element)
+                        # z=sorted(z)
+                        return ans           
+                                     
+                    
             
 a=Test()
-
 nums=[10,12,13,14,15]
-k=3
-s='textbook'
-print(a.halvesAreAlike(s))
+s="isawsquirrelnearmysquirrelhouseohmy"
+a="my"
+b="squirrel"
+k=15
+print(a.beautifulIndices(s,a,b,k))
 
 
 

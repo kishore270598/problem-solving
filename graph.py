@@ -265,39 +265,55 @@ class Graph:
         return result
 
     def solve(self, mat):
-        """
-        :type board: List[List[str]]
-        :rtype: None Do not return anything, modify board in-place instead.
-        """
-        m, n = len(mat), len(mat[0])
-        result = mat
-        visited = set()
-        queue = deque()
+        #if its O in the border and linked with the internal blocks it won't be covered with the 'X'
+        # in that case we need to find the full link
+        # for other O we can mark it as X
+        #DFS approach
+        n=len(mat)
+        m=len(mat[0])
+        print(m,n)
+        visted=[row[:] for row in mat]
+        delrow=[-1, 0, +1, 0]
+        delcol=[0, 1, 0, -1]
+        def dfs(i,j,mat,visted):
+            visted[i][j]=1
+            directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
+            for k in range (0,4,1):
+                nrow = i + delrow[k]
+                ncol = j + delcol[k]
+                if(nrow >=0 and nrow <n and ncol >= 0 and  ncol < m 
+                and visted[nrow][ncol]!=1 and  mat[nrow][ncol] == 'O'):
+                    dfs(nrow, ncol,mat,visted)
+        #first row
+        for j in range(0,m,1):
+            if visted[0][j]!=1 and mat[0][j]=='O':
+                    dfs(0,j,mat,visted)
+        #last row
+        for j in range(0,m,1):
+            if visted[n-1][j]!=1 and mat[n-1][j]=='O':
+                    dfs(n-1,j,mat,visted)
+        #first col
+        for i in range(0,n,1):
+            if visted[i][0]!=1 and mat[i][0]=='O':
+                    dfs(i,0,mat,visted)
 
-        # Find all 0s and add them to the queue with distance 0
-        for i in range(m):
-            for j in range(n):
-                if mat[i][j] == 'O' and i!=0 and j!=0 and j!=n-1 and i!=m-1:
-                    visited.add((i, j))
-                    queue.append((i, j))
-                
+        for i in range(0,n,1):
+            if visted[i][m-1]!=1 and mat[i][m-1]=='O':
+                    dfs(i,m-1,mat,visted)
+                          
+        for i in range(0,n,1):
+            for j in range(0,m,1):
+                if mat[i][j]=='O' and visted[i][j]!=1:
+                    visted[i][j]=1
+                    mat[i][j]='X'
 
-        directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
-        # Perform BFS to update distances
-        while queue:
-            row, col, steps = queue.popleft()
+        return mat
 
-            for dr, dc in directions:
-                next_row, next_col = row + dr, col + dc
-                if 0 <= next_row < m and 0 <= next_col < n and (next_row, next_col) not in visited:
-                    visited.add((next_row, next_col))
-                    queue.append((next_row, next_col))
 
-        return result
 
  
 g=Graph()
-mat = [[0,0,0],[0,1,0],[0,0,0]]
-ans=g.updateMatrix(mat)
+board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+ans=g.solve(board)
 print(ans)

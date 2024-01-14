@@ -7,5 +7,6 @@
     "workbench.activityBar.iconClickBehavior": "focus",
     "workbench.preferredLightColorTheme": "Visual Studio Light",
     "editor.fontSize": 12,
-    "workbench.colorTheme": "Default Dark+"
+    "workbench.colorTheme": "Default Dark+",
+    "python.REPL.enableREPLSmartSend": false
 }
