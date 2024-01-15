@@ -1,5 +1,6 @@
 from collections import defaultdict 
 from collections import deque
+from string import ascii_lowercase
 class Graph:
     def countingGraphs(n: int):
         #n=nodes
@@ -348,6 +349,32 @@ class Graph:
                         c+=1
 
         return c
+
+    def ladderLength(self, beginWord, endWord, wordList):
+        #we do with BFS traversal
+        #for every word we take a loop and try to change it each character 
+        #make sure its there in the wordlist
+        #once we meet it we remove it from wordlist
+        deq =deque()
+        bank = set(wordList)
+        deq.append(beginWord)
+        count = 0
+        n = len(beginWord)
+        while deq:
+            for _ in range(len(deq)):
+                cur_word = deq.popleft()
+                if cur_word == endWord:
+                    return count + 1
+                for i in range(n):
+                    #Hit---#hot
+                    for ch in [chr(ord('a') + k) for k in range(26)]:
+                        new_word = cur_word[:i]+ch+cur_word[i + 1:]
+                        if new_word in bank:
+                            deq.append(new_word)
+                            bank.discard(new_word)
+            count += 1
+        return 0
+
 
 
 
