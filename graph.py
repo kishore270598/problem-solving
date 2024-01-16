@@ -372,11 +372,151 @@ class Graph:
                         if new_word in bank:
                             deq.append(new_word)
                             bank.discard(new_word)
-            count += 1
         return 0
+    ################################
+    #Word 2 problem very important #
+    ################################
+    def findLadders(self, beginWord, endWord, wordList):
+        #using the words we form a pattern
+        # for example lets take HIT -- > we store all the patterns for that word
+        # HIT---> H_T,_IT,HI_
 
 
+        wordList.append(beginWord)
+        nei = collections.defaultdict(list)
+        #Creating adjs  list using pattern over the words
+        for w in wordList :
+            for k in range(len(w)) :
+                pattern = w[:k] + '-' + w[k + 1:]
+                nei[pattern].append(w)
+        q = collections.deque([(beginWord, [beginWord])])
+        #This format is to save the last word of the seque (beginWord,...)
+        vis = set([beginWord])
+        res = []
+        
+        while q :
+            auxSet = set() #this enable have control over the graph paths. The key for this problem
+            
+            for s in range(len(q)) :
+                w, seq = q.popleft()
+                if w == endWord :
+                    res.append(seq)      
+                    
+                for k in range(len(w)) : #sech adjs list 
+                    pattern = w[:k] + '-' + w[k + 1:]
+                    for adj in nei[pattern] :# all the possible pattern for that word we are adding 
+                        if adj not in vis :                        
+                            auxSet.add(adj)
+                            q.append((adj, seq[:]+[adj]))
+        
+            vis.update(auxSet) #this fun will update set
 
+        return res
+
+    def findLadders(self, beginWord,endWord ,wordList):
+        # 1. Create adjacency list
+        def adjacencyList():
+            # Initialize the adjacency list
+            adj = defaultdict(list)
+            # Iterate through all words
+            for word in wordList:
+                # Iterate through all characters in a word
+                for i, _ in enumerate(word):
+                    # Create the pattern
+                    pattern = word[:i] + "*" + word[i + 1 :]
+                    # Add a word into the adjacency list based on its pattern
+                    adj[pattern].append(word)
+            return adj
+        # 2. Create reversed adjacency list
+        def bfs(adj):
+            # Initialize the reversed adjacency list
+            reversedAdj = defaultdict(list)
+            # Initialize the queue
+            queue = deque([beginWord])
+            # Initialize a set to keep track of used words at previous level
+            visited = set([beginWord])
+            while queue:
+                # Initialize a set to keep track of used words at the current level
+                visitedCurrentLevel = set()
+                # Get the number of words at this level
+                n = len(queue)
+                # Iterate through all words
+                for _ in range(n):
+                    # Pop a word from the front of the queue
+                    word = queue.popleft()
+                    # Generate pattern based on the current word
+                    for i, _ in enumerate(word):
+                        pattern = word[:i] + "*" + word[i + 1 :]
+                        # Itereate through all next words
+                        for nextWord in adj[pattern]:
+                            # If the next word hasn't been used in previous levels
+                            if nextWord not in visited:
+                                # Add such word to the reversed adjacency list
+                                reversedAdj[nextWord].append(word)
+                                # If the next word hasn't been used in the current level
+                                if nextWord not in visitedCurrentLevel:
+                                    # Add such word to the queue
+                                    queue.append(nextWord)
+                                    # Mark such word as visited
+                                    visitedCurrentLevel.add(nextWord)
+                # Once we done with a level, add all words visited at this level to the visited set
+                visited.update(visitedCurrentLevel)
+                # If we visited the endWord, end the search
+                if endWord in visited:
+                    break
+            return reversedAdj
+        # 3. Construct paths based on the reversed adjacency list using DFS
+        def dfs(reversedAdj, res, path):
+            # If the first word in a path is beginWord, we have succesfully constructed a path
+            if path[0] == beginWord:
+                # Add such path to the result
+                res.append(list(path))
+                return res
+            # Else, get the first word in a path
+            word = path[0]
+            # Find next words using the reversed adjacency list
+            for nextWord in reversedAdj[word]:
+                # Add such next word to the path
+                path.appendleft(nextWord)
+                # Recursively go to the next word
+                dfs(reversedAdj, res, path)
+                # Remove such next word from the path
+                path.popleft()
+            # Return the result
+            return res
+        # Do all three steps
+        adj = adjacencyList()
+        reversedAdj = bfs(adj)
+        res = dfs(reversedAdj, [], deque([endWord]))
+        return res
+    def numIslands(self,grid):
+        n=len(grid)
+        m=len(grid[0])
+        visted=[]
+        for i in range(0,n,1):
+            z=[]
+            for j in range(0,m,1):
+                z.append(0)
+            visted.append(z)
+                
+        count=0
+        def find_island(row,col,visted):
+            visted[row][col] = 1
+            for k in range(-1,2,1):
+                for l in range(-1,2,1):
+                    nrow = row + k
+                    ncol = col + l
+                    if  nrow>=0 and ncol>=0 and nrow<n and ncol<m and visted[nrow][ncol]!=1 and grid[nrow][ncol]==1:
+                        visted[nrow][ncol]=1
+                        find_island(nrow,ncol,visted)
+                            
+        for i in range(0,n,1):
+            for j in range(0,m,1):
+                if visted[i][j]!=1 and grid[i][j]==1:
+                    count+=1
+                    find_island(i,j,visted)
+        return count
+                    
 
  
 g=Graph()
