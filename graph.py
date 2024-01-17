@@ -516,7 +516,32 @@ class Graph:
                     count+=1
                     find_island(i,j,visted)
         return count
-                    
+
+    def isBipartite(self, graph):
+        #when a graph length is node is odd we can't divide it 
+        n=len(graph)
+        def dfs(node,col,color,graph):
+            color[node]=col
+            for element in graph[node]:
+                if color[element]==-1:
+                    if col==0:
+                        if dfs(element,1,color,graph)==False:
+                            return False
+                    else:
+                        dfs(element,0,color,graph)
+                elif color[element]==col:
+                    #its adj col so it can't be bipartite
+                    return False
+    
+        # we create a coloured array as visted array to different the 0/1 
+        color=[-1]*n
+        #for components
+        for i in range(0,n,1):
+            if color[i]==-1:
+                if (dfs(i,0,color,graph))==False:
+                    return False
+        return True
+  
 
  
 g=Graph()
