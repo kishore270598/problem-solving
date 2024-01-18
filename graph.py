@@ -541,6 +541,24 @@ class Graph:
                 if (dfs(i,0,color,graph))==False:
                     return False
         return True
+    #Topo Sort
+    def topoSort(self, V, adj):
+        visted=[0]*V
+        stack=[]
+        def dfs(node,visted,adj,stack):
+            visted[node]=1
+            for element in adj[node]:
+                if visted[element]!=1:
+                    dfs(element,visted,adj,stack)
+            stack.append(node)
+        for i in range(0,V,1):
+            if visted[i]!=1:
+                dfs(i,visted,adj,stack)
+        ans=[]
+        while stack:
+            ans.append(stack.pop())
+            
+        return ans 
   
 
  
