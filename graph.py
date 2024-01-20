@@ -559,10 +559,60 @@ class Graph:
             ans.append(stack.pop())
             
         return ans 
-  
+    #TOPOLOGICAL STACK (DFS) WITHOUT INDEGRE**************************
+    def findOrder(self, V, adj):
+        visted=[0]*V
+        stack=[]
+        n=len(adj)
+        print(n)
+        graph=defaultdict(list)
+        for node,pre in adj:
+            graph[node].append(pre)
+
+        def dfs(node,visted,adj,stack):
+            visted[node]=0
+            for element in graph[node]:
+                if visted[element]!=1:
+                    dfs(element,visted,graph,stack)
+            stack.append(node)
+        for i in range(0,V,1):
+            if visted[i]!=1:
+                dfs(i,visted,graph,stack)
+        ans=[]
+        while stack:
+            ans.append(stack.pop())
+            
+        return ans 
+    #TOPOLOGICAL QUE (BFS) WITH INDEGRE**************************
+    def findOrder(self, V, adj):
+        #Kahn's Algorithm
+        #find the total indegree (node coming inside the our main node)
+        #whenever we find the less degre we add in stack and 
+        graph=defaultdict(list)
+        in_deg=defaultdict(int)
+        for after, before in adj:
+            graph[before].append(after)
+            in_deg[after] += 1
+        #which means we added a zero guy
+        que=deque()
+        for i in range(V):
+            if in_deg[i]==0:
+                que.append(i)
+        topo=[]
+
+        while que:
+            node=que.popleft()
+            topo.append(node)
+            for element in graph[node]:
+                in_deg[element]-=1
+                if in_deg[element]==0:
+                    que.append(element)
+        return topo if len(topo) == V else []
 
  
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
-ans=g.sonumEnclaveslve(board)
+numCourses = 2
+prerequisites = [[1,0]]
+ans=g.findOrder(numCourses,prerequisites)
 print(ans)
