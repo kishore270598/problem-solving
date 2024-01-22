@@ -608,7 +608,100 @@ class Graph:
                 if in_deg[element]==0:
                     que.append(element)
         return topo if len(topo) == V else []
+    
 
+    #Course Schedule
+    def canFinish(self, numCourses, prerequisites):
+        in_degre=defaultdict(int)
+        adj=defaultdict(list)
+        z=[]
+        for after,before in prerequisites:
+            adj[before].append(after)
+            in_degre[after]+=1
+        que=deque()
+        for i in range(numCourses):
+            if in_degre[i]==0:
+                que.append(i)
+        while que:
+            node=que.popleft()
+            z.append(node)
+            for element in adj[node]:
+                in_degre[element]-=1
+                if in_degre[element]==0:
+                    que.append(element)
+        if len(z)==numCourses:
+            return True
+        else:
+            return False
+    #Course Schedule 2    
+    def findOrder(self, V, adj):
+        #Kahn's Algorithm
+        #find the total indegree (node coming inside the our main node)
+        #whenever we find the less degre we add in stack and 
+        graph=defaultdict(list)
+        in_deg=defaultdict(int)
+        for after, before in adj:
+            graph[before].append(after)
+            in_deg[after] += 1
+        #which means we added a zero guy
+        que=deque()
+        for i in range(V):
+            if in_deg[i]==0:
+                que.append(i)
+        topo=[]
+
+        while que:
+            node=que.popleft()
+            topo.append(node)
+            for element in graph[node]:
+                in_deg[element]-=1
+                if in_deg[element]==0:
+                    que.append(element)
+        return topo if len(topo) == V else []
+    
+        
+
+
+
+
+
+
+    def eventualSafeNodes(self, adj):
+        """
+        :type graph: List[List[int]]
+        :rtype: List[int]
+        """
+        #same as cyclic dectection where a node is a part of cyclic then it can't be terminal
+        #so we will do a marked check and run a loop for nodes
+        #and if checks where still 1  then its terminal
+        V=len(adj)
+        def detect_cycle(node,adj,visted,pathvisted,checks):
+            visted[node]=1
+            pathvisted[node]=1
+            checks[node]=0
+            for element in adj[node]:
+                if visted[element]!=1:
+                    if detect_cycle(element,adj,visted,pathvisted,checks)==True:
+                        checks[node]=0
+                        return True
+                elif pathvisted[element]==1:
+                    checks[node]=0
+                    return True
+            checks[node]=1
+            pathvisted[node]=0
+            return False
+        
+        pathvisted=[0]*V
+        visted=[0]*V
+        ans=[]
+        checks=[0]*V
+        for i in range(0,V,1):
+            if visted[i]==0:
+                detect_cycle(i,adj,visted,pathvisted,checks)
+        for i in range(V):
+            if (checks[i]==1):
+                ans.append(i)
+        return ans
  
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
