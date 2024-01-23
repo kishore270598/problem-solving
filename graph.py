@@ -702,7 +702,59 @@ class Graph:
             if (checks[i]==1):
                 ans.append(i)
         return ans
- 
+    #alien ques
+    def findOrder(self,alien_dict, N, K):
+            def topoSort(V, adj):
+                visted=[0]*V
+                stack=[]
+                def dfs(node,visted,adj,stack):
+                    visted[node]=1
+                    for element in adj[node]:
+                        if visted[element]!=1:
+                            dfs(element,visted,adj,stack)
+                    stack.append(node)
+                for i in range(0,V,1):
+                    if visted[i]!=1:
+                        dfs(i,visted,adj,stack)
+                ans=[]
+                while stack:
+                    ans.append(stack.pop())
+                    
+                return ans
+            adj=defaultdict(list)
+            topo=[]
+            for i in range(0,len(alien_dict)-1,1):
+                s1=alien_dict[i]
+                s2=alien_dict[i+1]
+                min_len=min(len(s1),len(s2))
+                for j in range(min_len):
+                    if s1[j] != s2[j]:
+                        adj[ord(s1[j]) - ord('a')].append(ord(s2[j]) - ord('a'))
+                        break
+            topo=topoSort(K,adj)
+            z = ''.join(chr(node + ord('a')) for node in topo)
+            return z
+    def shortestPath(self, edges, n, m, src):
+        que=deque()
+        adj=defaultdict(list)
+        for i,j in edges:
+            adj[i].append(j)
+            adj[j].append(i)
+        que.append(src)
+        dist=[float('inf')]*n
+        dist[src] = 0
+        while que:
+            node=que.popleft()
+            for element in adj[node]:
+                #which checks the distance is shorted and updated the correct path
+                if dist[node]+1<dist[element]:
+                    dist[element] = 1 + dist[node]
+                    que.append(element)
+        
+        for i in range(n):
+           if dist[i] == float('inf'):
+               dist[i] = -1
+        return dist# code he
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
 numCourses = 2
