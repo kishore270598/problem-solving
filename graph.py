@@ -755,6 +755,48 @@ class Graph:
            if dist[i] == float('inf'):
                dist[i] = -1
         return dist# code he
+    
+    def shortestPath(self, n, m, edges): #dag 
+        graph=defaultdict(list)
+        que=deque()
+        distance=[float('inf')]*n
+        for i,j,k in edges:
+            graph[i].append((j,k))
+        que.append(0)
+        distance[0]=0
+        while que:
+            node=que.popleft()
+            for element,dis in graph[node]:
+                if distance[node]+dis<distance[element]:
+                    distance[element] = dis + distance[node]
+                    que.append(element)
+        for i in range(n):
+            if distance[i] == float('inf'):
+                distance[i]=-1
+        return distance
+    
+    def dijkstra(self, V, adj, S):
+         #code here
+        import heapq
+        g = defaultdict(list)
+        for i in range(len(adj)):
+            for u, w in adj[i]:
+                g[i].append([u,w])
+                g[u].append([i,w])
+        q = [(0, S)]
+        dist = [float('inf')]*V
+        dist[S] = 0
+        #since its pop reverse
+        while q:
+            dis, top = heapq.heappop(q)
+            for adjNode, weight in g[top]:
+                #it means we see that current node has more value so make sure we set a less value
+                if dist[adjNode] > weight + dis:
+                    dist[adjNode] = weight + dis
+                    heapq.heappush(q, (weight + dis, adjNode))
+        return dist
+    
+        
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
 numCourses = 2
