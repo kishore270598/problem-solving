@@ -796,6 +796,34 @@ class Graph:
                     heapq.heappush(q, (weight + dis, adjNode))
         return dist
     
+    def shortestDistance(self,N,M,A,X,Y):
+        dist=[[float('inf')]*M for _ in range(N)]
+        dist[0][0]=0
+        q=deque()
+        q.append((0,(0,0)))
+        del_row=[-1,0,1,0]
+        del_col=[0,1,0,-1]
+        if A[0][0]==0: return -1
+        if X==0 and Y==0 : return 0
+        
+        while q:
+            dst,curr=q.popleft()
+            row=curr[0]
+            col=curr[1]
+            for i in range(4):
+                nrow = row + del_row[i]
+                ncol = col + del_col[i]
+                
+                if nrow >= 0 and N > nrow and ncol >=0  and ncol < M and A[nrow][ncol]==1 and dst+1<dist[nrow][ncol]:
+                    dist[nrow][ncol]=dst+1
+                    if nrow==X and ncol==Y:
+                        return dst+1
+                        
+                    q.append((dst+1,(nrow,ncol)))    
+                    
+        return -1            
+        #code here
+    
         
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
