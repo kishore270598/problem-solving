@@ -824,10 +824,83 @@ class Graph:
         return -1            
         #code here
     
+    #Path With Minimum Effort
+    def minimumEffortPath(self, heights):
+        from heapq import heappush, heappop
+        N=len(heights)-1
+        M=len(heights[0])-1
+        q=[(0,(0,0))]
+        del_row=[-1,0,1,0]
+        del_col=[0,1,0,-1]
+        costSoFar = {(0,0): 0} #we can store the x,y their cost
+        min_=0
+        trgt=(N,M)
+        import math
+        while q:
+            distance,node=heappop(q)
+            row,col=node
+            if node == trgt: # - Dikstra can have early terminate
+                break
+            for i in range(4):
+                nrow = row + del_row[i]
+                ncol = col + del_col[i]
+                if nrow >= 0 and nrow <=N and ncol >= 0 and ncol <=M:
+                    edgeCost = max(distance, abs(heights[row][col] - heights[nrow][ncol]))
+                    if (nrow,ncol) not in costSoFar or ( (nrow,ncol) in costSoFar and costSoFar[(nrow,ncol)]>edgeCost):
+                        costSoFar[(nrow,ncol)]=edgeCost
+                        heappush(q, (edgeCost, (nrow, ncol)))
+        return costSoFar[trgt]
+    #Cheapest Flights Within K Stops
+    def findCheapestPrice(self, n, flights, src, dst, k):
+        # [soruce stops,start,end]
+        q=deque()
+        q.append([0,(src,0)])
+        graph=defaultdict(list)
+        distance=[float('inf')]*n
+        distance[src]=0
+        for u, v, w in flights:
+            graph[u].append((v, w))
+        while q:
+            stops,(node,cost)=q.popleft()
+            if stops>k:
+                continue
+            for element,edw in graph[node]:
+                if cost+edw<distance[element] and stops<=k:
+                    distance[element]=cost+edw
+                    q.append((stops+1,(element,cost+edw)))
         
+        if distance[dst]==float('inf'):
+            return -1
+        else:
+            return distance[dst]
+    #networkDelayTime 
+    def networkDelayTime(self, times, n, k):
+        graph=defaultdict(list)
+        from heapq import heappush, heappop
+        for u, v, w in times:
+            graph[u].append((v, w))
+        distance=[float('inf')]*n
+        q=[(0,k)]
+        distance[k-1]=0
+        visited=set()
+        while q:
+            dist,node=heappop(q)
+            visited.add(node)
+            if len(visited)==n:
+                return dist
+            for element,edw in graph[node]:
+                if element not in visited:
+                    heapq.heappush(q, (dist+edw, element))
+
+        return -1
+
+
+    
+
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
 numCourses = 2
 prerequisites = [[1,0]]
-ans=g.findOrder(numCourses,prerequisites)
+heights =[[1,2,2],[3,8,2],[5,3,5]]
+ans=g.minimumEffortPath(heights)
 print(ans)
