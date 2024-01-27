@@ -893,7 +893,27 @@ class Graph:
                     heapq.heappush(q, (dist+edw, element))
 
         return -1
+    def minimumMultiplications(self, arr : List[int], start : int, end : int) -> int:
+        # code here
+        que=deque()
+        distance=[float('inf')]*100000
+        distance[start]=0
+        que.append((start,0))
+        if start==end:
+            return 0
+        while que:
+            node,step=que.popleft()
+            for element in arr:
+                num=(element*node)%100000
+                if (step+1<distance[num]):
+                    distance[num]=step+1
+                    if num==end:
+                        return step+1
+                    que.append((num,step+1))
+                    
+                    
 
+        return -1
 
     
 
