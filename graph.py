@@ -915,7 +915,23 @@ class Graph:
 
         return -1
 
-    
+    def bellman_ford(self, V, edges, S):
+        ans=[10**8 for i in range(V)]
+        ans[S]=0
+        for it in range(0,V-1):
+            for i,j,w in edges:
+                if ans[i]!=10**8 and ans[i]+w<ans[j]:
+                    ans[j]=ans[i]+w
+        
+        x=[i for i in ans]
+        # print(ans)
+        for i,j,w in edges:
+            if x[i]!=10**8 and x[i]+w<x[j]:
+                x[j]=x[i]+w
+        if x==ans:
+            return ans
+        return [-1]
+
 
 g=Graph()
 board = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
