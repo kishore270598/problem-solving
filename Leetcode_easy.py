@@ -1,3 +1,4 @@
+from collections import defaultdict
 class Test:
     def plusOne(self):
         digits=[9]
@@ -251,16 +252,78 @@ class Test:
                         #         z.append(element)
                         # z=sorted(z)
                         return ans           
-                                     
-                    
-            
+    #contest 3019. Number of Changing Keys                                 
+    def countKeyChanges(self, s):
+                flag=0
+                for i in range(0,len(s)-1,1):
+                        if ord(s[i])+32!=ord(s[i+1]) and ord(s[i])!=ord(s[i+1])+32 and s[i]!=s[i+1]:
+                                flag+=1
+                return flag
+    #contest 3020. Find the Maximum Number of Elements in Subset
+    def maximumLength(self, nums):
+                maxcount = 1
+                freq=dict()
+                for num in nums:
+                        if num in freq:
+                                freq[num] += 1
+                        else:
+                                freq[num] = 1
+
+                # for every unique element in the array
+                for x in freq.keys():
+                        # we need atleast 2 x in array so there's no point checking further for x^2
+                        if freq[x] == 1:
+                                continue
+                        if x == 1:
+                                # special case
+                                count = freq[x] if freq[x]%2 else freq[x]-1
+                        else:
+                                # set to 2 as we have already use current x
+                                count = 2
+                                p = x
+                                while True:
+                                        p*=p
+                                        if p in freq:
+                                                if freq[p]==1:
+                                                        count+=1
+                                                        break
+                                                else:# use 2 p for left sub-subset and right
+                                                        count+=2
+                                        else:
+                                                count-=1
+                                                break
+                        maxcount=max(maxcount,count)
+                return maxcount
+    #contest 3021. Alice and Bob Playing Flower Game
+    def flowerGame(self, n, m):
+                #Intuition 
+                #To win alice  we need make sure that alice has more than the bob so odd counts
+                #left ( anticlock (odd M)* EVEN N) + (CLOCK  (odd N)* even(m))
+                even_count_n=0
+                even_count_m=0
+                odd_count_n=0
+                odd_count_m=0
+                for i in range(m):
+                        if i%2==0:
+                                even_count_m+=1
+                        else:
+                                odd_count_m+=1
+                for i in range(n):
+                        if i%2==0:
+                                even_count_n+=1
+                        else:
+                                odd_count_n+=1
+
+                return (even_count_n*odd_count_m)+(odd_count_n*even_count_m)
+
+    
 a=Test()
 nums=[10,12,13,14,15]
-s="isawsquirrelnearmysquirrelhouseohmy"
+s="aAbBcC"
 a="my"
 b="squirrel"
 k=15
-print(a.beautifulIndices(s,a,b,k))
+print(a.countKeyChanges(s))
 
 
 

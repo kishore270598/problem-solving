@@ -931,6 +931,7 @@ class Graph:
         if x==ans:
             return ans
         return [-1]
+    
 
 
 g=Graph()
