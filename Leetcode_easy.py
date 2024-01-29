@@ -315,6 +315,62 @@ class Test:
                                 odd_count_n+=1
 
                 return (even_count_n*odd_count_m)+(odd_count_n*even_count_m)
+    def shortest_distance(self, matrix):
+	    #Floyd Warshall
+        n=len(matrix)
+        m=len(matrix[0])
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j]==-1:
+                    matrix[i][j]=float('inf')
+            
+                if (i==j):
+                    matrix[i][j]=0
+        
+        for k in range(n):
+            for i in range(n):
+                for j in range(m):
+                    matrix[i][j]=min(matrix[i][j],matrix[i][k]+matrix[k][j])
+	        
+	               
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j]==float('inf'):
+                    matrix[i][j]=-1
+
+        return matrix
+
+    def findTheCity(self, n, edges, distanceThreshold):
+        #Floyd Warshall
+        cost=[]
+        adj=defaultdict(list)
+        for i in range(n):
+            temp=[]
+            for j in range(n):
+                temp.append(float('inf'))
+            cost.append(temp)
+        for start,end,distance in edges:
+            cost[start][end]=distance
+            cost[end][start]=distance
+            cost[end][end]=0
+            cost[start][start]=0
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    cost[i][j]=min(cost[i][j],cost[i][k]+cost[k][j])
+        d=defaultdict()
+        for i in range(n):
+            c=0
+            for j in range(n):
+                if cost[i][j]<=distanceThreshold and i!=j:
+                    c+=1
+            d[i]=c
+        m1=min(d.values())
+        m2=0
+        for k,v in d.items():
+            if m1==v:
+                m2=max(m2,k)
+        return m2
 
     
 a=Test()
