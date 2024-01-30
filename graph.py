@@ -893,7 +893,7 @@ class Graph:
                     heapq.heappush(q, (dist+edw, element))
 
         return -1
-    def minimumMultiplications(self, arr : List[int], start : int, end : int) -> int:
+    def minimumMultiplications(self, arr, start, end ):
         # code here
         que=deque()
         distance=[float('inf')]*100000
@@ -931,7 +931,98 @@ class Graph:
         if x==ans:
             return ans
         return [-1]
+    #MST PRIMS ALGO
+    def spanningTree(self, V, adj):
+        from heapq import heappush,heappop
+        #[weight,node]
+        q=[]
+        q.append([0,0])
+        visted=[0]*V
+        sum_=0
+        while q:
+            weight,node=heappop(q)
+            if(visted[node]==1):
+                continue
+            visted[node]=1
+            sum_+=weight
+            for s,w in adj[node]:
+                if visted[s]!=1:
+                    heappush(q,(w,s))
+        return sum_
+class Disjoint:
+    def __init__(self,n):
+        self.rank=[0]*n
+        self.parent=[0]*n
+        for i in range(n):
+            self.parent[i]=i
     
+    def find_parent(self,node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find_parent(self.parent[node])
+        return self.parent[node]
+    
+    def union_by_rank(self,u,v):
+        ultimate_u=self.find_parent(u)
+        ultimate_v=self.find_parent(v)
+        if (ultimate_u==ultimate_v):
+            return
+        if self.rank[ultimate_u]<self.rank[ultimate_v]:
+            self.parent[ultimate_u]=ultimate_v
+        
+        elif self.rank[ultimate_v]<self.rank[ultimate_u]:
+            self.parent[ultimate_v]=ultimate_u
+        else:
+            self.parent[ultimate_v]=ultimate_u
+            self.rank[ultimate_u]+=1
+    def main(self):
+        # Example usage
+        size = 7
+        ds = Disjoint(size)
+        # Perform some union operations
+        ds.union_by_rank(0, 1)
+        ds.union_by_rank(1, 2)
+        ds.union_by_rank(3, 4)
+        ds.union_by_rank(5, 6)
+        ds.union_by_rank(4, 5)
+        if ds.find_parent(2)==ds.find_parent(6):
+            print('yes')
+        ds.union_by_rank(2, 6)
+        if ds.find_parent(2)==ds.find_parent(6):
+            print('yes')
+        # Find the representative of each element
+
+
+
+d=Disjoint(7)
+d.main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 g=Graph()
