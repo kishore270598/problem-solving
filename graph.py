@@ -951,7 +951,8 @@ class Graph:
         return sum_
 class Disjoint:
     def __init__(self,n):
-        self.rank=[0]*n
+        self.size=[1]*n #union by size
+        #self.rank=[0]*n
         self.parent=[0]*n
         for i in range(n):
             self.parent[i]=i
@@ -966,14 +967,20 @@ class Disjoint:
         ultimate_v=self.find_parent(v)
         if (ultimate_u==ultimate_v):
             return
-        if self.rank[ultimate_u]<self.rank[ultimate_v]:
-            self.parent[ultimate_u]=ultimate_v
+        # if self.rank[ultimate_u]<self.rank[ultimate_v]:
+        #     self.parent[ultimate_u]=ultimate_v
         
-        elif self.rank[ultimate_v]<self.rank[ultimate_u]:
-            self.parent[ultimate_v]=ultimate_u
+        # elif self.rank[ultimate_v]<self.rank[ultimate_u]:
+        #     self.parent[ultimate_v]=ultimate_u
+        # else:
+        #     self.parent[ultimate_v]=ultimate_u
+        #     self.rank[ultimate_u]+=1
+        if self.size[ultimate_u]<self.size[ultimate_v]:
+            self.parent[ultimate_u]=ultimate_v
+            self.size[ultimate_v]+=self.size[ultimate_u]
         else:
             self.parent[ultimate_v]=ultimate_u
-            self.rank[ultimate_u]+=1
+            self.size[ultimate_u]+=self.size[ultimate_v]
     def main(self):
         # Example usage
         size = 7
@@ -986,11 +993,47 @@ class Disjoint:
         ds.union_by_rank(4, 5)
         if ds.find_parent(2)==ds.find_parent(6):
             print('yes')
+        else:
+            print('no')
         ds.union_by_rank(2, 6)
         if ds.find_parent(2)==ds.find_parent(6):
             print('yes')
         # Find the representative of each element
 
+#class Solution:
+    def spanningTree(self, V, adj):
+        edges=[]
+        for i in range(V):
+            for it in adj[i]:
+                edges.append([it[1],it[0],i])
+        edges.sort()
+        mstwt=0
+        ds=Disjoint(V)
+        for i in edges:
+            wt=i[0]
+            u=i[1]
+            v=i[2]
+            if ds.find_parent(u)!=ds.find_parent(v):
+                mstwt+=wt
+                ds.union_by_rank(u,v)
+        return mstwt
+
+
+    def makeConnected(self, n, connections):
+        #since mst required nodes--- edges(n-1)
+        #if extra that need to be added to the compenet -1== extra nodes
+        d=Disjoint(n)
+        edges_req=n
+        #this means required edges_requied for mst
+        for u,v in connections:
+            #mst required for edges
+            edges_req-=d.union_by_rank(u,v)
+        if edges_req - d.duplicates <= 1:
+            #checking node=edges-1
+            #---> checking above nodes-deges<=1 
+            return edges_req-1
+        else:
+            return -1
 
 
 d=Disjoint(7)
