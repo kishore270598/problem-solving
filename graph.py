@@ -1034,8 +1034,146 @@ class Disjoint:
             return edges_req-1
         else:
             return -1
+    
+    def removeStones(self, stones):
+        #intuition if we take the node as row and col as a node
+        #number componet (number node)-number compoent 
+        max_row=0
+        max_col=0
+        n=len(stones)
+        for i in stones:
+            max_row=max(max_row,i[0])
+            max_col=max(max_col,i[1])
+            #this to find the last element in row take it as node and from there we follow
+            #col as node ..
+        unique_nodes = set()
+        max_row+=1
+        max_col+=1
+        d=Disjoint(max_row+max_col)
+        for i in stones:
+            r=i[0]
+            c=i[1]+max_row
+            d.union_by_rank(r,c)
+            unique_nodes.add(r)
+            unique_nodes.add(c)
+        c=0
+        for item in unique_nodes:
+            if item==d.find_parent(item):
+                c+=1
+        return n-c
 
+    def accountsMerge(self, accounts):
+        maps=dict()
+        ds=Disjoint(len(accounts))
+        for i in range(len(accounts)):
+            for j in range(1,len(accounts[i]),1):
+                string_mail=accounts[i][j]
+                if string_mail not in maps:
+                    maps[string_mail]=i
+                else:
+                    ds.union_by_rank(i,maps[string_mail])
+        
+        merged_mail = [[]for _ in range(n)]
+        
+        for mail, node in maps.items():
+            # we need to merge it with the node that means the parent one
+            # so we check the ultimate parent
+            up = ds.find_parent(node)
+            merged_mail[up].append(mail)
+            
+        
+        ans = []
+        for i in range(n):
+            # since we negalted we removed it
+            if not merged_mail[i]:
+                continue
+            # we sort the emails
+            merged_mail[i].sort()
+            #the first name and the list
+            temp = [accounts[i][0]]  + merged_mail[i]
+            ans.append(temp)
+        return ans
+    
+    def numOfIslands(self, rows: int, cols : int, operators : List[List[int]]) -> List[int]:
+        ds=Disjoint(rows*cols)
+        visted=[]
+        for i in range(rows):
+            temp=[]
+            for j in range(cols):
+                temp.append(0)
+            visted.append(temp)
+        ans=[]
+        #there is changes on island that should be tracked so for that ans list
+        count=0
+        for element in operators:
+            row=element[0]
+            col=element[1]
+            if visted[row][col]==1:
+                ans.append(count)
+                continue
+            visted[row][col]=1
+            count+=1
+            dr=[0,-1,0,1]
+            dc=[-1,0,1,0]
+            for i in range(4):
+                new_r=dr[i]+row
+                new_c=dc[i]+col
+                #check the validity
+                if (new_r<rows and new_c<cols and new_r>=0 and new_c>=0):
+                    if visted[new_r][new_c]==1:
+                        #check if its already connected
+                        node=row*cols+col
+                        adjnode=new_r*cols+new_c
+                        if(ds.find_parent(node)!=ds.find_parent(adjnode)):
+                            count-=1
+                            #means the island is connected
+                            ds.union_by_rank(node,adjnode)
+            ans.append(count)
+        return ans
+    def largestIsland(self, grid):
+        n = len(grid)
+        ds = Disjoint(n * n)
+        # first step is connecting the components
+        delrow = [1, 0, -1, 0]
+        delcol = [0, 1, 0, -1]
+        for row in range(n):
+            for col in range(n):
+                if grid[row][col] == 0:
+                    continue
+                for ind in range(4):
+                    nrow = row + delrow[ind]
+                    ncol = col + delcol[ind]
+                    if nrow >= 0 and nrow < n and ncol >= 0 and ncol < n and grid[nrow][ncol] == 1:
+                            nodeNo = row * n + col
+                            adjNodeNo = nrow * n + ncol
+                            ds.union_by_rank(nodeNo, adjNodeNo)
+        
+        # making 0 -> 1
+        sizeOflargestIsland = 0
+        for row in range(n):
+            for col in range(n):
+                if grid[row][col] == 1:
+                    continue
+                # storing componenets
+                setOfComponenents = set()
+                for ind in range(4):
+                    nrow = row + delrow[ind]
+                    ncol = col + delcol[ind]
+                    if nrow >= 0 and nrow < n and ncol >= 0 and ncol < n \
+                        and grid[nrow][ncol] == 1:
+                            adjNodeNo = nrow * n + ncol
+                            setOfComponenents.add(ds.find_parent(adjNodeNo))
+                
+                sizeOfIsland = 0
+                for it in setOfComponenents:
+                    sizeOfIsland += ds.size[it]
+                sizeOflargestIsland = max(sizeOfIsland + 1, sizeOflargestIsland)
+        #what if there all the 1 that is the case we need to take the max of all the size of parent that means
+        #everything will be connected 
+        sizeOflargestIsland = max(sizeOflargestIsland, ds.size[ds.find_parent(n*n-1)])
 
+        return sizeOflargestIsland
+        # code hered.un
 d=Disjoint(7)
 d.main()
 
