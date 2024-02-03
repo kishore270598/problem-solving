@@ -1174,6 +1174,29 @@ class Disjoint:
 
         return sizeOflargestIsland
         # code hered.un
+    
+
+
+    def swimInWater(self, grid):
+        #we use dijistra algo
+        from heapq import heappush, heappop
+        n=len(grid)
+        min_heap=[[grid[0][0],0,0]] #(time/heigh,r,c)
+        visted=set()
+        visted.add((0,0))
+        directions=[[0,-1],[0,1],[-1,0],[1,0]]
+        ans=0
+        while min_heap:
+            time,i,j=heapq.heappop(min_heap)
+            ans=max(time,ans)
+            if i==n-1 and j==n-1:
+                return ans
+            for x, y in directions:
+                if(0<=i+x<n and 0<=j+y<n and (i+x, j+y) not in visted):
+                    visted.add((i+x, j+y))
+                    heappush(min_heap,[grid[i+x][j+y],i+x, j+y])
+
+    
 d=Disjoint(7)
 d.main()
 
