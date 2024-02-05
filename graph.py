@@ -1239,22 +1239,92 @@ class Disjoint:
                 elif v != parent[u]: # Update low value of u for parent function calls. 
                     low[u] = min(low[u], disc[v]) 
         return ans
+    
+    def kosaraju(self, V, adj):
+        def dfs(n):
+            vis1.add(n)
+            for i in adj[n]:
+                if i not in vis1:
+                    dfs(i)
+            q.append(n)
 
 
+        #step 1 dfs: sorting by finishing time
+        q=[]            
+        vis1=set()
+        for i in range(V):
+            if i not in vis1:
+                dfs(i)
 
-        visited = [False] * (n) 
-        disc = [float("Inf")] * (n) 
-        low = [float("Inf")] * (n) 
-        parent = [-1] * (n) 
 
-        # Call the recursive helper function to find bridges 
-        # in DFS tree rooted with vertex 'i' 
+        # step 2: rev all edges       
+        revadj=[[] for i in range(V)]
+        for n in range(V):
+            for a in adj[n]:
+                revadj[a].append(n)
+        
+        # for stp3 
+        def revdfs(n):
+            vis2.add(n)
+            for i in revadj[n]:
+                if i not in vis2:
+                    revdfs(i)
+
+
+        #step 3: final dfs to cnt scc
+        vis2=set()
+        cnt=0
+        while q:
+            i=q.pop()
+            if i not in vis2:
+                revdfs(i)
+                cnt+=1
+
+
+        return cnt
+
+    def articulationPoints(self, V, adj):
+        visted=[0]*V
+        mark=[0]*V
+        disc = [float("Inf")] * (V) 
+        low = [float("Inf")] * (V) 
         ans=[]
         time=[0]
-        for i in range(n): 
-            if visited[i] == False: 
-                ans.extend(bridgeUtil(i, visited, parent, low, disc,time))
-        return ans
+        def dfs(node,parent,visted,disc,low,mark,time,adj):
+            visted[node]=1
+            low[node]=time[0]
+            disc[node]=time[0]
+            time[0]+=1
+            child=0
+            for adjnode in adj[node]:
+                if adjnode==parent:
+                    continue
+                if visted[adjnode]!=1:
+                    dfs(adjnode,node,visted,disc,low,mark,time,adj)
+                    #once dfs is completed take the low
+                    low[node]=min(low[node],low[adjnode])
+                    if low[adjnode]>=disc[node] and parent!=-1:
+                        mark[node]=1
+                    child+=1
+                else:
+                    #i will take the low of time of insertion of the visted guy
+                    #since we break the point it won't able to reach
+                    low[node]=min(low[node],disc[adjnode])
+            
+            if child>1 and parent==-1:
+                mark[node]=1
+        
+        
+        for i in range(V):
+            if visted[i]!=1:
+                dfs(i,-1,visted,disc,low,mark,time,adj)
+        ans = []
+        for i in range(V):
+            if mark[i] ==1:
+              ans.append(i)
+        return ans if len(ans) else [-1]
+                
+
 d=Disjoint(7)
 d.main()
 
