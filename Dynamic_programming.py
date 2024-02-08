@@ -93,6 +93,100 @@ class Dynamic_programing:
             dp[i]=min_
         return dp[n-1]
     
+    def rob(self, nums):
+        #memo
+        n=len(nums)-1
+        def f(n):
+            if n==0:
+                return nums[n] #it means u have not picked 1
+            if n<0:
+                return 0 #to avoid the negative
+            pick=nums[n]+f(n-2)
+            #else
+            notpick=f(n-1)
+            return max(pick,notpick)
+        return f(n)
+    def rob(self, nums):
+        #TAB
+        n=len(nums)-1
+        dp=[-1]*n
+        def f(n):
+            if n==0:
+                return nums[n] #it means u have not picked 1
+            if dp[n]!=-1:
+                return dp[n]
+            if n<0:
+                return 0 #to avoid the negative
+            pick=nums[n]+f(n-2)
+            #else
+            notpick=f(n-1)
+            dp[n]=max(pick,notpick)
+            return dp[n]
+        return f(n)
+    def rob(self, nums):
+        #TAB  space
+        n=len(nums)-1
+        dp=[-1]*(n+1)
+        dp[0]=nums[0]
+        for i in range(1,len(nums),1):
+            pick=nums[i]
+            if (i>1):
+                pick+=dp[i-2]
+            nonpick=dp[i-1]
+            dp[i]=max(pick,nonpick)
+        return dp[n]
+    
+    def rob(self, nums):
+        #TAB op space
+        n=len(nums)-1
+        prev=nums[0]
+        prev2=0
+        curr=0
+        if n==0:
+            return nums[0]
+        for i in range(1,len(nums),1):
+            pick=nums[i]
+            if (i>1):
+                # Calculate the maximum value when not picking the current element
+                pick+=prev2
+            #i-1 means prev # i-2 prev 2
+            nonpick=0+prev
+            curr=max(pick,nonpick)
+            prev2=prev
+            prev=curr
+        return curr
+    #follow up
+    def rob(self, nums):
+        def f(nums):
+            #TAB  space
+            n=len(nums)
+            dp=[-1]*(n+1)
+            dp[0]=nums[0]
+            for i in range(1,len(nums),1):
+                pick=nums[i]
+                if (i>1):
+                    pick+=dp[i-2]
+                nonpick=dp[i-1]
+                dp[i]=max(pick,nonpick)
+            return dp[n-1]
+        n=len(nums)
+        arr1=[]
+        arr2=[]
+        if n==1:
+            return nums[0]
+        for i in range(n):
+            if i != 0:
+                arr1.append(nums[i])
+            if i != n - 1:
+                arr2.append(nums[i])
+
+        ans1 = f(arr1)
+        ans2 = f(arr2)
+
+        return max(ans1, ans2)
+
+
+    
 
 
 
