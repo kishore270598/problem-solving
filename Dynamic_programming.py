@@ -185,13 +185,156 @@ class Dynamic_programing:
 
         return max(ans1, ans2)
 
+    def ninjaTraining(self,n, points):
+        def f(day,last):#recur function
+            if day==0:
+                #if its 0 means ur starting u don't need any previous
+                maxi=0
+                for i in range(0,3,1):
+                    if i!=last:
+                        maxi=max(maxi,points[0][i])
+                return maxi
+            
+            maxi=0
+            for i in range(0,3,1):
+                if i!=last:
+                    points=points[day][i]+f(day-1,i) #this is to check the last guy and get the value what he did , making sure he is not doing the current task
+                    maxi=max(maxi,points)
+            return maxi
+        return f(n-1,3)
+    #memo
+    def ninjaTraining(n: int, points: List[List[int]]) -> int:
+            def f(day,last):#recur function
+                if day==0:
+                    #if its 0 means ur starting u don't need any previous
+                    maxi=0
+                    for i in range(0,3,1):
+                        if i!=last:
+                            maxi=max(maxi,points[0][i])
+                    return maxi
+                if dp[day][last]!=-1:
+                    return dp[day][last]
+                maxi=0
+                for i in range(0,3,1):
+                    if i!=last:
+                        point=points[day][i]+f(day-1,i) #this is to check the last guy and get the value what he did , making sure he is not doing the current task
+                        maxi=max(maxi,point)
+                dp[day][last]=maxi
+                return dp[day][last]
+            dp=[]
+            for i in range(n):
+                temp=[]
+                for j in range(4):
+                    temp.append(-1)
+                dp.append(temp)
+            return f(n-1,3)
+    #tab
+    def ninjaTraining(n: int, points: List[List[int]]) -> int:
+        dp=[]
+        for i in range(n):
+            temp=[]
+            for j in range(4):
+                temp.append(0)
+            dp.append(temp)
+        dp[0][0]=max(points[0][1],points[0][2])
+        dp[0][1]=max(points[0][0],points[0][2])
+        dp[0][2]=max(points[0][0],points[0][1])
+        dp[0][3]=max(points[0][0],max(points[0][1],points[0][2]))
+        for day in range(n):
+            for last in range(4):
+                dp[day][last]=0
+                for task in range(3):
+                    if task!=last:
+                        point=points[day][task]+dp[day-1][task]
+                        dp[day][last]=max(dp[day][last],point)
+        return dp[n-1][3]
+    #space 
+    def ninjaTraining(n: int, points: List[List[int]]) -> int:
+            prev=[0]*(4)
+            prev[0]=max(points[0][1],points[0][2])
+            prev[1]=max(points[0][0],points[0][2])
+            prev[2]=max(points[0][0],points[0][1])
+            prev[3]=max(points[0][0],max(points[0][1],points[0][2]))
+            for day in range(1,n):
+                temp=[0]*(4)
+                for last in range(4):
+                    temp[last]=0
+                    for task in range(3):
+                        if task!=last:
+                            temp[last]=max(temp[last],points[day][task]+prev[task])
+                prev=temp
+            return prev[3]
+    def uniquePaths(self, m, n):                    
+        def f(i,j): #tc-2power (n*m)
+            #top down
+            if i==0 and j==0:
+                return 1
+            if i<0 or j<0:
+                return 0
+            up=f(i-1,j)
+            down=f(i,j-1)
+            return up+down
+        return f(m-1,n-1)
+        #memo
+    def uniquePaths(self, m, n):
+        def f(i,j): #tc-O(n*m)
+            #top down
+            if i==0 and j==0:
+                return 1
+            if i<0 or j<0:
+                return 0
+            if dp[i][j]!=-1:
+                return dp[i][j]
+            up=f(i-1,j)
+            down=f(i,j-1)
+            dp[i][j]=up+down
+            return dp[i][j]
+        dp=[]
+        for i in range(m):
+            temp=[]
+            for j in range(n):
+                temp.append(-1)
+            dp.append(temp)
+        return f(m-1,n-1)
+        #tab 
+    def uniquePaths(self, m, n):
+        dp=[] #space= O(N*M)
+        for i in range(m):
+            temp=[]
+            for j in range(n):
+                temp.append(-1)
+            dp.append(temp)
+        for i in range(m):
+            for j in range(n):
+                if i==0 and j==0:
+                    dp[i][j]=1 #changing into base case
+                else:
+                    up=0
+                    down=0
+                    if i>0:
+                        up=dp[i-1][j]
+                    if j>0:
+                        down=dp[i][j-1]
+                    dp[i][j]=up+down
+        return dp[m-1][n-1]
 
-    
+
+
+
+
+
+
+
+
+
+
+
+            
 
 
 
 d=Dynamic_programing()
-heights=[10, 40, 30, 10]
-ans=d.minimizeCost(4,2,heights)
+heights=[[1,2,5], [3 ,1 ,1] ,[3,3,3]]
+ans=d.ninjaTraining(3,heights)
 print('ANS',ans)
 
