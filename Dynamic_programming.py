@@ -317,6 +317,176 @@ class Dynamic_programing:
                         down=dp[i][j-1]
                     dp[i][j]=up+down
         return dp[m-1][n-1]
+    #normal re
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        def f(i,j): #tc-2power (n*m)
+            #top down
+            if obstacleGrid[i][j]==1:
+                return 0
+            if i==0 and j==0:
+                return 1
+            if i<0 or j<0:
+                return 0
+            up=f(i-1,j)
+            down=f(i,j-1)
+            return up+down
+        m=len(obstacleGrid)
+        n=len(obstacleGrid[0])
+        return f(m-1,n-1)
+    #memo
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        def f(i,j): #tc-O(n*m)
+            #top down
+            if i==0 and j==0:
+                return 1
+            if obstacleGrid[i][j]==1:
+                return 0
+            if (i<0 or j<0):
+                return 0
+            if dp[i][j]!=-1:
+                return dp[i][j]
+            up=f(i-1,j)
+            down=f(i,j-1)
+            dp[i][j]=up+down
+            return dp[i][j]
+        dp=[]
+        m=len(obstacleGrid)
+        n=len(obstacleGrid[0])
+        if obstacleGrid[0][0]==1:
+            return 0
+        for i in range(m):
+            temp=[]
+            for j in range(n):
+                temp.append(-1)
+            dp.append(temp)
+        return f(m-1,n-1)
+    #tab
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        dp=[] #space= O(N*M)
+        m=len(obstacleGrid)
+        n=len(obstacleGrid[0])
+        if obstacleGrid[0][0]==1:
+            return 0
+        for i in range(m):
+            temp=[]
+            for j in range(n):
+                temp.append(-1)
+            dp.append(temp)
+        for i in range(m):
+            for j in range(n):
+                if obstacleGrid[i][j]==1:
+                    dp[i][j]=0
+                    continue 
+                if i==0 and j==0:
+                    dp[i][j]=1 #changing into base case
+                else:
+                    up=0
+                    down=0
+                    if i>0:
+                        up=dp[i-1][j]
+                    if j>0:
+                        down=dp[i][j-1]
+                    dp[i][j]=up+down
+        return dp[m-1][n-1]
+    def minPathSum(self, grid):
+        def f(i,j,maxi):
+            if i==0 and j==0:
+                return grid[0][0]
+            if j<0 or i<0:
+                return float('inf')
+            up=grid[i][j]+f(i-1,j,maxi)
+            down=grid[i][j]+f(i,j-1,maxi)
+            return min(up,down)
+        maxi=float('inf')
+        n=len(grid)
+        m=len(grid[0])
+        return f(n-1,m-1,maxi)
+    #memo
+    def minPathSum(self, grid):
+        #tc O(N*M) SC --> O(PATH travel)
+        def f(i,j,maxi):
+            if i==0 and j==0:
+                return grid[0][0]
+            if j<0 or i<0:
+                return float('inf')
+            if dp[i][j]!=-1:
+                return dp[i][j]
+            up=grid[i][j]+f(i-1,j,maxi)
+            down=grid[i][j]+f(i,j-1,maxi)
+            dp[i][j]=min(up,down)
+            return min(up,down)
+        maxi=float('inf')
+        n=len(grid)
+        m=len(grid[0])
+        dp=[]
+        for i in range(n):
+            temp=[]
+            for j in range(m):
+                temp.append(-1)
+            dp.append(temp)
+        return f(n-1,m-1,maxi)
+    #tabulation 
+    def minPathSum(self, grid):
+            n=len(grid)
+            m=len(grid[0])
+            dp=[]
+            for i in range(n):
+                temp=[]
+                for j in range(m):
+                    temp.append(-1)
+                dp.append(temp)
+            for i in range(n):
+                for j in range(m):
+                    if i==0 and j==0:
+                        dp[i][j]=grid[i][j]
+                    else:
+                        up=grid[i][j]
+                        if i>0:
+                            up+=dp[i-1][j]
+                        else:
+                            up+=int(1e9)
+                        down=grid[i][j]
+                        if j>0:
+                            down+=dp[i][j-1]
+                        else:
+                            down+=int(1e9)
+                        dp[i][j]=min(down,up)
+            return dp[n-1][m-1]
+    #space
+    def minPathSum(self, grid):
+        n=len(grid)
+        m=len(grid[0])
+        dp=[]
+        #we required a prev 
+        prev=[0]*m
+        for i in range(n):
+            temp=[]
+            for j in range(m):
+                temp.append(-1)
+            dp.append(temp)
+        for i in range(n):
+            curr=[0]*m
+            for j in range(m):
+                if i==0 and j==0:
+                    curr[j]=grid[i][j]
+                else:
+                    up=grid[i][j]
+                    if i>0:
+                        #prev ROW j col
+                        up+=prev[j]
+                    else:
+                        up+=int(1e9)
+                    down=grid[i][j]
+                    if j>0:
+                        #current row j-1 col will be prev
+                        down+=curr[j-1]
+                    else:
+                        down+=int(1e9)
+                    curr[j]=min(down,up)
+            prev=curr
+        return prev[m-1]
+
+
 
 
 
