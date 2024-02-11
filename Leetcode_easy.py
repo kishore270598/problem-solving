@@ -371,15 +371,75 @@ class Test:
             if m1==v:
                 m2=max(m2,k)
         return m2
+    #3033. Modify the Matrix
+    def modifiedMatrix(self, matrix):
+                n=len(matrix)
+                m=len(matrix[0])
+                max_=[]
+                j=0
+                print(m,n)
+                for i in range(m):
+                        maxi=-1
+                        while j!=n:
+                                maxi=max(maxi,matrix[j][i])
+                                print(matrix[j][i])
+                                j+=1
+                        j=0
+                        max_.append(maxi)
+                print(max_)
+                for i in range(n):
+                        for j in range(m):
+                                if matrix[i][j]==-1:
+                                        matrix[i][j]=max_[j]
+                return matrix
+    #3034. Number of Subarrays That Match a Pattern I
+    def countMatchingSubarrays(self, nums, pattern):
+        required_len=len(pattern)
+        n=len(nums)
+        def patterncheck(pattern,start,end):
+            for i in range(len(pattern)):
+                  while(start<=end):
+                        if pattern[i]==1:
+                              if nums[start]<nums[start+1]:
+                                    start+=1
+                                    break
+                              else:
+                                    return False
+                        elif pattern[i]==0:
+                              if nums[start]==nums[start+1]:
+                                    start+=1
+                                    break
+                              else:
+                                    return False
+                        elif pattern[i]==-1:
+                              if nums[start]>nums[start+1]:
+                                    start+=1
+                                    break
+                              else:
+                                    return False
+                        start+=1
+            return True
+        m=0
+        for i in range(n):
+            if i+required_len<n:
+                if(patterncheck(pattern,i,i+required_len)):
+                    m+=1
+            else:
+                  break
+        return m
 
-    
+                            
+          
+
+          
 a=Test()
-nums=[10,12,13,14,15]
+nums = [1,4,4,1,3,5,5,3]
+pattern = [1,0,-1]
 s="aAbBcC"
-a="my"
 b="squirrel"
 k=15
-print(a.countKeyChanges(s))
+an=a.countMatchingSubarrays(nums,pattern)
+print(an)
 
 
 
