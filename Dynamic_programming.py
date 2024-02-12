@@ -488,6 +488,80 @@ class Dynamic_programing:
 
 
 
+    # rec
+    def minimumTotal(self, triangle):
+        def f(i,j):
+                if i==n-1:
+                        return triangle[i][j]
+                dp=triangle[i][j]+f(i+1,j)
+                da=triangle[i][j]+f(i+1,j+1)
+                return min(dp,da)
+        n=len(triangle)
+        return f(0,0)
+    # memo
+    def minimumTotal(self, triangle):
+        #memo
+        dp_=[]
+        n=len(triangle)
+        for i in range(n):
+            z=[]
+            for j in range(n):
+                z.append(-1)
+            dp_.append(z)
+            def f(i,j):
+                if i==n-1:
+                    return triangle[i][j]
+                if dp_[i][j]!=-1:
+                    return dp_[i][j]
+                dp=triangle[i][j]+f(i+1,j)
+                da=triangle[i][j]+f(i+1,j+1)
+                dp_[i][j]=min(dp,da)
+                return dp_[i][j]
+        n=len(triangle)
+        return f(0,0)
+        
+
+# tab
+    def minimumTotal(self, triangle):
+        dp=[]
+        n=len(triangle)
+        for i in range(n):
+            z=[]
+            for j in range(n):
+                z.append(-1)
+            dp.append(z)
+        for j in range(n):
+            #to store the last values
+            dp[n-1][j]=triangle[n-1][j]
+        #sine we starting from n-1
+        for i in range(n-2,-1,-1):
+            for j in range(i,-1,-1):
+                d=triangle[i][j]+dp[i+1][j]
+                da=triangle[i][j]+dp[i+1][j+1]
+                dp[i][j]=min(d,da)
+        return dp[0][0]
+				
+# tab space
+    def minimumTotal(self, triangle):   
+        n=len(triangle)
+        front=[0]*n
+        for j in range(n):
+            #to store the last values
+            front[j]=triangle[n-1][j]
+        #sine we starting from n-1
+        for i in range(n-2,-1,-1):
+            curr=[0]*n
+            for j in range(i,-1,-1):
+                d=triangle[i][j]+front[j]
+                da=triangle[i][j]+front[j+1]
+                curr[j]=min(d,da)
+            front=curr
+        return front[0]
+
+
+
+
+
 
 
 
