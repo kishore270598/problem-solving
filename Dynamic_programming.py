@@ -203,7 +203,7 @@ class Dynamic_programing:
             return maxi
         return f(n-1,3)
     #memo
-    def ninjaTraining(n: int, points: List[List[int]]) -> int:
+    def ninjaTraining(n, points):
             def f(day,last):#recur function
                 if day==0:
                     #if its 0 means ur starting u don't need any previous
@@ -229,7 +229,7 @@ class Dynamic_programing:
                 dp.append(temp)
             return f(n-1,3)
     #tab
-    def ninjaTraining(n: int, points: List[List[int]]) -> int:
+    def ninjaTraining(n, points):
         dp=[]
         for i in range(n):
             temp=[]
@@ -249,7 +249,7 @@ class Dynamic_programing:
                         dp[day][last]=max(dp[day][last],point)
         return dp[n-1][3]
     #space 
-    def ninjaTraining(n: int, points: List[List[int]]) -> int:
+    def ninjaTraining(n, points):
             prev=[0]*(4)
             prev[0]=max(points[0][1],points[0][2])
             prev[1]=max(points[0][0],points[0][2])
@@ -557,20 +557,125 @@ class Dynamic_programing:
                 curr[j]=min(d,da)
             front=curr
         return front[0]
+    def minFallingPathSum(self, matrix):
+        #rec
+        n=len(matrix)
+        def f(i,j):
+            if i==n-1:
+                return matrix[i][j]
+            d_anti=matrix[i][j]+f(i+1,j-1)
+            d_bot=matrix[i][j]+f(i+1,j)
+            d_dia=matrix[i][j]+f(i+1,j+1)
+            return min(d_dia,min(d_bot,d_anti))
+        min_=0
+        for i in range(n):
+            min_=min(min_,f(0,i))
+        return min_
+    # rec
+    def minFallingPathSum(self, matrix):
+        #rec
+        n=len(matrix)
+        def f(i,j):
+            if j<0 or j>=n:
+                return int(1e9)
+            if i==0:
+                return matrix[0][j]
+            d_anti=matrix[i][j]+f(i-1,j-1)
+            d_bot=matrix[i][j]+f(i-1,j)
+            d_dia=matrix[i][j]+f(i-1,j+1)
+            return min(d_dia,min(d_bot,d_anti))
+        min_=float('inf')
+        for i in range(n-1,-1,-1):
+            min_=min(min_,f(n-1,i))
+        return min_
+    def minFallingPathSum(self, matrix):
+        #memo
+        n=len(matrix)
+        def f(i,j):
+            if j<0 or j>=n:
+                return int(1e9)
+            if dp[i][j]!=-1:
+                return dp[i][j]
+            if i==0:
+                return matrix[0][j]
+            d_anti=matrix[i][j]+f(i-1,j-1)
+            d_bot=matrix[i][j]+f(i-1,j)
+            d_dia=matrix[i][j]+f(i-1,j+1)
+            dp[i][j]=min(d_dia,min(d_bot,d_anti))
+            return dp[i][j]
+        min_=float('inf')
+        for i in range(n-1,-1,-1):
+            dp=[]
+            for k in range(n):
+                temp=[]
+                for j in range(n):
+                    temp.append(-1)
+                dp.append(temp)
+            min_=min(min_,f(n-1,i))
+        return min_
 
+    def minFallingPathSum(self, matrix):
+        #tab
+        n=len(matrix)
+        min_=float('inf')
+        dp=[]
+        for k in range(n):
+            temp=[]
+            for j in range(n):
+                temp.append(-1)
+            dp.append(temp)
+        for j in range(n):
+            dp[0][j]=matrix[0][j]
+        for i in range(1,n,1):
+            for j in range(n):
+                if j-1>=0:
+                    d_anti=matrix[i][j]+dp[i-1][j-1]
+                else:
+                    d_anti=int(1e9)
+                d_bot=matrix[i][j]+dp[i-1][j]
+                if j+1<n:
+                    d_dia=matrix[i][j]+dp[i-1][j+1]
+                else:
+                    d_dia=int(1e9)
+                dp[i][j]=min(d_dia,min(d_bot,d_anti))
+        mini=dp[n-1][0]
+        for j in range(1,n,1):
+            mini=min(mini,dp[n-1][j])
+        return mini
 
+        # space
 
-
-
-
-
-
-
-
-
-
-
-
+    def minFallingPathSum(self, matrix):
+        #tab
+        n=len(matrix)
+        min_=float('inf')
+        dp=[]
+        for k in range(n):
+            temp=[]
+            for j in range(n):
+                temp.append(-1)
+            dp.append(temp)
+        prev=[0]*n
+        for j in range(n):
+            prev[j]=matrix[0][j]
+        for i in range(1,n,1):
+            cur=[0]*n
+            for j in range(n):
+                if j-1>=0:
+                    d_anti=matrix[i][j]+prev[j-1]
+                else:
+                    d_anti=int(1e9)
+                d_bot=matrix[i][j]+prev[j]
+                if j+1<n:
+                    d_dia=matrix[i][j]+prev[j+1]
+                else:
+                    d_di=int(1e9)
+                cur[j]=min(d_dia,min(d_bot,d_anti))
+            prev=cur
+        mini=float('inf')
+        for j in range(0,n,1):
+            mini=min(mini,prev[j])
+        return mini
 
 
             
@@ -578,7 +683,7 @@ class Dynamic_programing:
 
 
 d=Dynamic_programing()
-heights=[[1,2,5], [3 ,1 ,1] ,[3,3,3]]
-ans=d.ninjaTraining(3,heights)
+matrix = [[2,1,3],[6,5,4],[7,8,9]]
+ans=d.minFallingPathSum(matrix)
 print('ANS',ans)
 
