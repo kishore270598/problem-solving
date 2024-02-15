@@ -676,12 +676,170 @@ class Dynamic_programing:
         for j in range(0,n,1):
             mini=min(mini,prev[j])
         return mini
+        #MEMO
+    def maximumChocolates(r: int, c: int, grid: List[List[int]]) -> int:
+        def f(i,j1,j2):
+            if j2>=c or j1>=c or j1<0 or j2<0:
+                return int(-1e9)
+            if dp[i][j1][j2]!=-1:
+                return dp[i][j1][j2]
+            if i==r-1:
+                if j1==j2:
+                    return grid[i][j1]
+                else:
+                    return grid[i][j1]+grid[i][j2]
+            maxi = -sys.maxsize
+            dir=[-1,0,1]
+            for di in range(-1, 2):
+                    for dj in range(-1, 2):
+                        ans = 0
+                        if j1 == j2:
+                            ans = grid[i][j1] + f(i + 1, j1 + di, j2 + dj)
+                        else:
+                            ans = grid[i][j1] + grid[i][j2] + f(i + 1, j1 + di, j2 + dj)
+                        maxi = max(maxi, ans)
+            dp[i][j1][j2]=maxi
+            return dp[i][j1][j2]
+        n=r
+        m=c
+        dp = [[[-1 for j in range(m)] for i in range(m)] for k in range(n)]
+        return f(0,0,c-1)
 
 
-            
+    # DP on Subsequences
+    def subsetSumToK(n, k, arr):
+    #recu
+        def f(index,k):
+            if k==0:
+                return True
+            if index==0:
+                if arr[index]==k:
+                    return True
+                else:
+                    return False
+            not_include=f(index-1,k)
+            include=False
+            if arr[index]<=k:
+                include=f(index-1,k-arr[index])
+            return not_include or include
+        return f(n-1,k)
+        #memeo
+    def subsetSumToK(n, k, arr):
+        def f(index,k):
+            if k==0:
+                return True
+            if dp[index][k]!=-1:
+                return dp[index][k]
+            if index==0:
+                if arr[index]==k:
+                    return True
+                else:
+                    return False
+            not_include=f(index-1,k)
+            include=False
+            if arr[index]<=k:
+                include=f(index-1,k-arr[index])
+            dp[index][k]=not_include or include
+            return dp[index][k]
+        dp = [[-1 for j in range(k+1)] for i in range(n)]
+        return f(n-1,k)
+        
 
+    
+    def subsetSumToK(n, k, arr):
+        #tab
+        dp = [[False for j in range(k+1)] for i in range(n)]
+        for i in range(n):
+            dp[i][0]=True
+            #whenever the target is zero it means true
+        if arr[0] <= k:
+            dp[0][arr[0]] = True
+        for i in range(1,n):
+            for target in range(1,k+1):
+                not_include=dp[i-1][target]
+                include=False
+                if arr[i]<=target:
+                    include=dp[i-1][target-arr[i]]
+                dp[i][target]=not_include or include
 
+        return dp[n-1][k]
+    def subsetSumToK(n, k, arr):
+    #tab
+        prev = [False] * (k + 1)
+        prev[0]=True
+        if arr[0] <= k:
+            prev[arr[0]] = True
+        for i in range(1,n):
+            cur = [False] * (k + 1)
+            cur[0] = True
+            for target in range(1,k+1):
+                not_include=prev[target]
+                include=False
+                if arr[i]<=target:
+                    include=prev[target-arr[i]]
+                cur[target]=not_include or include
+            prev=cur
+        return prev[k]
+    #416. Partition Equal Subset Sum
+    #------------------------------------------------------
+    def subsetSumToK(self,n, k, arr):
+        #tab
+        prev = [False] * (k + 1)
+        prev[0]=True
+        if arr[0] <= k:
+            prev[arr[0]] = True
+        for i in range(1,n):
+            cur = [False] * (k + 1)
+            cur[0] = True
+            for target in range(1,k+1):
+                not_include=prev[target]
+                include=False
+                if arr[i]<=target:
+                    include=prev[target-arr[i]]
+                cur[target]=not_include or include
+            prev=cur
+        return prev[k]
+    def canPartition(self, arr):
+        n=len(arr)
+        sum_=sum(arr)
+        if sum_%2!=0:
+            return False
+        return self.subsetSumToK(n,sum_//2,arr)
+    #------------------------------------------------------
+    #2035. Partition Array Into Two Arrays to Minimize Sum Difference
+    #------------------------------------------------------
+    def minSubsetSumDifference(arr, n ):
+        totSum = sum(arr)
+        dp = [[False for i in range(totSum + 1)] for j in range(n)]
+        for i in range(n):
+            dp[i][0] = True
 
+        if arr[0] <= totSum:
+            dp[0][arr[0]] = True
+
+        for ind in range(1, n):
+            for target in range(1, totSum + 1):
+                # If the current element is not taken, the result is the same as the previous row.
+                notTaken = dp[ind - 1][target]
+
+                # If the current element is taken, subtract its value from the target and check the previous row.
+                taken = False
+                if arr[ind] <= target:
+                    taken = dp[ind - 1][target - arr[ind]]
+
+                # Update the DP table with the result of taking or not taking the current element.
+                dp[ind][target] = notTaken or taken
+
+        # Initialize a variable to track the minimum absolute difference.
+        mini = int(1e9)
+        # Iterate through all possible sums.
+        for i in range(totSum + 1):
+            if dp[n - 1][i] == True:
+                diff = abs(i - (totSum - i))
+                mini = min(mini, diff)
+
+        return mini
+    #------------------------------------------------------
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
 ans=d.minFallingPathSum(matrix)
