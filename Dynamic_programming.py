@@ -840,6 +840,123 @@ class Dynamic_programing:
 
         return mini
     #------------------------------------------------------
+    #------------------------------------------------------
+    #count the subset for sum k
+    #------------------------------------------------------    
+    #recu
+    def findWays(arr: List[int], k: int) -> int:
+        #recu
+        n=len(arr)
+        def f(index,sum_):
+            if sum_==0:
+                return 1
+            if index==0:
+                if arr[index]==sum_:
+                    return 1
+                else:
+                    return 0
+            notpick=f(index-1,sum_)
+            pick=0
+            if arr[index]<=k:
+                pick=f(index-1,sum_-arr[index])
+            return pick+notpick
+        return f(n-1,k)
+    #memeo
+    #------------------------------------------------------    
+    def findWays(arr: List[int], k: int) -> int:
+        n=len(arr)
+        dp = [[-1 for i in range(k + 1)] for j in range(n)]
+        def f(index,sum_):
+            if sum_==0:
+                return 1
+            if dp[index][sum_]!=-1:
+                return dp[index][sum_]
+            if index==0:
+                if sum_==0 and arr[index]==0:
+                    return 2
+                elif sum_==0 or arr[index]==0:
+                    return 1
+                else:
+                    return 0
+            notpick=f(index-1,sum_)
+            pick=0
+            if arr[index]<=sum_:
+                pick=f(index-1,sum_-arr[index])
+            dp[index][sum_]=pick+notpick
+            return dp[index][sum_]
+        return f(n-1,k)
+    #------------------------------------------------------    
+    def findWays(arr: List[int], k: int) -> int:
+        #tab
+        n=len(arr)
+        dp = [[0 for i in range(k + 1)] for j in range(n)]
+        for i in range(n):
+            dp[i][0] = 1
+        if arr[0] <= k:
+            dp[0][arr[0]] = 1
+        for index in range(1,n):
+            for sum_ in range(1,k+1):
+                notpick=dp[index-1][sum_]
+                pick=0
+                if arr[index]<=sum_:
+                    pick=dp[index-1][sum_-arr[index]]
+                dp[index][sum_]=pick+notpick
+        return dp[n-1][k]
+    #------------------------------------------------------   
+    #space optimi 
+    def findWays(arr: List[int], k: int) -> int:
+        #tab space opt
+        n=len(arr)
+        dp = [[0 for i in range(k + 1)] for j in range(n)]
+        prev=[0]*(k+1)
+        prev[0] = 1
+        if arr[0] <= k:
+            prev[arr[0]] = 1
+        for index in range(1,n):
+            curr=[0]*(k+1)
+            curr[0]=1
+            for sum_ in range(1,k+1):
+                notpick=prev[sum_]
+                pick=0
+                if arr[index]<=sum_:
+                    pick=prev[sum_-arr[index]]
+                curr[sum_]=pick+notpick
+            prev=curr
+        return prev[k]
+    #------------------------------------------------------  
+    #Count Partitions with Given Difference (DP - 18)
+    mod =int(1e9+7)
+    def countPartitions(n: int, d: int, arr: List[int]) -> int:
+        def findWays(num, k):
+            n=len(num)
+            dp = [[0] * (k + 1) for _ in range(n)]
+            if num[0] == 0:
+                dp[0][0] = 2 # 2 cases - pick and not pick
+            else:
+                dp[0][0] = 1 # 1 case - not pick
+            if num[0] != 0 and num[0] <= k:
+                dp[0][num[0]] = 1 # 1 case - pick
+            for index in range(1,n):
+                for sum_ in range(k+1):
+                    notpick=dp[index-1][sum_]
+                    pick=0
+                    if num[index]<=sum_:
+                        pick=dp[index-1][sum_-num[index]]
+                    dp[index][sum_]=(pick+notpick)% mod
+            return dp[n-1][k]
+        totSum = sum(arr)
+        mod=int(1e9+7)
+        # Checking for edge cases
+        if (totSum - d) < 0 or (totSum - d) % 2:
+            return 0
+        return findWays(arr, (totSum - d) // 2)
+
+
+
+
+
+
+
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
 ans=d.minFallingPathSum(matrix)
