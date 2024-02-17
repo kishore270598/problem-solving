@@ -1,4 +1,5 @@
 import math
+import sys
 class Dynamic_programing:
     def fibonacci(self,n):
         #memory method
@@ -950,9 +951,192 @@ class Dynamic_programing:
         if (totSum - d) < 0 or (totSum - d) % 2:
             return 0
         return findWays(arr, (totSum - d) // 2)
+    #------------------------------------------------------ 
+    #0/1 Knapsack (DP - 19) recur method
+    #------------------------------------------------------ 
+    def knapSack(self,W, wt, val, n):
+        #recur method
+        def f(index,weight,Threshold):
+            #base case
+            if index==0:
+                if wt[index]<=Threshold:
+                    return val[0]
+                else:
+                    return 0
+            notpic=f(index-1,weight,Threshold)
+            pick=-sys.maxsize
+            if wt[index]<=Threshold:
+                pick=val[index]+f(index-1,weight,Threshold-weight[index])
+            return max(pick,notpic)
+        Threshold=W
+        return f(n-1,wt,Threshold)
+    #------------------------------------------------------ 
+    #0/1 Knapsack (DP - 19) memo method
+    #------------------------------------------------------ 
+    def knapSack(self,W, wt, val, n):
+        #memo method
+        def f(index,weight,Threshold):
+            #base case
+            if index==0:
+                if wt[index]<=Threshold:
+                    return val[0]
+                else:
+                    return 0
+            if dp[index][Threshold]!=-1:
+                return dp[index][W]
+            notpic=f(index-1,weight,Threshold)
+            pick=-sys.maxsize
+            if wt[index]<=Threshold:
+                pick=val[index]+f(index-1,weight,Threshold-weight[index])
+            dp[index][Threshold]=max(pick,notpic)
+            return dp[index][Threshold]
+        Threshold=W
+        dp = [[-1 for j in range(W + 1)] for i in range(n)]
+        return f(n-1,wt,Threshold)
+    #------------------------------------------------------ 
+    #tab
+    def knapSack(self,W, wt, val, n):
+        #tab method
+        dp = [[0 for j in range(W + 1)] for i in range(n)]
+        #for every value less than W index 0 we can steal it
+        for i in range(wt[0],W+1):
+            dp[0][i]=val[0]
+        for index in range(1,n):
+            for Threshold in range(W+1):
+                notpic=dp[index-1][Threshold]
+                pick=-sys.maxsize
+                if wt[index]<=Threshold:
+                    pick=val[index]+dp[index-1][Threshold-wt[index]]
+                dp[index][Threshold]=max(pick,notpic)
+        return dp[n-1][W]
+    #------------------------------------------------------ 
+    #tab space
+    #------------------------------------------------------ 
+    def knapSack(self,W, wt, val, n):
+        #tab method space
+        prev=[0]*(W+1)
+        #for every value less than W index 0 we can steal it
+        for i in range(wt[0],W+1):
+            prev[i]=val[0]
+        for index in range(1,n):
+            for Threshold in range(W,-1,-1):
+                notpic=prev[Threshold]
+                pick=-sys.maxsize
+                if wt[index]<=Threshold:
+                    pick=val[index]+prev[Threshold-wt[index]]
+                prev[Threshold]=max(pick,notpic)
+        return prev[W]
+    #------------------------------------------------------ 
+    #recur
+    #------------------------------------------------------ 
+    def coinChange(self, coins, amount):
+        def f(index, threshold):
+            # Base case: If we reach the first coin, check if it can divide the amount
+            if index == 0:
+                if threshold % coins[0] == 0:
+                    # Same coin value can be used multiple times, so return the count
+                    return threshold / coins[0]
+                # If the coin cannot divide the amount, return a large value indicating impossibility
+                return 1e9
+            # Recursive cases:
+            # 1. Don't take the current coin and move to the next one
+            dont_take = f(index - 1, threshold)
+            # 2. Take the current coin if it doesn't exceed the threshold, and recursively check the remaining amount
+            take = float('inf')
+            if coins[index] <= threshold:
+                take = 1 + f(index, threshold - coins[index])
+            # Return the minimum of the two options
+            return min(take, dont_take)
+        # Main function
+        n = len(coins)
+        # Calculate the minimum number of coins needed using the recursive function
+        ans = f(n - 1, amount)
+        # If the minimum number of coins is still a large value, it means it's impossible to make the amount
+        if ans >= 1e9:
+            return -1
+        # Return the minimum number of coins needed
+        return ans
+    #------------------------------------------------------ 
+    #memeo
+    #------------------------------------------------------ 
+    def coinChange(self, coins, amount):
+        #memo
+        def f(index,threshold):
+            #base
+            if index==0:
+                #check the element can divide the amount
+                if threshold % coins[0]==0:
+                    #same value can be divided mutiple time so that count
+                    return threshold / coins[0]
+                return 1e9
+            if dp[index][threshold]!=-1:
+                return dp[index][threshold]
+            donttake=f(index-1,threshold)
+            take=float('inf')
+            if coins[index]<=threshold:
+                take=1+f(index,threshold-coins[index])
+            dp[index][threshold]=min(take,donttake)
+            return dp[index][threshold]
+        n=len(coins)
+        dp=[[-1 for i in range(amount+1)] for i in range(n)]
+        ans =  f(n-1, amount)
+        if ans >= 1e9:
+            return -1
+        return ans
+    #------------------------------------------------------ 
+    #tab
+    #------------------------------------------------------ 
+    def coinChange(self, coins, amount):
+        #tab
+        n=len(coins)
+        dp=[[-1 for i in range(amount+1)] for i in range(n)]
+        for i in range(amount+1):
+            if i % coins[0]==0:
+                dp[0][i]=i//coins[0]
+            else:
+                dp[0][i]=int(1e9)
+        for index in range(1,n):
+            for threshold in range(amount+1):
+                donttake=dp[index-1][threshold]
+                take=int(1e9)
+                if coins[index]<=threshold:
+                    take=1+dp[index][threshold-coins[index]]
+                dp[index][threshold]=min(take,donttake)
+        ans = dp[n - 1][amount]
+        # If the result is still equal to a very large value, it means it's not possible to achieve the target sum.
+        if ans >= int(1e9):
+            return -1
+        return ans
+    #------------------------------------------------------ 
+    #space
+    #------------------------------------------------------ 
+    def coinChange(self, coins, amount):
+        #tab
+        n=len(coins)
+        dp=[[-1 for i in range(amount+1)] for i in range(n)]
+        prev=[0]*(amount+1)
+        curr=[0]*(amount+1)
+        for i in range(amount+1):
+            if i % coins[0]==0:
+                prev[i]=i//coins[0]
+            else:
+                prev[i]=int(1e9)
+        for index in range(1,n):
+            for threshold in range(amount+1):
+                donttake=prev[threshold]
+                take=int(1e9)
+                if coins[index]<=threshold:
+                    take=1+curr[threshold-coins[index]]
+                curr[threshold]=min(take,donttake)
+            prev=curr
+        ans = prev[amount]
+        # If the result is still equal to a very large value, it means it's not possible to achieve the target sum.
+        if ans >= int(1e9):
+            return -1
+        return ans
 
 
-
+        
 
 
 
