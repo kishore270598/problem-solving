@@ -427,18 +427,43 @@ class Test:
             else:
                   break
         return m
+    #------------------------------------
+    #3042. Count Prefix and Suffix Pairs I
+    #-------------------------------------
+    def countPrefixSuffixPairs(self, words):
+                ans = 0
+                def isPrefix(a,b):
+                        n = len(a)
+                        return b[:n]==a and b[-n:]==a
+                for i in range(len(words)-1):
+                        for j in range(i+1,len(words)):
+                                ans+=isPrefix(words[i],words[j])
 
-                            
+                return ans       
           
+    
+    def longestCommonPrefix(self, arr1, arr2):
+            def firstdigit(num1,num2):
+                  len_=0
+                  while(num1!=0 and num2!=0):
+                        num1=num1//10
+                        num2=num1//10
 
-          
+            max_=0
+            for i in range(len(arr1)):
+                    for j in range(len(arr2)):
+
+                                   
+
+
 a=Test()
-nums = [1,4,4,1,3,5,5,3]
+arr1 = [1,26]
+arr2=[22,2]
 pattern = [1,0,-1]
 s="aAbBcC"
-b="squirrel"
+words = ["a","aba","ababa","aa"]
 k=15
-an=a.countMatchingSubarrays(nums,pattern)
+an=a.longestCommonPrefix(arr1,arr2)
 print(an)
 
 

@@ -1134,7 +1134,64 @@ class Dynamic_programing:
         if ans >= int(1e9):
             return -1
         return ans
+    #518. Coin Change II
+    #-----------------
+    def change(self, amount, coins):
+        # Initialize variables
+        n = len(coins)
+        dp = [[0 for i in range(amount + 1)] for i in range(n)]
+        prev = [0] * (amount + 1)
+        curr = [0] * (amount + 1)
+        
+        # Set initial values in prev based on the first coin
+        for i in range(amount + 1):
+            if i % coins[0] == 0:
+                prev[i] = 1
+        
+        # Iterate over the remaining coins
+        for index in range(1, n):
+            for threshold in range(amount + 1):
+                # Calculate the number of ways to make change for the current threshold
+                donttake = prev[threshold]
+                take = 0
+                
+                # Check if the current coin can be taken to contribute to the change
+                if coins[index] <= threshold:
+                    take = curr[threshold - coins[index]]
+                    
+                # Update the current value in the dp array
+                curr[threshold] = take + donttake
+            
+            # Update prev array for the next iteration
+            prev = curr
+        
+        # The final result is stored in the last element of prev array for the given amount
+        return prev[amount]
 
+    def findTargetSumWays(self, arr, d):
+        def findWays(num, k):
+            n=len(num)
+            dp = [[0] * (k + 1) for _ in range(n)]
+            if num[0] == 0:
+                dp[0][0] = 2 # 2 cases - pick and not pick
+            else:
+                dp[0][0] = 1 # 1 case - not pick
+            if num[0] != 0 and num[0] <= k:
+                dp[0][num[0]] = 1 # 1 case - pick
+            for index in range(1,n):
+                for sum_ in range(k+1):
+                    notpick=dp[index-1][sum_]
+                    pick=0
+                    if num[index]<=sum_:
+                        pick=dp[index-1][sum_-num[index]]
+                    dp[index][sum_]=(pick+notpick)
+            return dp[n-1][k]
+        totSum = sum(arr)
+        mod=int(1e9+7)
+        # Checking for edge cases
+        if (totSum - d) < 0 or (totSum - d) % 2:
+            return 0
+        return findWays(arr, (totSum - d) // 2)
 
         
 
