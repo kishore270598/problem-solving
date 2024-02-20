@@ -1192,10 +1192,55 @@ class Dynamic_programing:
         if (totSum - d) < 0 or (totSum - d) % 2:
             return 0
         return findWays(arr, (totSum - d) // 2)
-
-        
-
-
+    #DP on Subsequences
+    #DP22 - Unbounded Knapsack #Memorization Approach
+    #--------------------------------------------
+    def unboundedKnapsack(n, W, val, wt):
+    #Memorization Approach
+        def f(ind,weight_threshold):
+            if ind == 0:
+                return (weight_threshold // wt[0]) * val[0]
+            if dp[ind][weight_threshold] != -1:
+                return dp[ind][weight_threshold]
+            notTaken = f (ind - 1, weight_threshold)
+            taken = -sys.maxsize
+            if wt[ind] <= weight_threshold:
+                taken = val[ind] + f(ind, weight_threshold - wt[ind])
+            dp[ind][weight_threshold] = max(notTaken, taken)
+            return dp[ind][weight_threshold]
+        dp=[[-1 for i in range(W+1)] for i in range(n)]
+        return f(n-1,W)
+    #DP22 - Unbounded Knapsack #Tabulation Approach Approach
+    #--------------------------------------------
+    def unboundedKnapsack(n, W, val, wt):
+    #tab Approach
+        dp=[[-1 for i in range(W+1)] for i in range(n)]
+        for i in range(W+1):
+            dp[0][i]=(i // wt[0]) * val[0]
+        for index in range(1,n):
+            for target in range(W+1):
+                notTaken = dp[index-1][target]
+                taken = -sys.maxsize
+                if wt[index] <= target:
+                    taken = val[index] + dp[index][target-wt[index]]
+                dp[index][target] = max(notTaken, taken)
+        return dp[n-1][W]
+    #DP22 - Unbounded Knapsack #Tabulation space Approach
+    #--------------------------------------------
+    def unboundedKnapsack(n, W, val, wt):
+    #space optimi
+        prev=[0]*(W+1)
+        for i in range(W+1):
+            prev[i]=(i // wt[0]) * val[0]
+        for index in range(1,n):
+            for target in range(W+1):
+                notTaken = prev[target]
+                taken = -sys.maxsize
+                if wt[index] <= target:
+                    taken = val[index] +prev[target-wt[index]]
+                prev[target] = max(notTaken, taken)
+        return prev[W]
+    
 
 
 d=Dynamic_programing()
