@@ -1240,7 +1240,98 @@ class Dynamic_programing:
                     taken = val[index] +prev[target-wt[index]]
                 prev[target] = max(notTaken, taken)
         return prev[W]
-    
+    #DP25 - Longest Common Subsequence | (DP – 25)
+    #--------------------------------------------
+    #recur
+    def longestCommonSubsequence(self, text1, text2):
+        #rec
+        def dfs(index1,index2):
+            if index1<0 or index2<0:
+                return 0
+            if text1[index1]==text2[index2]:
+                return 1+dfs(index1-1,index2-1)
+            return max(dfs(index1-1,index2),dfs(index1,index2-1))
+        n1=len(text1)
+        n2=len(text2)
+        return dfs(n1-1,n2-1)
+    # memo
+    def longestCommonSubsequence(self, text1, text2):
+        #memo
+        def dfs(index1,index2):
+            if index1<0 or index2<0:
+                return 0
+            if dp[index1][index2]!=-1:
+                return dp[index1][index2]
+            if text1[index1]==text2[index2]:
+                return 1+dfs(index1-1,index2-1)
+            dp[index1][index2]=max(dfs(index1-1,index2),dfs(index1,index2-1))
+            return dp[index1][index2]
+        n1=len(text1)
+        n2=len(text2)
+        dp=[[-1 for i in range(n2)] for i in range(n1)]
+        return dfs(n1-1,n2-1)
+    # tab
+    def longestCommonSubsequence(self, text1, text2):
+        #tab
+        #we need  to reduce a index
+        n1=len(text1)
+        n2=len(text2)
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return 0
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
+        
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                else:
+                    dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
+        return dp[n1][n2]
+    #--------------------------------------------
+    def findLCS(n: int, m: int, text1: str, text2: str) -> str:
+        #tab
+        #we need  to reduce a index
+        n1=n
+        n2=m
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return 0
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
+        
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                else:
+                    dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
+        len_=dp[n1][n2]
+        str_=''
+        for i in range(len_):
+            str_+='$'
+        index=len_-1
+        i=n
+        j=m
+        while (i>0 and j>0):
+            if text1[i-1]==text2[j-1]:
+                str_ = text1[i - 1] + str_[:-1]
+                index=-1
+                i -= 1
+                j -= 1
+            elif dp[i-1][j]>dp[i][j-1]:
+                i-=1
+            else:
+                j-=1
+        return str_
+        
 
 
 d=Dynamic_programing()
