@@ -1331,8 +1331,158 @@ class Dynamic_programing:
             else:
                 j-=1
         return str_
+    #--------------------------------------------
+    #Longest Common Substring | 
+    # No need to carry the values
+    # since its sub string we carry only the max else we set to 0
+    #--------------------------------------------
+    def lcs(self,text1: str, text2: str) -> int:
+        #tab
+        #we need  to reduce a index
+        n1=len(text1)
+        n2=len(text2)
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return 0
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
+        ans=0
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    # since its sub string we carry only the max else we set to 0
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                    ans=max(ans,dp[index1][index2])
+                else:
+                    dp[index1][index2]=0
+        return ans
+    #--------------------------------------------
+    #Longest Common palindromic  | 
+    # No need to carry the values
+    # since its sub string we carry only the max else we set to 0
+    #--------------------------------------------
+    def longestPalindromeSubseq(self, s):
+        text1=s
+        text2=s[::-1]
+        n1=len(text1)
+        n2=len(text2)
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return 0
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
         
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                else:
+                    dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
+        return dp[n1][n2]
 
+    #1312. Minimum Insertion Steps to Make a String Palindrome
+    def minInsertions(self, s):
+        #Minimum insertions to make string palindrome | DP-29
+        text1=s
+        text2=s[::-1]
+        n1=len(text1)
+        n2=len(text2)
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return 0
+        # Base cases: When one of the strings is empty, LCS length is 0.
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
+        
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                else:
+                    dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
+        # The minimum insertions required to make the string palindrome is the difference between its length and the length of its longest palindromic subsequence
+        return len(s)-dp[n1][n2]
+    #583. Delete Operation for Two Strings
+    def minDistance(self, word1, word2):
+        #Delete Operation for Two Strings
+        text1=word1
+        text2=word2
+        n1=len(text1)
+        n2=len(text2)
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return (len(word1)+len(word2))
+        # Base cases: When one of the strings is empty, LCS length is 0.
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
+        
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                else:
+                    dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
+        # The minimum insertions required to make the string palindrome is the difference between its length and the length of its longest palindromic subsequence
+        return (len(word1)+len(word2))-2*(dp[n1][n2])
+    #1092. Shortest Common Supersequence 
+    def shortestCommonSupersequence(self, text1, text2):
+        #using the concept of least common subseq
+        n1=len(text1)
+        n2=len(text2)
+        if n1==1 and n2==n1:
+            if text1[0]!=text2[0]:
+                return 0
+        dp=[[-1 for i in range(n2+1)] for i in range(n1+1)]
+        for i in range(n1):
+            dp[i][0]=0
+        for j in range(n2):
+            dp[0][j]=0
+        
+        for index1 in range(1,n1+1):
+            for index2 in range(1,n2+1):
+                if text1[index1-1]==text2[index2-1]:
+                    dp[index1][index2]=1+dp[index1-1][index2-1]
+                else:
+                    dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
+        shortest_len=dp[n1][n2]
+        str_=''
+        index=shortest_len-1
+        i=n1
+        j=n2
+        while (i>0 and j>0):
+            if text1[i-1]==text2[j-1]:
+                str_ += text1[i - 1] 
+                index=-1
+                i -= 1
+                j -= 1
+            elif dp[i-1][j]>dp[i][j-1]:
+                #since we are moving to the max dp table value.
+                #we add that char
+                str_+=text1[i-1]
+                i-=1
+            else:
+                str_+=text2[j-1]
+                j-=1
+        #remain i or j left char of text 1 text 2
+        while i>0:
+            str_+=text1[i-1]
+            i-=1
+        while j>0:
+            str_+=text2[j-1]
+            j-=1
+        return str_[::-1]
 
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
