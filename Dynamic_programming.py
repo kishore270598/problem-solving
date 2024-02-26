@@ -1411,7 +1411,7 @@ class Dynamic_programing:
                     dp[index1][index2]=max(dp[index1-1][index2],dp[index1][index2-1])
         # The minimum insertions required to make the string palindrome is the difference between its length and the length of its longest palindromic subsequence
         return len(s)-dp[n1][n2]
-    #583. Delete Operation for Two Strings
+    ,
     def minDistance(self, word1, word2):
         #Delete Operation for Two Strings
         text1=word1
@@ -1483,6 +1483,146 @@ class Dynamic_programing:
             str_+=text2[j-1]
             j-=1
         return str_[::-1]
+    #DP32 -Distinct Subsequences| (DP-32)
+    #-------------------------------------------
+    #recur
+    # memo
+    def numDistinct(self, s, t):
+        #memo
+        #left= main string index
+        #right= sub string index
+        def f(left,right):
+            #sub string index is exhausted
+            if right<0:
+                return 1
+            if dp[left][right]!=-1:
+                return dp[left][right]
+            #main index is exhausted
+            if left<0:
+                return 0
+            if s[left]==t[right]:
+                dp[left][right]=f(left-1,right-1)+f(left-1,right)
+            else:
+                dp[left][right]=f(left-1,right)
+            return dp[left][right]
+        n=len(s)
+        m=len(t)
+        dp=[[-1 for i in range(m)] for j in range(n)]
+        return f(n-1,m-1)
+    def numDistinct(self, s, t): 
+# tab   #memo
+        #left= main string index
+        #right= sub string index
+        n=len(s)
+        m=len(t)
+        dp=[[0 for i in range(m+1)] for j in range(n+1)]
+        for i in range(n+1):
+            dp[i][0]=1
+
+        for left in range(1,n+1):
+            for right in range(1,m+1):
+                if s[left-1]==t[right-1]:
+                    dp[left][right]=dp[left-1][right-1]+dp[left-1][right]
+                else:
+                    dp[left][right]=dp[left-1][right]
+        return dp[n][m]
+    
+                
+            
+
+# ****SPACE
+    def numDistinct(self, s, t):
+        #memo
+        prime = int(1e9 + 7)
+        #left= main string index
+        #right= sub string index
+        n=len(s)
+        m=len(t)
+        prev=[0]*(m+1)
+        prev[0]=1
+
+        for i in range(1, n + 1):
+            for j in range(m, 0, -1):
+                # If the current characters match, update prev[j] based on previous values
+                if s[i - 1] == t[j - 1]:
+                    prev[j] = (prev[j - 1] + prev[j]) % prime
+                # If the characters don't match, keep prev[j] unchanged (omit this statement)
+                else:
+                    prev[j] = prev[j]
+
+        # The final value in prev[m] is the count of distinct subsequences
+        return prev[m]
+    #DP33 -We are given two strings ‘S1’ and ‘S2’. We need to convert S1 to S2. The following three operations are allowed:
+    #33
+    #-------------------------------------------
+# memo
+    def minDistance(self, word1, word2):
+        def f(left,right):
+            #we required the right word
+            #left is exhausted
+            if left<0:
+                return right+1
+            #right is exhausted
+            if right<0:
+                return left+1
+            if dp[left][right]!=-1:
+                return dp[left][right]
+
+            if word1[left]==word2[right]:
+                return f(left-1,right-1)
+            else:
+                insert=1+f(left,right-1)
+                replace=1+f(left-1,right-1)
+                delete=1+f(left-1,right)
+                dp[left][right]= min(min(insert,replace),delete)
+            return dp[left][right]
+        n=len(word1)
+        m=len(word2)
+        dp=[[-1 for i in range(m)] for j in range(n)]
+        return f(n-1,m-1)
+# tab
+
+    def minDistance(self, word1, word2):
+        n=len(word1)
+        m=len(word2)
+        dp=[[0 for i in range(m+1)] for j in range(n+1)]
+        for i in range(n+1):
+            dp[i][0]=i
+        for j in range(m+1):
+            dp[0][j]=j
+        for left in range(1,n+1):
+            for right in range(1,m+1):
+                if word1[left-1]==word2[right-1]:
+                    dp[left][right]=dp[left-1][right-1]
+                else:
+                    insert=1+dp[left][right-1]
+                    replace=1+dp[left-1][right-1]
+                    delete=1+dp[left-1][right]
+                    dp[left][right]= min(min(insert,replace),delete)
+
+        return dp[n][m]
+
+# space
+    def minDistance(self, word1, word2):
+        n=len(word1)
+        m=len(word2)
+        prev = [j for j in range(m + 1)]
+        cur = [0 for _ in range(m + 1)]
+        # dp=[[0 for i in range(m+1)] for j in range(n+1)]
+        # for i in range(n+1):
+        #     dp[i][0]=i
+        # for j in range(m+1):
+        #     dp[0][j]=j
+        for left in range(1,n+1):
+            cur[0]=left
+            for right in range(1,m+1):
+                if word1[left-1]==word2[right-1]:
+                    cur[right]=prev[right-1]
+                else:
+                    cur[right]=1+min(prev[right],min(cur[right-1],prev[right-1]))
+            prev, cur = cur, prev
+        return prev[m]
+
 
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
