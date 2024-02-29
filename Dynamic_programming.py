@@ -1733,7 +1733,7 @@ class Dynamic_programing:
             aheadbuy=currbuy
         return aheadbuy
     #stock 3 
-    #REC
+    ##Buy and Stock Sell 111 |(DP-37)
     def maxProfit(self, stocks):
         def f(index,buy,cap):
             if cap==0:
@@ -1766,7 +1766,6 @@ class Dynamic_programing:
         return f(0,1,2)
     #tab
     def maxProfit(self, stocks):
-        #memo
         n=len(stocks)
         dp=[[[0 for i in range(3)]for j in range(2)]for k in range(n+1)]
         for index in range(n-1,-1,-1):
@@ -1777,6 +1776,34 @@ class Dynamic_programing:
                     else:
                         dp[index][buy][cap]= max(stocks[index]+dp[index+1][1][cap-1],0+dp[index+1][0][cap])
         return dp[0][1][2]
+    #optmised
+    def maxProfit(self, stocks):
+        n=len(stocks)
+        prev = [[0 for _ in range(3)] for _ in range(2)]
+        curr = [[0 for _ in range(3)] for _ in range(2)]
+        for index in range(n-1,-1,-1):
+            for buy in range(2):
+                for cap in range(1,3):
+                    if buy==1:
+                        curr[buy][cap]=max(-stocks[index]+prev[0][cap],0+prev[1][cap])
+                    else:
+                        curr[buy][cap]= max(stocks[index]+prev[1][cap-1],0+prev[0][cap])
+                prev=curr
+        return curr[1][2]
+    #Buy and Stock Sell IV |(DP-38)
+    def maxProfit(self, k, stocks):
+        n=len(stocks)
+        prev = [[0 for _ in range(k+1)] for _ in range(2)]
+        curr = [[0 for _ in range(k+1)] for _ in range(2)]
+        for index in range(n-1,-1,-1):
+            for buy in range(2):
+                for cap in range(1,k+1):
+                    if buy==1:
+                        curr[buy][cap]=max(-stocks[index]+prev[0][cap],0+prev[1][cap])
+                    else:
+                        curr[buy][cap]= max(stocks[index]+prev[1][cap-1],0+prev[0][cap])
+                prev=curr
+        return curr[1][k]
 
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
