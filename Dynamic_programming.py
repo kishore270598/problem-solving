@@ -1527,9 +1527,7 @@ class Dynamic_programing:
                     dp[left][right]=dp[left-1][right]
         return dp[n][m]
     
-                
             
-
 # ****SPACE
     def numDistinct(self, s, t):
         #memo
@@ -1581,7 +1579,6 @@ class Dynamic_programing:
         dp=[[-1 for i in range(m)] for j in range(n)]
         return f(n-1,m-1)
 # tab
-
     def minDistance(self, word1, word2):
         n=len(word1)
         m=len(word2)
@@ -1601,8 +1598,7 @@ class Dynamic_programing:
                     dp[left][right]= min(min(insert,replace),delete)
 
         return dp[n][m]
-
-# space
+    # space
     def minDistance(self, word1, word2):
         n=len(word1)
         m=len(word2)
@@ -1623,6 +1619,164 @@ class Dynamic_programing:
             prev, cur = cur, prev
         return prev[m]
 
+    #Wildcard Pattern Matching
+    def isAllStars(S1, i):
+        for j in range(1, i + 1):
+            if S1[j - 1] != '*':
+                return False
+        return True
+    def wildcardMatching(S1, S2):
+        n = len(S1)
+        m = len(S2)
+        dp = [[False for _ in range(m)] for _ in range(n + 1)]
+        dp[0][0] = True
+        for j in range(1, m):
+            dp[0][j] = False
+
+        for i in range(1, n + 1):
+            dp[i][0] = isAllStars(S1, i)
+        for i in range(1, n + 1):
+            for j in range(1, m):
+                if S1[i - 1] == S2[j - 1] or S1[i - 1] == '?':
+                    dp[i][j] = dp[i - 1][j - 1]
+                elif S1[i - 1] == '*':
+                    dp[i][j] = dp[i - 1][j] or dp[i][j - 1]
+                else:
+                    dp[i][j] = False
+        return dp[n][m-1]
+    #DP STOCKS
+    def maxProfit(self, stocks):
+        min_=stocks[0]
+        profit=0
+        for i in range(1,len(stocks),1):
+            #cost=stocks[i]-min_
+            profit=max(profit,stocks[i]-min_)
+            min_=min(min_,stocks[i])
+        return profit
+    # memo
+    def maxProfit(self, stocks):
+        #memo
+        def f(index,buy):
+            if index==n:
+                return 0
+            profit=0
+            if buy==0:
+                # 2 cases we buy and . we don't buy
+                profit=max(-stocks[index]+f(index+1,1),f(index+1,0))
+            else:
+                # 0 means u can buy
+                # 1 means u can't buy
+                # 2 cases we sell and . we don't sell
+                profit=max(stocks[index]+f(index+1,0),f(index+1,1))
+            return profit
+        n=len(stocks)
+        return f(0,0)
+    def maxProfit(self, stocks):
+        #memo
+        def f(index,buy):
+            if index==n:
+                return 0
+            profit=0
+            if dp[index][buy]!=-1:
+                return dp[index][buy]
+            if buy==0:
+                # 2 cases we buy and . we don't buy
+                profit=max(-stocks[index]+f(index+1,1),f(index+1,0))
+            else:
+                # 0 means u can buy
+                # 1 means u can't buy
+                # 2 cases we sell and . we don't sell
+                profit=max(stocks[index]+f(index+1,0),f(index+1,1))
+            dp[index][buy]=profit
+            return dp[index][buy]
+        n=len(stocks)
+        dp = [[-1 for _ in range(2)] for _ in range(n)]
+        return f(0,0)
+    #tab
+    def maxProfit(self, stocks):
+        #tab
+        n=len(stocks)
+        dp = [[-1 for _ in range(2)] for _ in range(n+1)]
+        dp[n][1]=0
+        dp[n][0]=0
+        for index in range(n-1,-1,-1):
+            for buy in range(0,2,1):
+                profit=0
+                if buy==0:
+                    # 2 cases we buy and . we don't buy
+                    profit=max(-stocks[index]+dp[index+1][1],dp[index+1][0])
+                else:
+                    # 0 means u can buy
+                    # 1 means u can't buy
+                    # 2 cases we sell and . we don't sell
+                    profit=max(stocks[index]+dp[index+1][0],dp[index+1][1])
+                dp[index][buy]=profit
+        return dp[0][0]
+    #space 
+    def maxProfit(self, stocks):
+        #space
+        n=len(stocks)
+        ahead = [0, 0]  # Initialize two lists, 'ahead' and 'cur', to keep track of profits for buying and selling
+        aheadnotbuy=0
+        aheadbuy=0
+        currnotbuy=0
+        currbuy=0
+        for index in range(n-1,-1,-1):
+            currnotbuy=max(stocks[index]+aheadbuy,aheadnotbuy)
+                    # 2 cases we buy and . we don't buy
+            currbuy=max(-stocks[index]+aheadnotbuy,aheadbuy)
+                    # 0 means u can buy
+                    # 1 means u can't buy
+                    # 2 cases we sell and . we don't sell
+            
+            aheadnotbuy=currnotbuy
+            aheadbuy=currbuy
+        return aheadbuy
+    #stock 3 
+    #REC
+    def maxProfit(self, stocks):
+        def f(index,buy,cap):
+            if cap==0:
+                return 0
+            if index==n:
+                return 0
+            if buy==1:
+                return max(-stocks[index]+f(index+1,0,cap),0+f(index+1,1,cap))
+            else:
+                return max(stocks[index]+f(index+1,1,cap-1),0+f(index+1,0,cap))
+        n=len(stocks)
+        return f(0,1,2)
+    def maxProfit(self, stocks):
+        #memo
+        def f(index,buy,cap):
+            if cap==0:
+                return 0
+            if index==n:
+                return 0
+            if dp[index][buy][cap]!=-1:
+                return dp[index][buy][cap]
+            if buy==1:
+                dp[index][buy][cap]=max(-stocks[index]+f(index+1,0,cap),0+f(index+1,1,cap))
+                return dp[index][buy][cap]
+            else:
+                dp[index][buy][cap]= max(stocks[index]+f(index+1,1,cap-1),0+f(index+1,0,cap))
+                return dp[index][buy][cap]
+        n=len(stocks)
+        dp=[[[-1 for i in range(3)]for j in range(2)]for k in range(n)]
+        return f(0,1,2)
+    #tab
+    def maxProfit(self, stocks):
+        #memo
+        n=len(stocks)
+        dp=[[[0 for i in range(3)]for j in range(2)]for k in range(n+1)]
+        for index in range(n-1,-1,-1):
+            for buy in range(2):
+                for cap in range(1,3):
+                    if buy==1:
+                        dp[index][buy][cap]=max(-stocks[index]+dp[index+1][0][cap],0+dp[index+1][1][cap])
+                    else:
+                        dp[index][buy][cap]= max(stocks[index]+dp[index+1][1][cap-1],0+dp[index+1][0][cap])
+        return dp[0][1][2]
 
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
