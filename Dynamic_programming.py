@@ -1804,7 +1804,173 @@ class Dynamic_programing:
                         curr[buy][cap]= max(stocks[index]+prev[1][cap-1],0+prev[0][cap])
                 prev=curr
         return curr[1][k]
+ #STOCK WITH COOL TIME 
+    def maxProfit(self, stocks):
+        #tab
+        n=len(stocks)
+        dp = [[0 for _ in range(2)] for _ in range(n+2)]
+        for index in range(n-1,-1,-1):
+            for buy in range(0,2,1):
+                profit=0
+                if buy==0:
+                    profit=max(-stocks[index]+dp[index+1][1],dp[index+1][0])
+                else:
+                    profit=max(stocks[index]+dp[index+2][0],dp[index+1][1])
+                dp[index][buy]=profit
+        return dp[0][0]
+    def maxProfit(self, stocks, fee):
+        #tab
+        n=len(stocks)
+        dp = [[-1 for _ in range(2)] for _ in range(n+1)]
+        dp[n][1]=0
+        dp[n][0]=0
+        for index in range(n-1,-1,-1):
+            for buy in range(0,2,1):
+                profit=0
+                if buy==0:
+                    # 2 cases we buy and . we don't buy
+                    profit=max(-stocks[index]-fee +dp[index+1][1],dp[index+1][0])
+                else:
+                    # 0 means u can buy
+                    # 1 means u can't buy
+                    # 2 cases we sell and . we don't sell
+                    profit=max(stocks[index]+dp[index+1][0],dp[index+1][1])
+                dp[index][buy]=profit
+        return dp[0][0]
+#-----------------------------------------------------------------------------------------#
+    #DP on LIS
+    #Longest Increasing Subsequence 
+    #rec method
+    def lengthOfLIS(self, nums):
+        def f(index,prev_index):
+            if index==n:
+                return 0
+            #notpick
+            len_=0+f(index+1,prev_index)
+            #pick
+            if prev_index==-1 or nums[index]>nums[prev_index]:
+                len_=max(len_,1+f(index+1,index))
+            return len_
+        n=len(nums)
+        return f(0,-1)
+    #memo
+    def lengthOfLIS(self, nums):
+        def f(index,prev_index):
+            if index==n:
+                return 0
+            #notpick
+            if dp[index][prev_index]!=-1:
+                return dp[index][prev_index]
+            len_=0+f(index+1,prev_index)
+            #pick
+            if prev_index==-1 or nums[index]>nums[prev_index]:
+                len_=max(len_,1+f(index+1,index))
+            dp[index][prev_index]=len_
+            return dp[index][prev_index]
+        n=len(nums)
+        dp=[[-1 for i in range(n)] for _ in range(n)]
+        return f(0,-1)
+    #tab
+    #tab
+    def lengthOfLIS(self, nums):
+        n=len(nums)
+        dp=[[0 for i in range(n+1)] for _ in range(n+1)]
+        for index in range(n-1,-1,-1):
+            for prev_index in range(index-1,-2,-1):
+                len_=0+dp[index+1][prev_index+1]
+                #pick
+                if prev_index==-1 or nums[index]>nums[prev_index]:
+                    len_=max(len_,1+dp[index+1][index+1])
+                dp[index][prev_index+1]=len_
+        return dp[0][0]
+    #space
+    def lengthOfLIS(self, nums):
+        n=len(nums)
+        dp=[[0 for i in range(n+1)] for _ in range(n+1)]
+        prev=[0]*(n+1)
+        curr=[0]*(n+1)
+        for index in range(n-1,-1,-1):
+            for prev_index in range(index-1,-2,-1):
+                len_=0+prev[prev_index+1]
+                #pick
+                if prev_index==-1 or nums[index]>nums[prev_index]:
+                    len_=max(len_,1+prev[index+1])
+                curr[prev_index+1]=len_
+            prev=curr
+        return prev[0]
+        #tab
+    def lengthOfLIS(self, nums):
+        n=len(nums)
+        maxi=1
+        dp=[1]*(n) #which holds the last
+        for index in range(0,n,1):
+            for prev_index in range(0,index,1):
+                if nums[index]>nums[prev_index]:
+                    dp[index]=max(dp[index],1+dp[prev_index])
+            maxi=max(maxi,dp[index])
+        return maxi
+#PRINTING THAT LIST
+    def lengthOfLIS(self, nums):
+        n=len(nums)
+        maxi=1
+        dp=[1]*(n) #which holds the last
+        hash_=set()
+        for index in range(0,n,1):
+            hash_[index] = index
+            for prev_index in range(0,index,1):
+                if nums[index]>nums[prev_index] and 1+dp[prev_index]>dp[index]:
+                    dp[index]=1+dp[prev_index]
+                    hash_[index]=prev_index
+        maxi=-1
+        last_index=-1
+        for i in range(0,n,1):
+            if dp[i]>maxi:
+                maxi=dp[i]
+                last_index=i
+        ans=[]
+        while(hash_[last_index]!=last_index):
+            last_index=hash_[last_index]
+            ans.append(nums[last_index])
+        return ans[::-1]
 
+    def lengthOfLIS(self, nums):
+        #binary method
+        temp=[nums[0]]
+        len_=1
+        for i in range(1,len(nums),1):
+            if nums[i]>temp[-1]:
+                temp.append(nums[i])
+                len_ += 1
+            else:
+                #this will give the binary search value
+                index = bisect_left(temp, nums[i])
+                temp[index] = nums[i]
+
+        return len_
+#DIVISIBLE RULE:    
+    def largestDivisibleSubset(self, nums):
+        n=len(nums)
+        maxi=1
+        dp=[1]*(n) #which holds the last
+        hash_ = list(range(n))
+        for index in range(0,n,1):
+            hash_[index] = index
+            for prev_index in range(0,index,1):
+                # divisible check                    #max subset check
+                if nums[index]%nums[prev_index]==0 and 1+dp[prev_index]>dp[index]:
+                    dp[index]=1+dp[prev_index]
+                    hash_[index]=prev_index
+        maxi=-1
+        last_index=-1
+        for i in range(0,n,1):
+            if dp[i]>maxi:
+                maxi=dp[i]
+                last_index=i
+        ans=[nums[last_index]]
+        while(hash_[last_index]!=last_index):
+            last_index=hash_[last_index]
+            ans.append(nums[last_index])
+        return ans
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
 ans=d.minFallingPathSum(matrix)
