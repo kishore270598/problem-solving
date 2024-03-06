@@ -1971,6 +1971,74 @@ class Dynamic_programing:
             last_index=hash_[last_index]
             ans.append(nums[last_index])
         return ans
+    #increasing string chain
+    def longestStrChain(self, words):
+        n=len(words)
+        maxi=1
+        words.sort(key=len)
+        def check(word1,word2):
+            n1=len(word1)
+            n2=len(word2)
+            if n2+1!=n1:
+                return False
+            first=0
+            second=0
+            while (first<n1):
+                if second < n2 and word1[first]==word2[second]:
+                    first+=1
+                    second+=1
+                else:#since second is big we match it
+                    first+=1
+            if first==n1 and second==n2:
+                return True
+        dp=[1]*(n) #which holds the last
+        for index in range(0,n,1):
+            for prev_index in range(0,index,1):
+                if check(words[index],words[prev_index]) and dp[index]<1+dp[prev_index]:
+                    dp[index]=1+dp[prev_index]
+            maxi=max(maxi,dp[index])
+        return maxi
+    #longest_bitonic_sequence
+    def longestBitonicSubsequence(self,arr, n):
+        n=len(arr)
+        dp1=[1]*(n)
+        dp2=[1]*(n)
+        for index in range(0,n,1):
+            for prev in range(0,index,1):
+                if arr[index]>arr[prev]:
+                    dp1[index] = max(dp1[index], 1 + dp1[prev])
+        maxi=-1
+        for index in range(n-1,-1,-1):
+            for prev in range(n-1,index,-1):
+                if arr[index]>arr[prev]:
+                    dp2[index] = max(dp2[index], 1 + dp2[prev])
+        for i in range(n):
+            maxi = max(maxi, dp1[i] + dp2[i] - 1)
+
+        return maxi
+#Number of Longest Increasing Subsequences | (DP-47)
+    def findNumberOfLIS(self, arr):
+        maxi=-1
+        num_len_max=0
+        n=len(arr)
+        dp1=[1]*(n)
+        count=[1]*n
+        for index in range(0,n,1):
+            for prev in range(0,index,1):
+                if arr[index]>arr[prev] and 1 + dp1[prev] > dp1[index]:
+                    dp1[index] = 1 + dp1[prev]
+                    count[index]=count[prev]
+                elif 1 + dp1[prev] == dp1[index] and arr[index]>arr[prev]:
+                    count[index]+=count[prev]
+                maxi = max(maxi, dp1[index])
+        for i in range(n):
+            if count[i]==maxi:
+                num_len_max+=count[i]
+        return num_len_max
+
+
+
+
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
 ans=d.minFallingPathSum(matrix)
