@@ -2036,8 +2036,45 @@ class Dynamic_programing:
                 num_len_max+=count[i]
         return num_len_max
 
-
-
+    #memeo #MCM DP | Partition DP
+    #------------------------------------------------------    
+    def matrixMultiplication(self, N,p):
+        def f(i,j):
+            if i == j:
+                return 0
+            _min = sys.maxsize
+            if dp[i][j]!=-1:
+                return dp[i][j]
+            for k in range(i, j):
+         
+                step = (f(i, k)
+                         + f( k + 1, j)
+                         + p[i-1] * p[k] * p[j])
+                if step < _min:
+                    _min = step
+                dp[i][j]=_min
+        # Return minimum count
+            return dp[i][j]
+        dp=[[-1 for _ in range(N)] for _ in range(N)]
+        return f(1,N-1)
+    #TAB
+    def matrixMultiplication(self, N,p):
+        dp=[[-1 for _ in range(N)] for _ in range(N)]
+        for i in range(1,N):
+            dp[i][i]=0
+        for i in range(N-1,0,-1):
+            for j in range(i+1,N,1):
+                _min = sys.maxsize
+                for k in range(i,j,1):
+                    step = (dp[i][k]
+                             + dp[k+1][j]
+                             + p[i-1] * p[k] * p[j])
+                    if step < _min:
+                        _min = step
+                    dp[i][j]=_min
+                
+        return dp[1][N-1]
+    
 
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
