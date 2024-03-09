@@ -2074,8 +2074,90 @@ class Dynamic_programing:
                     dp[i][j]=_min
                 
         return dp[1][N-1]
-    
+    #---------------------------------'
+    #partition
+    #Minimum cost to cut the stick| (DP-50)
+    #memo
+    def minCost(self, n, cuts):
+        def f(i, j):
+        # Base case
+            if i > j:
+                return 0
+            
+            if dp[i][j] != -1:
+                return dp[i][j]
+            
+            mini = float('inf')
+            
+            for ind in range(i, j + 1):
+                ans = cuts[j + 1] - cuts[i - 1] + f(i, ind - 1) + f(ind + 1, j)
+                mini = min(mini, ans)
+            
+            dp[i][j] = mini
+            return mini
 
+        # Extend the cuts list with 0 and n, and sort it
+        c=len(cuts)
+        dp = [[-1] * (c + 1) for _ in range(c + 1)]
+        cuts = [0] + cuts + [n]
+        cuts.sort()
+        return f(1,c)
+    #tab
+    def minCost(self, n, cuts):
+        # Extend the cuts list with 0 and n, and sort it
+        c=len(cuts)
+        dp = [[0] * (c + 2) for _ in range(c + 2)]
+        cuts = [0] + cuts + [n]
+        cuts.sort()
+        #for the base case
+        for i in range(c,0,-1):
+            for j in range(1,c+1,1):
+                mini = float('inf')
+                if i>j:
+                    continue
+                for ind in range(i, j + 1):
+                    ans = cuts[j + 1] - cuts[i - 1] + dp[i][ind - 1] + dp[ind + 1][j]
+                    mini = min(mini, ans)
+                dp[i][j] = mini
+        return dp[1][c]
+#DP--------------BURST BALLON
+    #Memo 
+    def maxCoins(self, nums):
+        def f(i,j):
+            if i>j:
+                return 0
+            if dp[i][j]!=-1:
+                return dp[i][j]
+            max_=-1
+            for index in range(i,j+1):
+                #we are taking the last burst case
+                # so 1 * index num * 1 ( i-1 ,j+1 ) border
+                cost=nums[i-1]*nums[index]*nums[j+1]+(f(i,index-1)+f(index+1,j))
+                max_=max(max_,cost)
+            dp[i][j]=max_
+            return dp[i][j]
+        n=len(nums)
+        nums.insert(0, 1)
+        nums.append(1)
+        dp = [[-1] * (n + 2) for _ in range(n + 2)]
+        return f(1,n)
+#DP- TAB
+    def maxCoins(self, nums):
+        n=len(nums)
+        nums.insert(0, 1)
+        nums.append(1)
+        dp = [[0] * (n + 2) for _ in range(n + 2)]
+        for i in range(n,0,-1):
+            for j in range(1,n+1,1):
+                max_=-1
+                for index in range(i,j+1):
+                    #we are taking the last burst case
+                    # so 1 * index num * 1 ( i-1 ,j+1 ) border
+                    cost=nums[i-1]*nums[index]*nums[j+1]+(f(i,index-1)+f(index+1,j))
+                    max_=max(max_,cost)
+                dp[i][j]=max_
+        return dp[1][n]
+        
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
 ans=d.minFallingPathSum(matrix)
