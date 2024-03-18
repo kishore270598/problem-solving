@@ -2242,7 +2242,54 @@ class Dynamic_programing:
                     dp[i][j][isTrue] = ways
         return dp[0][n - 1][1]
 
-
+    #---------------------------------'
+    #partition
+    #Palindrome Partitioning - II|(DP-53)
+    #memo
+    def minCut(self, s):
+        def is_palindrome(i, j):
+            while i < j:
+                if s[i] != s[j]:
+                    return False
+                i += 1
+                j -= 1
+            return True
+        def f(index):
+            if index==n:
+                return 0
+            min_=sys.maxsize
+            if dp[index]!=-1:
+                return dp[index]
+            for j in range(index,n,1):
+                if(is_palindrome(index,j)):
+                    cost=1+f(j+1)
+                min_=min(cost,min_)
+            dp[index]=min_
+            return dp[index]
+        n = len(s)
+        dp=[-1 for _ in range(n)]
+        return f(0) - 1
+    
+    def minCut(self, s):
+        #tab
+        def is_palindrome(i, j):
+            while i < j:
+                if s[i] != s[j]:
+                    return False
+                i += 1
+                j -= 1
+            return True
+        n = len(s)
+        dp = [0] * (n + 1)
+        dp[n] = 0  
+        for i in range(n - 1, -1, -1):  
+            min_cost = float('inf')
+            for j in range(i, n):
+                if is_palindrome(i, j):
+                    cost = 1 + dp[j + 1]
+                    min_cost = min(min_cost, cost)
+            dp[i] = min_cost
+        return dp[0] - 1
 d=Dynamic_programing()
 matrix = [[2,1,3],[6,5,4],[7,8,9]]
 ans=d.minFallingPathSum(matrix)
