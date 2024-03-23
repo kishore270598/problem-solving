@@ -1145,7 +1145,26 @@ class ArrayProblems:
             max_=max(max_,max(pref,suf))
         return max_
 
-
+    def nextPermutation(self, nums):
+        #find the increasing point find that point
+        #lets take that breaking point has the nums[index] we need to find someone greater than 1 but smallest in the remaing value
+        #swap with the element 
+        # from index next element to last reverse and attach with the array since it was increasing order(the method we checking)
+        index=-1
+        n=len(nums)
+        for i in range(n-2,-1,-1):
+            if nums[i]<nums[i+1]:
+                index=i
+                break
+        if index==-1:
+            return nums.reverse()
+        for i in range(n-1,index,-1):
+            if nums[i]>nums[index]:
+                #swap
+                nums[i], nums[index] = nums[index], nums[i]
+                break
+        nums[index+1:] = reversed(nums[index+1:])
+        return nums
 
 a=ArrayProblems()
 arr=[[1, 2 ,3 ,4 ,6 ],[4,5,6,0,2,3],[1,2,0,0,5,6],[-2,1,0,5,9],[0,0,0,0,0],[2],[2,2,1,1,3,3,3],[10,9]]
