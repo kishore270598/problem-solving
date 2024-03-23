@@ -441,29 +441,33 @@ class Test:
 
                 return ans       
           
-    
-    def longestCommonPrefix(self, arr1, arr2):
-            def firstdigit(num1,num2):
-                  len_=0
-                  while(num1!=0 and num2!=0):
-                        num1=num1//10
-                        num2=num1//10
 
-            max_=0
-            for i in range(len(arr1)):
-                    for j in range(len(arr2)):
-
-                                   
+    def maxFrequency(self, nums, k):
+        left=0
+        right=0
+        max_=0
+        pre_sum=0
+        nums.sort()
+        while left<right:
+            pre_sum+=nums[right]
+            len_=(right-left+1)
+            if (nums[right]*(len_)-pre_sum)<=k:
+                max_=max(max_,len_)
+                right+=1
+            else:
+                left+=1
+                right=left
+                pre_sum=0
+        return max_                           
 
 
 a=Test()
-arr1 = [1,26]
-arr2=[22,2]
-pattern = [1,0,-1]
+nums = [1,2,4]
+k = 5
 s="aAbBcC"
 words = ["a","aba","ababa","aa"]
 k=15
-an=a.longestCommonPrefix(arr1,arr2)
+an=a.maxFrequency(nums,k)
 print(an)
 
 

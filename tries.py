@@ -104,3 +104,46 @@ class Trie:
             parent=parent.child[index]
             parent.countprev-=1
         parent.endcount-=1
+#Maximum XOR of Two Numbers in an Array#
+class TrieNode:
+    def __init__(self):
+        self.children = dict()                        
+        # children nodes
+        self.val = 0                                  
+        # end value 
+
+class Trie:
+    def __init__(self, n):
+        self.root = TrieNode()                        
+        # root node
+        self.n = n                                    
+        # max length of all numbers
+        
+    def add_num(self, num):
+        node=self.root #to point the root
+        for shift in range(self.n,-1,-1):
+            val = 1 if num & (1 << shift) else 0
+            if val not in node.children:
+                node.children[val]=TrieNode()
+            node = node.children[val]
+        node.val=num #to save the value
+
+class Solution:
+    def findMaximumXOR(self, nums):
+        #to find the maximum n required
+        max_len = len(bin(max(nums))) - 2
+        trie = Trie(max_len)
+        for element in nums:
+            trie.add(element)
+        for num in nums:
+            ans=0
+            node = trie.root 
+            for shift in range(self.n,-1,-1):
+                val = 1 if num & (1 << shift) else 0
+                node = node.children[1-val] if 1-val in node.children else node.children[val]
+                #take the op
+                node = node.children[1-val] if 1-val in node.children else node.children[val] 
+            #we need to get the correct last value
+            ans=max(ans,nums ^ node.val)
+        return ans 
+          
