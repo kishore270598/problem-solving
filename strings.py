@@ -266,9 +266,47 @@ class Strings_problems:
         for key in val_map:
             max_=max(max_,val_map[key])
             min_=min(min_,val_map[key])
-        return max_ - min_
+        return max_ - min_  
+#921. Minimum Add to Make Parentheses Valid
+    def minAddToMakeValid(self, s):
+        if len(s)==1:
+            return 1
+        stack=[]
+        parentheses = {")":"("}
+        for i in range(0,len(s),1):
+            if stack and stack[-1]==parentheses.get(s[i],None):
+                stack.pop()
+            else:
+                stack.append(s[i])
+            i+=1
+        return len(stack)
             
-
+#Count and say
+    def countAndSay(self, n):
+        def dfs(n):
+            if n==1:
+                return "1"
+            prev=dfs(n-1)
+            result = ""
+            count=1 #intial 1 since a n is give and it has passed it means it has 1
+            for i in range(len(prev)):
+                #to make sure we are in bounadry
+                if i+1<len(prev) and prev[i]==prev[i+1]:
+                    #we increment
+                    count+=1
+                else:
+                    # string count that times
+                    result += str(count) + prev[i]
+                    count=1
+            return result
+        return dfs(n)
+#28. Find the Index of the First Occurrence in a String
+    def strStr(self, word, check):
+        k=len(check)
+        for i in range(0,len(word),1):
+            if word[i:i+k]==check:
+                return i
+        return -1
 
 
 
